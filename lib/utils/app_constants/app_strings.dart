@@ -1,0 +1,34 @@
+class AppStrings {
+  static String tidyTechTitle = 'TidyTech';
+  static String tidyTechCaption = 'A Tidy Space Starts With Smart Choices';
+  static String tidyTechSub = "Your ‘go-to’ for professional cleaning service.";
+  static String welcome = 'Welcome';
+  static String to = 'to';
+  static String login = 'Login';
+  static String signUp = 'Sign up';
+  static String getStarted = 'Get Started';
+  static String emailVerification = 'Email verification';
+  static String emailVerificationText = 'Enter the verification code sent to ';
+  static String resendCode = 'Resend code?';
+  static String confirm = 'Confirm';
+  static String createAccount = 'Create Account';
+  static String proceed = 'Proceed';
+  static String home = 'Home';
+  static String profile = 'Profile';
+  static String fullName = 'Full Name';
+  static String email = 'Email';
+  static String password = 'Password';
+  static String confirmPassword = 'Confirm Password';
+  static String bookings = 'Bookings';
+  static String termsOfUse = 'Terms of Use';
+  static String privacyPolicy = 'Privacy Policy';
+  static String addCoverPictures = 'Add Cover Pictures';
+  static String addPictures = 'Add Pictures';
+  static String upload = 'Upload';
+  static String choose = 'Choose';
+  static String homepage = 'Homepage';
+  static String toponym = 'Toponym';
+  static String toponymDesc = 'Toponym Description';
+  static String toponymType = 'Toponym Type';
+  static String test = 'test';
+}
