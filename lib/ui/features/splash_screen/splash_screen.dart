@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:animate_gradient/animate_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/shared/global_variables.dart';
@@ -51,9 +52,9 @@ class _SplashScreenState extends State<SplashScreen>
           accountExisting = false;
         }
 
-        // context.pushReplacement(
-        //   accountExisting ? '/homepageView' : '/createAccountView',
-        // );
+        context.pushReplacement(
+          accountExisting ? '/homepageView' : '/onboardingScreen',
+        );
       }
     });
   }
