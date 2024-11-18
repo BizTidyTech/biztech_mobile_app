@@ -85,13 +85,13 @@ class AuthController extends GetxController {
       errMessage = "Passwords do not match";
       update();
     } else {
-      logger.i('Registering user . . .');
       userEnteredData = UserData(
         userId: generateRandomString(),
         email: emailController.text.trim(),
         name: fullnameController.text.trim(),
         password: passwordController.text.trim(),
       );
+      logger.i('Registering user . . . ${userEnteredData?.toJson()}');
       sendEmailOtp(context);
     }
   }
@@ -124,6 +124,8 @@ class AuthController extends GetxController {
       Fluttertoast.showToast(msg: 'Error verifying OTP');
       stopLoading();
     }
+    otpController.clear();
+    update();
   }
 
   createNewUser(BuildContext context) async {
@@ -132,11 +134,10 @@ class AuthController extends GetxController {
       userEnteredData?.password ?? '',
     );
     if (isAccountCreated == true) {
-      final isUserRegistered = await AuthUtil().registerUser();
+      final isUserRegistered = await AuthUtil().registerUser(userEnteredData);
       if (isUserRegistered == true) {
         logger.f('Account created successfully.');
-        context.go('/homepageView');
-        disposeAllControllers();
+        await attemptToSignInUser(context);
       } else {
         errMessage = 'Error creating user.';
         logger.w('Error creating user.');
@@ -154,10 +155,16 @@ class AuthController extends GetxController {
     if (emailController.text.trim().isNotEmpty &&
         passwordController.text.trim().isNotEmpty) {
       logger.i('signing in user . . .');
-
       startLoading();
-
-      await saveUserDetailsLocally(userEnteredData);
+      final isLoggedIn = await AuthUtil().signInUser(
+        emailController.text.trim(),
+        passwordController.text.trim(),
+      );
+      if (isLoggedIn == true) {
+        logger.f("userEnteredData: ${userEnteredData?.toJson()}");
+        await saveUserDetailsLocally(userEnteredData);
+        context.go('/homepageView');
+      }
     } else {
       errMessage = 'All fields must be filled, and with no spaces';
       logger.i("Errormessage: $errMessage");

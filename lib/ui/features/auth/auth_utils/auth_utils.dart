@@ -26,16 +26,13 @@ class AuthUtil {
     }
   }
 
-  Future<bool> registerUser() async {
-    var userId = auth.currentUser!.uid;
-    var email = auth.currentUser!.email;
-    var name = auth.currentUser!.displayName;
-    var photoUrl = auth.currentUser!.photoURL;
+  Future<bool> registerUser(UserData? userdata) async {
     UserData userData = UserData(
-      userId: userId,
-      email: email,
-      name: name,
-      photoUrl: photoUrl,
+      userId: auth.currentUser!.uid,
+      email: auth.currentUser!.email ?? userdata?.email,
+      password: userdata?.password,
+      name: auth.currentUser!.displayName ?? userdata?.name,
+      photoUrl: auth.currentUser!.photoURL,
     );
     bool isRegister = await FirebaseService().register(user: userData);
     return isRegister;

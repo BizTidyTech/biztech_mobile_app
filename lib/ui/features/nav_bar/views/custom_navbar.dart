@@ -1,24 +1,24 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
-import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
 import 'package:tidytech/utils/app_constants/app_styles.dart';
 
-class UserCustomNavBar extends StatefulWidget {
+class CustomNavBar extends StatefulWidget {
   final int currentPageIndx;
-  const UserCustomNavBar({super.key, required this.currentPageIndx});
+  const CustomNavBar({super.key, required this.currentPageIndx});
 
   @override
-  State<UserCustomNavBar> createState() => _UserCustomNavBarState();
+  State<CustomNavBar> createState() => _CustomNavBarState();
 }
 
-class _UserCustomNavBarState extends State<UserCustomNavBar> {
+class _CustomNavBarState extends State<CustomNavBar> {
   void goPopUntil(BuildContext context, String routeName) {
     final router = GoRouter.of(context);
     while (router
@@ -34,10 +34,10 @@ class _UserCustomNavBarState extends State<UserCustomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
-      padding: const EdgeInsets.only(top: 15, right: 0, left: 0, bottom: 15),
+      height: 59,
       decoration: BoxDecoration(
         border: Border(top: BorderSide(color: AppColors.lighterGray)),
+        color: AppColors.plainWhite,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -81,8 +81,8 @@ class _UserCustomNavBarState extends State<UserCustomNavBar> {
             child: _buildNavBarItem(
               barIndex: 1,
               label: AppStrings.bookings,
-              activeIcon: Icons.calendar_month,
-              inactiveIcon: Icons.calendar_today_outlined,
+              activeIcon: CupertinoIcons.calendar_today,
+              inactiveIcon: CupertinoIcons.calendar,
             ),
           ),
 
@@ -147,27 +147,26 @@ class _UserCustomNavBarState extends State<UserCustomNavBar> {
       required IconData activeIcon,
       required IconData inactiveIcon}) {
     return SizedBox(
-      width: 60,
+      width: 70,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             widget.currentPageIndx == barIndex ? activeIcon : inactiveIcon,
             color: widget.currentPageIndx == barIndex
                 ? AppColors.deepBlue
                 : AppColors.fullBlack,
+            size: 30,
           ),
-          verticalSpacer(5),
           Text(
             label,
             style: AppStyles.subStringStyle(
-              13,
+              10,
               widget.currentPageIndx == barIndex
                   ? AppColors.deepBlue
                   : AppColors.fullBlack,
             ),
           ),
-          verticalSpacer(15),
         ],
       ),
     );

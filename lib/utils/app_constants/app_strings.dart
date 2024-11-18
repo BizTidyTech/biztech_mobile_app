@@ -10,6 +10,8 @@ class AppStrings {
   static String getStarted = 'Get Started';
   static String emailVerification = 'Email verification';
   static String emailVerificationText = 'Enter the verification code sent to ';
+  static String accountCreationDone  = 'Account Created!';
+  static String accountCreationDoneText = 'Your account has been successfully created';
   static String resendCode = 'Resend code?';
   static String confirm = 'Confirm';
   static String contineu = 'Continue';

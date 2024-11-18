@@ -1,35 +1,52 @@
+import 'dart:convert';
+
+UserData userDataFromJson(String str) => UserData.fromJson(json.decode(str));
+
+String userDataToJson(UserData data) => json.encode(data.toJson());
+
 class UserData {
   String? userId;
   String? email;
   String? name;
-  String? photoUrl;
   String? password;
+  String? photoUrl;
 
   UserData({
     this.userId,
     this.email,
     this.name,
-    this.photoUrl,
     this.password,
+    this.photoUrl,
   });
 
-  factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
-      userId: json['userId'],
-      email: json['email'],
-      name: json['name'],
-      photoUrl: json['photoUrl'],
-      password: json['password'],
-    );
-  }
+  UserData copyWith({
+    String? userId,
+    String? email,
+    String? name,
+    String? password,
+    String? photoUrl,
+  }) =>
+      UserData(
+        userId: userId ?? this.userId,
+        email: email ?? this.email,
+        name: name ?? this.name,
+        password: password ?? this.password,
+        photoUrl: photoUrl ?? this.photoUrl,
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['userId'] = userId;
-    data['email'] = email;
-    data['name'] = name;
-    data['photoUrl'] = photoUrl;
-    data['password'] = password;
-    return data;
-  }
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+        userId: json["userId"],
+        email: json["email"],
+        name: json["name"],
+        password: json["password"],
+        photoUrl: json["photoUrl"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "userId": userId,
+        "email": email,
+        "name": name,
+        "password": password,
+        "photoUrl": photoUrl,
+      };
 }

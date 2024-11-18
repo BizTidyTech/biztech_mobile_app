@@ -4,13 +4,13 @@ import 'package:tidytech/ui/features/auth/auth_view/create_account_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/onboarding_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/signin_user_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/verify_otp_screen.dart';
+import 'package:tidytech/ui/features/home/home_view/home_view.dart';
 import 'package:tidytech/ui/features/splash_screen/splash_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
-    // initialLocation: '/createAccountView',
-    // initialLocation: '/homepageView',
+    // initialLocation: '/onboardingScreen',
     routes: [
       GoRoute(
         path: '/',
@@ -34,11 +34,11 @@ class AppRouter {
         path: '/verifyOtpScreen',
         builder: (context, state) => const VerifyOtpScreen(),
       ),
+      GoRoute(
+        path: '/homepageView',
+        builder: (context, state) => const HomepageView(),
+      ),
 
-      // GoRoute(
-      //   path: '/homepageView',
-      //   builder: (context, state) => const HomepageView(),
-      // ),
       // GoRoute(
       //   path: '/recordPageView',
       //   builder: (context, state) => const RecordPageView(),

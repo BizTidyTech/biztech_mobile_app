@@ -29,7 +29,7 @@ class AppColors {
 
   static Color inputFieldBlack = fromHex('#1A1819');
 
-  static Color normalGreen = Colors.green.shade900;
+  static Color normalGreen = const Color.fromARGB(255, 38, 223, 50);
 
   static Color transparent = Colors.transparent;
 
