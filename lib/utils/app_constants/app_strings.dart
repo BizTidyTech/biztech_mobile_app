@@ -5,7 +5,7 @@ class AppStrings {
       "Your ‘go-to’ for professional cleaning\nservice.";
   static String welcome = 'Welcome';
   static String to = 'to';
-  static String login = 'Login';
+  static String login = 'Log in';
   static String signUp = 'Sign up';
   static String getStarted = 'Get Started';
   static String emailVerification = 'Email verification';

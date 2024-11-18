@@ -1,21 +1,30 @@
-// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, avoid_print
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, avoid_logger.i
 
 import 'dart:io';
 
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
+import 'package:tidytech/tidytech_app.dart';
+import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
+import 'package:tidytech/ui/features/auth/auth_utils/auth_utils.dart';
+import 'package:tidytech/utils/extension_and_methods/string_cap_extensions.dart';
 
 class AuthController extends GetxController {
   TextEditingController fullnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
+  UserData? userEnteredData;
+
   AuthController();
 
-  bool showLoading = false;
+  bool showLoading = false, invalidOtp = false;
   String errMessage = '';
 
   File? imageFile;
@@ -44,83 +53,110 @@ class AuthController extends GetxController {
   }
 
   void gotoSignInUserPage(BuildContext context) {
-    print('Going to sign in user page');
+    logger.i('Going to sign in user page');
     resetValues();
     context.push('/signInUserView');
   }
 
   void gotoHomepage(BuildContext context) async {
-    await saveSharedPrefsStringValue(
-        "username", fullnameController.text.trim());
-    await saveSharedPrefsStringValue("profileImageLink", imageUrl!);
-    print('Going to homepage page');
+    logger.i('Going to homepage page');
     resetValues();
     context.go('/homepageView');
   }
 
-  void attemptToSignInUser(BuildContext context) {
-    print('attemptToSignInUser . . .');
-    if (fullnameController.text.trim().isNotEmpty &&
-        !fullnameController.text.trim().contains(" ") &&
-        passwordController.text.trim().isNotEmpty &&
-        !passwordController.text.trim().contains(" ")) {
-      print('signing in user . . .');
+  Future<void> attemptToSignInUser(BuildContext context) async {
+    logger.i('attemptToSignInUser . . .');
+    if (emailController.text.trim().isNotEmpty &&
+        passwordController.text.trim().isNotEmpty) {
+      logger.i('signing in user . . .');
+
       startLoading();
-      checkIfUserExistsForSignIn(context);
+
+      await saveUserDetailsLocally(userEnteredData);
     } else {
       errMessage = 'All fields must be filled, and with no spaces';
-      print("Errormessage: $errMessage");
+      logger.i("Errormessage: $errMessage");
       stopLoading();
     }
   }
 
-  Future<void> checkIfUserExistsForSignIn(BuildContext context) async {
-    /*
-    print('checking If User Exists');
-    final ref = FirebaseDatabase.instance.ref();
-    final snapshot =
-        await ref.child('user_details/${usernameController.text.trim()}').get();
-    if (snapshot.exists) {
-      print("User exists: ${snapshot.value}");
-      UserAccountModel userAccountModel =
-          userAccountModelFromJson(jsonEncode(snapshot.value).toString());
-      print(
-          "UserAccountModel: ${userAccountModel.toJson()} \nPassword Existing: ${userAccountModel.password}");
-      if (userAccountModel.password == passwordController.text.trim()) {
-        showLoading = false;
-        update();
-        GlobalVariables.myUsername = usernameController.text.trim();
-        print("GlobalVariables.myUsername: ${GlobalVariables.myUsername}");
-        context.pushReplacement('/updateNewAccountView');
-      } else {
-        print('Password does not match.');
-        errMessage = "Error! username or password incorrect";
-        showLoading = false;
-        update();
-      }
+  Future<void> sendEmailOtp(BuildContext context, {bool? navigate}) async {
+    startLoading();
+    logger.i("Sending OTP . . .");
+    final sendOtpResponse = await EmailOTP.sendOTP(email: emailController.text);
+    if (sendOtpResponse == true) {
+      logger.f("OTP sent successfully");
+      navigate != false
+          ? context.go('/verifyOtpScreen')
+          : Fluttertoast.showToast(msg: "OTP has been resent");
     } else {
-      print('User data does not exist.');
-      errMessage = "Error! User ${usernameController.text.trim()} not found";
-      showLoading = false;
-      update();
+      logger.e("Error sending OTP");
+      errMessage = 'Error sending OTP. Check email and try again';
     }
-    */
+    stopLoading();
   }
 
-  void attemptToRegisterNewUser(BuildContext context) {
-    print('attemptToRegisterUser . . .');
-
-    if (fullnameController.text.trim().isNotEmpty &&
-        emailController.text.trim().isNotEmpty &&
-        passwordController.text.trim().isNotEmpty &&
-        confirmPasswordController.text.trim().isNotEmpty) {
-      print('Registering user . . .');
-      startLoading();
+  Future<void> verifyOtp(BuildContext context) async {
+    startLoading();
+    final verifyOtpResponse = EmailOTP.verifyOTP(otp: otpController.text);
+    if (verifyOtpResponse == true) {
+      Fluttertoast.showToast(msg: "Email verification successful");
+      createNewUser(context);
     } else {
+      invalidOtp = true;
+      errMessage = 'Error verifying OTP';
+      Fluttertoast.showToast(msg: 'Error verifying OTP');
+      stopLoading();
+    }
+  }
+
+  createNewUser(BuildContext context) async {
+    final isAccountCreated = await AuthUtil().createAccount(
+      userEnteredData?.email ?? '',
+      userEnteredData?.password ?? '',
+    );
+    if (isAccountCreated == true) {
+      final isUserRegistered = await AuthUtil().registerUser();
+      if (isUserRegistered == true) {
+        logger.f('Account created successfully.');
+        context.go('/homepageView');
+      } else {
+        errMessage = 'Error creating user.';
+        logger.w('Error registering user.');
+        stopLoading();
+      }
+    } else {
+      errMessage = 'Error creating account.';
+      logger.w('Error creating account.');
+      stopLoading();
+    }
+  }
+
+  Future<void> attemptToVerifyNewUser(BuildContext context) async {
+    logger.i('attemptToVerifyNewUser . . .');
+
+    if (fullnameController.text.trim().isEmpty == true ||
+        emailController.text.trim().isEmpty == true ||
+        passwordController.text.trim().isEmpty == true ||
+        confirmPasswordController.text.trim().isEmpty == true) {
       errMessage = 'All fields must be filled accordingly';
-      print("Errormessage: $errMessage");
-      showLoading = false;
       update();
+    } else if (await validateEmail(emailController.text.trim()) == false) {
+      errMessage = 'Enter a valid email address';
+      update();
+    } else if (passwordController.text.trim() !=
+        confirmPasswordController.text.trim()) {
+      errMessage = "Passwords do not match";
+      update();
+    } else {
+      logger.i('Registering user . . .');
+      userEnteredData = UserData(
+        userId: generateRandomString(),
+        email: emailController.text.trim(),
+        name: fullnameController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      sendEmailOtp(context);
     }
   }
 

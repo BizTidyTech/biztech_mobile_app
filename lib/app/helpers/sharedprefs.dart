@@ -1,8 +1,13 @@
 // ignore_for_file: avoid_print
 
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
-Future<void> saveSharedPrefsStringValue(String stringKey, String stringValue) async {
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
+import 'package:tidytech/utils/app_constants/fb_collection_names.dart';
+
+Future<void> saveSharedPrefsStringValue(
+    String stringKey, String stringValue) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.setString(stringKey, stringValue);
   print('Saved $stringKey as $stringValue');
@@ -13,4 +18,15 @@ Future<String> getSharedPrefsSavedString(String stringKey) async {
   final String? readValue = prefs.getString(stringKey);
   print('Retrieved value for $stringKey is $readValue.');
   return readValue ?? '';
+}
+
+saveUserDetailsLocally(UserData? userData) async {
+  await saveSharedPrefsStringValue(
+      FbCollectionNames.user, jsonEncode(userData));
+}
+
+Future<UserData> getLocallySavedUserDetails(UserData userData) async {
+  final userDataString =
+      await getSharedPrefsSavedString(FbCollectionNames.user);
+  return UserData.fromJson(jsonDecode(userDataString));
 }

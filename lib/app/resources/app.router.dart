@@ -3,6 +3,7 @@ import 'package:tidytech/app/services/navigation_service.dart';
 import 'package:tidytech/ui/features/auth/auth_view/create_account_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/onboarding_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/signin_user_view.dart';
+import 'package:tidytech/ui/features/auth/auth_view/verify_otp_screen.dart';
 import 'package:tidytech/ui/features/splash_screen/splash_screen.dart';
 
 class AppRouter {
@@ -21,6 +22,19 @@ class AppRouter {
         path: '/onboardingScreen',
         builder: (context, state) => const OnboardingScreen(),
       ),
+      GoRoute(
+        path: '/createAccountView',
+        builder: (context, state) => CreateAccountView(),
+      ),
+      GoRoute(
+        path: '/signInUserView',
+        builder: (context, state) => SignInUserView(),
+      ),
+      GoRoute(
+        path: '/verifyOtpScreen',
+        builder: (context, state) => const VerifyOtpScreen(),
+      ),
+
       // GoRoute(
       //   path: '/homepageView',
       //   builder: (context, state) => const HomepageView(),
@@ -38,14 +52,6 @@ class AppRouter {
       //   builder: (context, state) => const ActivityPageView(),
       // ),
       // //
-      GoRoute(
-        path: '/createAccountView',
-        builder: (context, state) => CreateAccountView(),
-      ),
-      GoRoute(
-        path: '/signInUserView',
-        builder: (context, state) => SignInUserView(),
-      ),
       // GoRoute(
       //   path: '/updateNewAccountView',
       //   builder: (context, state) => UpdateNewAccountView(),

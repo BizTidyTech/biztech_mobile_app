@@ -29,6 +29,8 @@ class AppColors {
 
   static Color inputFieldBlack = fromHex('#1A1819');
 
+  static Color normalGreen = Colors.green.shade900;
+
   static Color transparent = Colors.transparent;
 
   static Color fromHex(String hexString) {

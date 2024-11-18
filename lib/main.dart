@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:email_otp/email_otp.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tidytech/app/resources/app.locator.dart';
@@ -14,5 +15,17 @@ void main() async {
   );
   await setupLocator();
   Firebase.initializeApp();
+  configureEmailOtp();
   runApp(TidyTechApp());
+}
+
+void configureEmailOtp() {
+  EmailOTP.config(
+    appName: 'TidyTech',
+    otpType: OTPType.numeric,
+    expiry: 30000,
+    emailTheme: EmailTheme.v6,
+    appEmail: 'verification@tidytech.com',
+    otpLength: 6,
+  );
 }
