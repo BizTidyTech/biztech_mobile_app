@@ -48,7 +48,7 @@ class AppStyles {
       );
 
   static TextStyle inputStringStyle(Color textcolor) => _base(
-        16,
+        12,
         _semiBoldWeight,
         textcolor,
       );

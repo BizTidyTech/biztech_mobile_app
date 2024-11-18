@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sizing/sizing.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_styles.dart';
+import 'package:tidytech/utils/extension_and_methods/screen_utils.dart';
 
 class SizedCustomTextField extends StatelessWidget {
   SizedCustomTextField({
@@ -106,7 +106,7 @@ class SizedCustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height ?? 61,
-      width: width ?? 1.sw,
+      width: width ?? screenWidth(context),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(23)),
         border: Border.all(color: borderColor ?? AppColors.transparent),

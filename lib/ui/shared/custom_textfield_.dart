@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:tidytech/utils/app_constants/app_colors.dart';
+import 'package:tidytech/utils/app_constants/app_styles.dart';
 
 TextStyle labelTextStyles = TextStyle(
   fontSize: 15,
@@ -8,14 +10,14 @@ TextStyle labelTextStyles = TextStyle(
 );
 
 TextStyle hintTextStyles = const TextStyle(
-  fontSize: 13,
-  fontWeight: FontWeight.w500,
+  fontSize: 11,
+  fontWeight: FontWeight.w300,
   color: Color.fromRGBO(153, 153, 153, 1),
 );
 
 class CustomTextfield extends StatefulWidget {
   const CustomTextfield(
-      {Key? key,
+      {super.key,
       this.fillColor,
       this.labelText,
       this.hintText,
@@ -47,8 +49,7 @@ class CustomTextfield extends StatefulWidget {
       this.autofocus,
       this.enabled = true,
       this.suffixText,
-      this.textMaxLength})
-      : super(key: key);
+      this.textMaxLength});
 
   final EdgeInsets? scrollPadding;
   final Color? fillColor;
@@ -90,29 +91,33 @@ class CustomTextfield extends StatefulWidget {
 class _CustomTextfieldState extends State<CustomTextfield> {
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      style: TextStyle(
-        letterSpacing: widget.letterSpacing ?? 1.0,
-      ),
-      controller: widget.textEditingController,
-      maxLength: widget.textMaxLength,
-      keyboardType: widget.keyboardType,
-      decoration: InputDecoration(
-        labelText: widget.labelText,
-        hintText: widget.hintText,
-        fillColor: widget.fillColor ?? Colors.grey[50],
-        filled: true,
-        contentPadding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(20.0),
+    return SizedBox(
+      height: 55,
+      child: TextFormField(
+        style: widget.inputStringStyle ??
+            AppStyles.inputStringStyle(AppColors.fullBlack),
+        controller: widget.textEditingController,
+        maxLength: widget.textMaxLength,
+        keyboardType: widget.keyboardType,
+        decoration: InputDecoration(
+          labelText: widget.labelText,
+          hintText: widget.hintText,
+          fillColor: widget.fillColor ?? AppColors.plainWhite,
+          filled: true,
+          contentPadding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2.0),
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: AppColors.primaryThemeColor, width: 2.0),
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          labelStyle: labelTextStyles,
+          hintStyle: hintTextStyles,
+          counterText: '',
         ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.amber, width: 1.0),
-        ),
-        labelStyle: labelTextStyles,
-        hintStyle: hintTextStyles,
-        counterText: '',
       ),
     );
   }

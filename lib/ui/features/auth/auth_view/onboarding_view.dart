@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
+import 'package:tidytech/ui/shared/custom_button.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -14,8 +16,8 @@ class OnboardingScreen extends StatelessWidget {
     return AnnotatedRegion(
       value: SystemUiOverlayStyle(
         statusBarColor: AppColors.plainWhite,
-        statusBarIconBrightness: Brightness.light,
-        systemNavigationBarIconBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark,
         systemNavigationBarColor: AppColors.kPrimaryColor,
       ),
       child: Scaffold(
@@ -28,7 +30,6 @@ class OnboardingScreen extends StatelessWidget {
               height: screenHeight(context) * 0.36,
               width: screenWidth(context),
               decoration: const BoxDecoration(
-                // color: AppColors.kPrimaryColor,
                 image: DecorationImage(
                   image: AssetImage('assets/casual-life-cleaning.png'),
                   fit: BoxFit.contain,
@@ -50,7 +51,8 @@ class OnboardingScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  verticalSpacer(20),
+                  verticalSpacer(10),
+                  const Spacer(),
                   Text(
                     "${AppStrings.welcome} ${AppStrings.to}",
                     style: AppStyles.subStringStyle(22, AppColors.fullBlack),
@@ -60,6 +62,30 @@ class OnboardingScreen extends StatelessWidget {
                     style: AppStyles.defaultKeyStringStyle(32, 'Audiowide')
                         .copyWith(color: AppColors.fullBlack),
                   ),
+                  verticalSpacer(5),
+                  Text(
+                    AppStrings.tidyTechSub,
+                    style: AppStyles.regularStringStyle(17, AppColors.fullBlack,
+                        family: 'Alice'),
+                  ),
+                  const Spacer(flex: 2),
+                  Center(
+                    child: CustomButton(
+                      buttonText: AppStrings.signUp,
+                      onPressed: () => context.push('/createAccountView'),
+                    ),
+                  ),
+                  verticalSpacer(15),
+                  Center(
+                    child: CustomButton(
+                      borderColor: AppColors.deepBlue,
+                      color: AppColors.kPrimaryColor,
+                      textcolor: AppColors.deepBlue,
+                      buttonText: AppStrings.login,
+                      onPressed: () => context.push('/signInUserView'),
+                    ),
+                  ),
+                  const Spacer(),
                 ],
               ),
             ),

@@ -7,14 +7,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sizing/sizing.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tidytech/ui/features/auth/auth_controller/auth_controller.dart';
+import 'package:tidytech/ui/features/auth/auth_view/widgets/input_widget.dart';
+import 'package:tidytech/ui/features/auth/auth_view/widgets/top_card.dart';
 import 'package:tidytech/ui/shared/custom_button.dart';
-import 'package:tidytech/ui/shared/custom_textfield_.dart';
+import 'package:tidytech/ui/shared/loading_widget.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
 import 'package:tidytech/utils/app_constants/app_styles.dart';
+import 'package:tidytech/utils/extension_and_methods/string_cap_extensions.dart';
 
 class CreateAccountView extends StatelessWidget {
   CreateAccountView({super.key});
@@ -23,116 +26,110 @@ class CreateAccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    return Scaffold(
-      backgroundColor: AppColors.plainWhite,
-      appBar: AppBar(
-        backgroundColor: AppColors.kPrimaryColor,
-        title: Text(
-          AppStrings.createAccount,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        statusBarColor: AppColors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: AppColors.plainWhite,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(30),
-        child: SizedBox(
-          height: size.height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CustomTextfield(
-                textEditingController: controller.fullnameController,
-                labelText: AppStrings.fullName,
-                hintText: 'Enter your name',
-              ),
-              verticalSpacer(20),
-              CustomTextfield(
-                textEditingController: controller.emailController,
-                labelText: AppStrings.email,
-                hintText: 'Enter your email address',
-              ),
-              verticalSpacer(20),
-              CustomTextfield(
-                textEditingController: controller.fullnameController,
-                labelText: AppStrings.password,
-                hintText: 'Enter your preferred password',
-              ),
-              verticalSpacer(20),
-              CustomTextfield(
-                textEditingController: controller.fullnameController,
-                labelText: AppStrings.confirmPassword,
-                hintText: 'Confirm your password',
-              ),
-              verticalSpacer(20),
-              verticalSpacer(20),
-              Center(
-                child: GetBuilder<AuthController>(
-                    init: AuthController(),
-                    builder: (_) {
-                      return Text(
-                        controller.errMessage,
-                        style: const TextStyle(color: Colors.red),
-                      );
-                    }),
-              ),
-              verticalSpacer(40),
-              CustomButton(
-                styleBoolValue: true,
-                height: 55,
-                width: 1.sw * 0.6,
-                color: Colors.amber[600],
-                child: Text(
-                  'Create Account',
-                  style: AppStyles.regularStringStyle(18, AppColors.plainWhite),
-                ),
-                onPressed: () {
-                  SystemChannels.textInput.invokeMethod('TextInput.hide');
-                  controller.attemptToRegisterUser(context);
-                },
-              ),
-              verticalSpacer(12),
-              RichText(
-                text: TextSpan(
-                  text: 'Already have an account? ',
-                  style: TextStyle(
-                    color: AppColors.fullBlack,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Sign in here',
-                      style: AppStyles.regularStringStyle(
-                        14,
-                        AppColors.kPrimaryColor,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: SizedBox(
+            child: Column(
+              children: [
+                authScreensTopCard(context, AppStrings.signUp),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      verticalSpacer(40),
+                      inputWidget(
+                        titleText: AppStrings.fullName.toSentenceCase,
+                        textEditingController: controller.fullnameController,
+                        hintText: 'Enter your name',
                       ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          controller.resetValues();
-                          controller.gotoSignInUserPage(context);
+                      inputWidget(
+                        titleText: AppStrings.email,
+                        textEditingController: controller.emailController,
+                        hintText: 'Enter your email address',
+                      ),
+                      inputWidget(
+                        titleText: AppStrings.password,
+                        textEditingController: controller.passwordController,
+                        hintText: 'Enter your preferred password',
+                      ),
+                      inputWidget(
+                        titleText: AppStrings.confirmPassword,
+                        textEditingController:
+                            controller.confirmPasswordController,
+                        hintText: 'Confirm your password',
+                      ),
+                      verticalSpacer(40),
+                      Center(
+                        child: GetBuilder<AuthController>(
+                            init: AuthController(),
+                            builder: (_) {
+                              return Text(controller.errMessage,
+                                  style: AppStyles.subStringStyle(
+                                      13, AppColors.coolRed));
+                            }),
+                      ),
+                      verticalSpacer(10),
+                      controller.showLoading == true
+                          ? loadingWidget()
+                          : CustomButton(
+                              buttonText: AppStrings.signUp,
+                              onPressed: () {
+                                SystemChannels.textInput
+                                    .invokeMethod('TextInput.hide');
+                                controller.attemptToRegisterNewUser(context);
+                              },
+                            ),
+                      verticalSpacer(12),
+                      controller.showLoading == true
+                          ? const SizedBox.shrink()
+                          : RichText(
+                              text: TextSpan(
+                                text: 'Already have an account? ',
+                                style: TextStyle(
+                                  color: AppColors.fullBlack,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: AppStrings.login,
+                                    style: AppStyles.regularStringStyle(
+                                        14, AppColors.kPrimaryColor),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        controller.resetValues();
+                                        context
+                                            .pushReplacement('/signInUserView');
+                                      },
+                                  ),
+                                ],
+                              ),
+                              textScaler: const TextScaler.linear(1),
+                            ),
+                      verticalSpacer(40),
+                      GetBuilder<AuthController>(
+                        init: AuthController(),
+                        builder: (_) {
+                          return Center(
+                            child: controller.showLoading == true
+                                ? Platform.isAndroid
+                                    ? const CircularProgressIndicator()
+                                    : const CupertinoActivityIndicator()
+                                : const SizedBox.shrink(),
+                          );
                         },
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-                textScaler: const TextScaler.linear(1),
-              ),
-              verticalSpacer(40),
-              GetBuilder<AuthController>(
-                init: AuthController(),
-                builder: (_) {
-                  return Center(
-                    child: controller.showLoading == true
-                        ? Platform.isAndroid
-                            ? const CircularProgressIndicator()
-                            : const CupertinoActivityIndicator()
-                        : const SizedBox.shrink(),
-                  );
-                },
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

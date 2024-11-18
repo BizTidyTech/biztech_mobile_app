@@ -51,3 +51,10 @@ flutter:
     - family: OpenSans
       fonts:
         - asset: fonts/OpenSans-VariableFont_wdth,wght.ttf
+    - family: Alice
+      fonts:
+        - asset: fonts/Alice-Regular.ttf
+    - family: Inter
+      fonts:
+        - asset: fonts/Inter-VariableFont_opsz,wght.ttf
+

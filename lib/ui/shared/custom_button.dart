@@ -2,25 +2,34 @@
 
 import 'package:flutter/material.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
+import 'package:tidytech/utils/app_constants/app_styles.dart';
+import 'package:tidytech/utils/extension_and_methods/screen_utils.dart';
 
 class CustomButton extends StatelessWidget {
-  final bool? styleBoolValue;
   final Widget? child;
   final double? width;
   final double? height;
   final Color? color;
+  final Color? borderColor;
   final double? borderRadius;
+  final String? buttonText;
+  final double? fontSize;
+  final Color? textcolor;
   final void Function()? onPressed;
 
-  const CustomButton(
-      {super.key,
-      required this.styleBoolValue,
-      required this.width,
-      this.height,
-      this.child,
-      this.color,
-      this.onPressed,
-      this.borderRadius});
+  const CustomButton({
+    super.key,
+    this.width,
+    this.height,
+    this.child,
+    this.color,
+    this.onPressed,
+    this.borderRadius,
+    this.borderColor,
+    this.buttonText,
+    this.fontSize,
+    this.textcolor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +39,25 @@ class CustomButton extends StatelessWidget {
             print('Custom Button pressed');
           },
       style: TextButton.styleFrom(
-        fixedSize: Size(width!, height ?? 60),
+        fixedSize: Size(width ?? screenWidth(context) * 0.75, height ?? 50),
         padding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius ?? 28),
+          borderRadius: BorderRadius.circular(borderRadius ?? 10),
+          side: BorderSide(
+            color: borderColor ?? AppColors.deepBlue,
+            width: 2.0,
+          ),
         ),
-        backgroundColor: styleBoolValue!
-            ? (color ?? AppColors.kPrimaryColor)
-            : AppColors.coolRed.withOpacity(0.4),
+        backgroundColor: color ?? AppColors.deepBlue,
       ),
-      child: child ?? const SizedBox(),
+      child: child ??
+          Text(
+            buttonText ?? '',
+            style: AppStyles.subStringStyle(
+              fontSize ?? 18,
+              textcolor ?? AppColors.kPrimaryColor,
+            ),
+          ),
     );
   }
 }

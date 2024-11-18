@@ -1,7 +1,8 @@
 class AppStrings {
   static String tidyTechTitle = 'TidyTech';
   static String tidyTechCaption = 'A Tidy Space Starts With Smart Choices';
-  static String tidyTechSub = "Your ‘go-to’ for professional cleaning service.";
+  static String tidyTechSub =
+      "Your ‘go-to’ for professional cleaning\nservice.";
   static String welcome = 'Welcome';
   static String to = 'to';
   static String login = 'Login';
@@ -15,7 +16,7 @@ class AppStrings {
   static String proceed = 'Proceed';
   static String home = 'Home';
   static String profile = 'Profile';
-  static String fullName = 'Full Name';
+  static String fullName = 'Name';
   static String email = 'Email';
   static String password = 'Password';
   static String confirmPassword = 'Confirm Password';

@@ -7,7 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sizing/sizing_extension.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tidytech/ui/features/auth/auth_controller/auth_controller.dart';
 import 'package:tidytech/ui/shared/custom_button.dart';
 import 'package:tidytech/ui/shared/custom_textfield_.dart';
@@ -70,14 +70,7 @@ class SignInUserView extends StatelessWidget {
               ),
               verticalSpacer(40),
               CustomButton(
-                styleBoolValue: true,
-                height: 55,
-                width: 1.sw * 0.6,
-                color: Colors.amber[600],
-                child: Text(
-                  AppStrings.login,
-                  style: AppStyles.regularStringStyle(18, AppColors.plainWhite),
-                ),
+                buttonText: AppStrings.login,
                 onPressed: () {
                   SystemChannels.textInput.invokeMethod('TextInput.hide');
                   controller.attemptToSignInUser(context);
@@ -93,7 +86,7 @@ class SignInUserView extends StatelessWidget {
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                      text: 'Sign up here',
+                      text: AppStrings.signUp,
                       style: AppStyles.regularStringStyle(
                         14,
                         AppColors.kPrimaryColor,
@@ -101,7 +94,7 @@ class SignInUserView extends StatelessWidget {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           controller.resetValues();
-                          Navigator.pop(context);
+                          context.pushReplacement('/createAccountView');
                         },
                     ),
                   ],

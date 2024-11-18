@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:sizing/sizing_extension.dart';
 import 'package:tidytech/ui/features/auth/auth_controller/auth_controller.dart';
 import 'package:tidytech/ui/shared/custom_button.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
@@ -97,10 +96,6 @@ class UpdateNewAccountView extends StatelessWidget {
                   }),
               verticalSpacer(20),
               CustomButton(
-                styleBoolValue: true,
-                height: 55,
-                width: 1.sw * 0.6,
-                color: Colors.amber[600],
                 child: Text(
                   'Continue',
                   style: AppStyles.regularStringStyle(18, AppColors.plainWhite),
