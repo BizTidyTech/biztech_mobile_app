@@ -17,7 +17,7 @@ class AppColors {
 
   static Color lightGray = fromHex('#161a1818').withOpacity(0.05);
 
-  static Color coolRed = fromHex('#ff4550');
+  static Color coolRed = const Color.fromARGB(255, 252, 30, 14);
 
   static Color lighterGray = fromHex('#0c000000').withOpacity(0.02);
 

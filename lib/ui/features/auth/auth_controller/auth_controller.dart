@@ -33,6 +33,7 @@ class AuthController extends GetxController {
   void resetValues() {
     errMessage = "";
     showLoading = false;
+    invalidOtp = false;
     imageFile = null;
     update();
   }
@@ -52,31 +53,31 @@ class AuthController extends GetxController {
     update();
   }
 
-  void gotoSignInUserPage(BuildContext context) {
-    logger.i('Going to sign in user page');
-    resetValues();
-    context.push('/signInUserView');
-  }
+  Future<void> attemptToVerifyNewUser(BuildContext context) async {
+    logger.i('attemptToVerifyNewUser . . .');
 
-  void gotoHomepage(BuildContext context) async {
-    logger.i('Going to homepage page');
-    resetValues();
-    context.go('/homepageView');
-  }
-
-  Future<void> attemptToSignInUser(BuildContext context) async {
-    logger.i('attemptToSignInUser . . .');
-    if (emailController.text.trim().isNotEmpty &&
-        passwordController.text.trim().isNotEmpty) {
-      logger.i('signing in user . . .');
-
-      startLoading();
-
-      await saveUserDetailsLocally(userEnteredData);
+    if (fullnameController.text.trim().isEmpty == true ||
+        emailController.text.trim().isEmpty == true ||
+        passwordController.text.trim().isEmpty == true ||
+        confirmPasswordController.text.trim().isEmpty == true) {
+      errMessage = 'All fields must be filled accordingly';
+      update();
+    } else if (await validateEmail(emailController.text.trim()) == false) {
+      errMessage = 'Enter a valid email address';
+      update();
+    } else if (passwordController.text.trim() !=
+        confirmPasswordController.text.trim()) {
+      errMessage = "Passwords do not match";
+      update();
     } else {
-      errMessage = 'All fields must be filled, and with no spaces';
-      logger.i("Errormessage: $errMessage");
-      stopLoading();
+      logger.i('Registering user . . .');
+      userEnteredData = UserData(
+        userId: generateRandomString(),
+        email: emailController.text.trim(),
+        name: fullnameController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      sendEmailOtp(context);
     }
   }
 
@@ -122,7 +123,7 @@ class AuthController extends GetxController {
         context.go('/homepageView');
       } else {
         errMessage = 'Error creating user.';
-        logger.w('Error registering user.');
+        logger.w('Error creating user.');
         stopLoading();
       }
     } else {
@@ -132,31 +133,19 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> attemptToVerifyNewUser(BuildContext context) async {
-    logger.i('attemptToVerifyNewUser . . .');
+  Future<void> attemptToSignInUser(BuildContext context) async {
+    logger.i('attemptToSignInUser . . .');
+    if (emailController.text.trim().isNotEmpty &&
+        passwordController.text.trim().isNotEmpty) {
+      logger.i('signing in user . . .');
 
-    if (fullnameController.text.trim().isEmpty == true ||
-        emailController.text.trim().isEmpty == true ||
-        passwordController.text.trim().isEmpty == true ||
-        confirmPasswordController.text.trim().isEmpty == true) {
-      errMessage = 'All fields must be filled accordingly';
-      update();
-    } else if (await validateEmail(emailController.text.trim()) == false) {
-      errMessage = 'Enter a valid email address';
-      update();
-    } else if (passwordController.text.trim() !=
-        confirmPasswordController.text.trim()) {
-      errMessage = "Passwords do not match";
-      update();
+      startLoading();
+
+      await saveUserDetailsLocally(userEnteredData);
     } else {
-      logger.i('Registering user . . .');
-      userEnteredData = UserData(
-        userId: generateRandomString(),
-        email: emailController.text.trim(),
-        name: fullnameController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-      sendEmailOtp(context);
+      errMessage = 'All fields must be filled, and with no spaces';
+      logger.i("Errormessage: $errMessage");
+      stopLoading();
     }
   }
 
