@@ -1,12 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tidytech/ui/features/auth/auth_controller/auth_controller.dart';
 import 'package:tidytech/ui/shared/custom_textfield_.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_styles.dart';
 
-Widget inputWidget(
-    {required String titleText,
-    required TextEditingController textEditingController,
-    required String hintText}) {
+Widget inputWidget({
+  required String titleText,
+  required TextEditingController textEditingController,
+  required String hintText,
+  TextInputAction? textInputAction = TextInputAction.next,
+  TextInputType? keyboardType,
+  bool? isObscurable,
+}) {
+  final controller = Get.put(AuthController());
+
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 6),
     height: 79,
@@ -24,6 +33,23 @@ Widget inputWidget(
         CustomTextfield(
           textEditingController: textEditingController,
           hintText: hintText,
+          textInputAction: textInputAction ?? TextInputAction.next,
+          keyboardType: keyboardType,
+          obscureText: isObscurable != true ? false : controller.isObscured,
+          suffixIcon: isObscurable != true
+              ? null
+              : InkWell(
+                  onTap: () {
+                    controller.toggleObscurePassword();
+                  },
+                  child: Icon(
+                    controller.isObscured
+                        ? CupertinoIcons.eye_solid
+                        : CupertinoIcons.eye_slash_fill,
+                    size: 25,
+                    color: AppColors.kPrimaryColor,
+                  ),
+                ),
         ),
       ],
     ),

@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
-import 'package:tidytech/ui/shared/global_variables.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -43,16 +42,13 @@ class _SplashScreenState extends State<SplashScreen>
         sleep(const Duration(milliseconds: 200));
 
         bool accountExisting;
-        String existingUsername = await getSharedPrefsSavedString("username");
-        logger.w('existingUsername: $existingUsername');
-        if (existingUsername != '') {
-          GlobalVariables.myUsername = existingUsername;
+        final existingUserData = await getLocallySavedUserDetails();
+        logger.w('existingUserData: ${existingUserData?.toJson()}');
+        if (existingUserData != null) {
           accountExisting = true;
-          logger.f('GlobalVariables.myUsername: ${GlobalVariables.myUsername}');
         } else {
           accountExisting = false;
         }
-
         context.pushReplacement(
           accountExisting ? '/homepageView' : '/onboardingScreen',
         );

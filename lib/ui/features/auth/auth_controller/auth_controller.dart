@@ -24,17 +24,26 @@ class AuthController extends GetxController {
 
   AuthController();
 
-  bool showLoading = false, invalidOtp = false;
+  bool showLoading = false, invalidOtp = false, isObscured = true;
   String errMessage = '';
 
   File? imageFile;
-  String? imageUrl;
+
+  disposeAllControllers() {
+    fullnameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    otpController.dispose();
+    resetValues();
+  }
 
   void resetValues() {
     errMessage = "";
     showLoading = false;
     invalidOtp = false;
     imageFile = null;
+    userEnteredData = null;
     update();
   }
 
@@ -50,6 +59,12 @@ class AuthController extends GetxController {
   }
 
   updateVals() {
+    update();
+  }
+
+  toggleObscurePassword() {
+    isObscured = !isObscured;
+    logger.i("Toggling to $isObscured");
     update();
   }
 
@@ -88,7 +103,7 @@ class AuthController extends GetxController {
     if (sendOtpResponse == true) {
       logger.f("OTP sent successfully");
       navigate != false
-          ? context.go('/verifyOtpScreen')
+          ? context.push('/verifyOtpScreen')
           : Fluttertoast.showToast(msg: "OTP has been resent");
     } else {
       logger.e("Error sending OTP");
@@ -121,6 +136,7 @@ class AuthController extends GetxController {
       if (isUserRegistered == true) {
         logger.f('Account created successfully.');
         context.go('/homepageView');
+        disposeAllControllers();
       } else {
         errMessage = 'Error creating user.';
         logger.w('Error creating user.');

@@ -41,7 +41,7 @@ class CustomTextfield extends StatefulWidget {
       this.maxLines,
       this.onTap,
       this.inputStringStyle,
-      this.textInputAction = TextInputAction.done,
+      this.textInputAction = TextInputAction.next,
       this.textCapitalization,
       this.contentpadding,
       this.scrollPadding,
@@ -68,7 +68,7 @@ class CustomTextfield extends StatefulWidget {
   final bool hasSuffixIcon;
   final bool hasPrefixIcon;
   final bool? obscureText;
-  final IconData? suffixIcon;
+  final Widget? suffixIcon;
   final FocusNode? focusNode;
   final TextStyle? inputStringStyle;
   final TextStyle? prefixStyle;
@@ -99,11 +99,14 @@ class _CustomTextfieldState extends State<CustomTextfield> {
         controller: widget.textEditingController,
         maxLength: widget.textMaxLength,
         keyboardType: widget.keyboardType,
+        textInputAction: widget.textInputAction,
+        obscureText: widget.obscureText ?? false,
         decoration: InputDecoration(
           labelText: widget.labelText,
           hintText: widget.hintText,
           fillColor: widget.fillColor ?? AppColors.plainWhite,
           filled: true,
+          suffixIcon: widget.suffixIcon,
           contentPadding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: AppColors.kPrimaryColor, width: 2.0),

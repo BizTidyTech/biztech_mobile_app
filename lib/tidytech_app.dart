@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/app/resources/app.router.dart';
 import 'package:tidytech/app/services/navigation_service.dart';
-import 'package:tidytech/ui/features/custom_nav_bar/page_index_class.dart';
+import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
 import 'package:tidytech/utils/app_constants/app_theme_data.dart';
 

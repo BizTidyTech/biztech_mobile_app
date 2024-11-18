@@ -29,7 +29,6 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
 
   @override
   void dispose() {
-    // otpController.dispose();
     super.dispose();
   }
 
@@ -38,7 +37,6 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
     return GestureDetector(
       onTap: () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
       child: Scaffold(
-        backgroundColor: AppColors.fullBlack,
         body: GetBuilder<AuthController>(
             init: AuthController(),
             builder: (_) {
@@ -47,18 +45,21 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                   children: [
                     authScreensTopCard(context, AppStrings.emailVerification),
                     verticalSpacer(42),
-                    RichText(
-                      textAlign: TextAlign.start,
-                      text: TextSpan(
-                        text: AppStrings.emailVerificationText,
-                        style:
-                            AppStyles.subStringStyle(14, AppColors.fullBlack),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: controller.userEnteredData?.email,
-                              style: AppStyles.regularStringStyle(
-                                  14, AppColors.primaryThemeColor)),
-                        ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: RichText(
+                        textAlign: TextAlign.start,
+                        text: TextSpan(
+                          text: AppStrings.emailVerificationText,
+                          style:
+                              AppStyles.subStringStyle(14, AppColors.fullBlack),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: controller.userEnteredData?.email,
+                                style: AppStyles.regularStringStyle(
+                                    14, AppColors.primaryThemeColor)),
+                          ],
+                        ),
                       ),
                     ),
                     verticalSpacer(49),

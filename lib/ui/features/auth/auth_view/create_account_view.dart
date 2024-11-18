@@ -30,107 +30,106 @@ class CreateAccountView extends StatelessWidget {
         systemNavigationBarIconBrightness: Brightness.dark,
         systemNavigationBarColor: AppColors.plainWhite,
       ),
-      child: GestureDetector(
-        onTap: () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: SizedBox(
-              child: Column(
-                children: [
-                  authScreensTopCard(context, AppStrings.signUp),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        verticalSpacer(40),
-                        inputWidget(
-                          titleText: AppStrings.fullName.toSentenceCase,
-                          textEditingController: controller.fullnameController,
-                          hintText: 'Enter your name',
-                        ),
-                        inputWidget(
-                          titleText: AppStrings.email,
-                          textEditingController: controller.emailController,
-                          hintText: 'Enter your email address',
-                        ),
-                        inputWidget(
-                          titleText: AppStrings.password,
-                          textEditingController: controller.passwordController,
-                          hintText: 'Enter your preferred password',
-                        ),
-                        inputWidget(
-                          titleText: AppStrings.confirmPassword,
-                          textEditingController:
-                              controller.confirmPasswordController,
-                          hintText: 'Confirm your password',
-                        ),
-                        verticalSpacer(40),
-                        Center(
-                          child: GetBuilder<AuthController>(
-                              init: AuthController(),
-                              builder: (_) {
-                                return Text(controller.errMessage,
-                                    style: AppStyles.subStringStyle(
-                                        13, AppColors.coolRed));
-                              }),
-                        ),
-                        verticalSpacer(10),
-                        controller.showLoading == true
-                            ? loadingWidget()
-                            : CustomButton(
-                                buttonText: AppStrings.signUp,
-                                onPressed: () {
-                                  SystemChannels.textInput
-                                      .invokeMethod('TextInput.hide');
-                                  controller.attemptToVerifyNewUser(context);
-                                },
-                              ),
-                        verticalSpacer(12),
-                        controller.showLoading == true
-                            ? const SizedBox.shrink()
-                            : RichText(
-                                text: TextSpan(
-                                  text: 'Already have an account? ',
-                                  style: TextStyle(
-                                    color: AppColors.fullBlack,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: AppStrings.login,
-                                      style: AppStyles.regularStringStyle(
-                                          14, AppColors.kPrimaryColor),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          controller.resetValues();
-                                          context.pushReplacement(
-                                              '/signInUserView');
-                                        },
-                                    ),
-                                  ],
+      child: GetBuilder<AuthController>(
+          init: AuthController(),
+          builder: (_) {
+            return GestureDetector(
+              onTap: () =>
+                  SystemChannels.textInput.invokeMethod('TextInput.hide'),
+              child: Scaffold(
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      authScreensTopCard(context, AppStrings.signUp),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            verticalSpacer(40),
+                            inputWidget(
+                              titleText: AppStrings.fullName.toSentenceCase,
+                              textEditingController:
+                                  controller.fullnameController,
+                              hintText: 'Enter your name',
+                            ),
+                            inputWidget(
+                              titleText: AppStrings.email,
+                              textEditingController: controller.emailController,
+                              hintText: 'Enter your email address',
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            inputWidget(
+                              titleText: AppStrings.password,
+                              textEditingController:
+                                  controller.passwordController,
+                              hintText: 'Enter your preferred password',
+                              isObscurable: true,
+                            ),
+                            inputWidget(
+                              titleText: AppStrings.confirmPassword,
+                              textEditingController:
+                                  controller.confirmPasswordController,
+                              hintText: 'Confirm your password',
+                              textInputAction: TextInputAction.done,
+                              isObscurable: true,
+                            ),
+                            verticalSpacer(30),
+                            Center(
+                              child: Text(
+                                controller.errMessage,
+                                style: AppStyles.subStringStyle(
+                                  13,
+                                  AppColors.coolRed,
                                 ),
-                                textScaler: const TextScaler.linear(1),
                               ),
-                        verticalSpacer(40),
-                        GetBuilder<AuthController>(
-                          init: AuthController(),
-                          builder: (_) {
-                            return Center(
-                              child: controller.showLoading == true
-                                  ? loadingWidget()
-                                  : const SizedBox.shrink(),
-                            );
-                          },
+                            ),
+                            verticalSpacer(10),
+                            controller.showLoading == true
+                                ? loadingWidget()
+                                : CustomButton(
+                                    buttonText: AppStrings.signUp,
+                                    onPressed: () {
+                                      SystemChannels.textInput
+                                          .invokeMethod('TextInput.hide');
+                                      controller
+                                          .attemptToVerifyNewUser(context);
+                                    },
+                                  ),
+                            verticalSpacer(12),
+                            controller.showLoading == true
+                                ? const SizedBox.shrink()
+                                : RichText(
+                                    text: TextSpan(
+                                      text: 'Already have an account? ',
+                                      style: TextStyle(
+                                        color: AppColors.fullBlack,
+                                      ),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: AppStrings.login,
+                                          style: AppStyles.regularStringStyle(
+                                              14, AppColors.kPrimaryColor),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              controller.resetValues();
+                                              context.pushReplacement(
+                                                  '/signInUserView');
+                                            },
+                                        ),
+                                      ],
+                                    ),
+                                    textScaler: const TextScaler.linear(1),
+                                  ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 }

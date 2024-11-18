@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomSizeTransition extends CustomTransitionPage {
-  CustomSizeTransition({required LocalKey key, required Widget child})
+  CustomSizeTransition({required LocalKey super.key, required super.child})
       : super(
-          key: key,
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               SizeTransition(
             sizeFactor: animation,
@@ -12,14 +11,12 @@ class CustomSizeTransition extends CustomTransitionPage {
             child: child,
           ),
           transitionDuration: const Duration(milliseconds: 500),
-          child: child,
         );
 }
 
 class CustomSlideTransition extends CustomTransitionPage {
-  CustomSlideTransition({required LocalKey key, required Widget child})
+  CustomSlideTransition({required LocalKey super.key, required super.child})
       : super(
-          key: key,
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               SlideTransition(
             position: Tween(
@@ -29,17 +26,14 @@ class CustomSlideTransition extends CustomTransitionPage {
             child: child,
           ),
           transitionDuration: const Duration(milliseconds: 400),
-          child: child,
         );
 }
 
 class CustomFadeTransition extends CustomTransitionPage {
-  CustomFadeTransition({required LocalKey key, required Widget child})
+  CustomFadeTransition({required LocalKey super.key, required super.child})
       : super(
-          key: key,
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               FadeTransition(opacity: animation, child: child),
           transitionDuration: const Duration(milliseconds: 500),
-          child: child,
         );
 }

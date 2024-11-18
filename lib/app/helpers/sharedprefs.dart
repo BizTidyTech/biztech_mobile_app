@@ -25,8 +25,15 @@ saveUserDetailsLocally(UserData? userData) async {
       FbCollectionNames.user, jsonEncode(userData));
 }
 
-Future<UserData> getLocallySavedUserDetails(UserData userData) async {
-  final userDataString =
-      await getSharedPrefsSavedString(FbCollectionNames.user);
-  return UserData.fromJson(jsonDecode(userDataString));
+Future<UserData?> getLocallySavedUserDetails() async {
+  try {
+    final userDataString =
+        await getSharedPrefsSavedString(FbCollectionNames.user);
+    if (userDataString == '') {
+      return null;
+    }
+    return UserData.fromJson(jsonDecode(userDataString));
+  } catch (e) {
+    return null;
+  }
 }
