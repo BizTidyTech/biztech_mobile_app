@@ -23,7 +23,7 @@ void configureEmailOtp() {
   EmailOTP.config(
     appName: 'TidyTech',
     otpType: OTPType.numeric,
-    expiry: 30000,
+    expiry: 600000,
     emailTheme: EmailTheme.v6,
     appEmail: 'verification@tidytech.com',
     otpLength: 6,

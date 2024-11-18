@@ -116,12 +116,12 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                                     : TextSpan(
                                         text: 'Didn\'t receive any code?   ',
                                         style: AppStyles.subStringStyle(
-                                            14, AppColors.plainWhite),
+                                            14, AppColors.fullBlack),
                                       ),
                                 TextSpan(
                                   text: 'Resend',
                                   style: AppStyles.subStringStyle(
-                                      14, AppColors.kPrimaryColor),
+                                      14, AppColors.primaryThemeColor),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () async {
                                       controller.sendEmailOtp(context,
