@@ -56,6 +56,7 @@ class SignInUserView extends StatelessWidget {
                               textEditingController:
                                   controller.passwordController,
                               hintText: 'Enter your password',
+                              isObscurable: true,
                             ),
                             verticalSpacer(40),
                             Center(

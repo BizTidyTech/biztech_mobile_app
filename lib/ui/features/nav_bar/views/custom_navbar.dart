@@ -1,8 +1,9 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
@@ -72,7 +73,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
                       : false;
               Provider.of<CurrentPage>(context, listen: false)
                   .setCurrentPageIndex(1);
-
               logger.i('currentPageIndexCheck: $currentPageIndexCheck');
               currentPageIndexCheck == true
                   ? context.push('/bookingsPage')
@@ -106,8 +106,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
             child: _buildNavBarItem(
               barIndex: 2,
               label: AppStrings.notifications,
-              activeIcon: Icons.notifications_rounded,
-              inactiveIcon: Icons.notifications_none_sharp,
+              activeIcon: Iconsax.notification5,
+              inactiveIcon: Iconsax.notification4,
             ),
           ),
 
@@ -123,7 +123,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
                       : false;
               Provider.of<CurrentPage>(context, listen: false)
                   .setCurrentPageIndex(3);
-
               logger.i('currentPageIndexCheck: $currentPageIndexCheck');
               currentPageIndexCheck == true
                   ? context.push('/profileView')
@@ -132,8 +131,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
             child: _buildNavBarItem(
               barIndex: 3,
               label: AppStrings.profile,
-              activeIcon: Icons.person,
-              inactiveIcon: Icons.person_outline_rounded,
+              activeIcon: IconsaxPlusBold.profile,
+              inactiveIcon: IconsaxPlusLinear.profile,
             ),
           ),
         ],
@@ -148,6 +147,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
       required IconData inactiveIcon}) {
     return SizedBox(
       width: 70,
+      height: 50,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -155,7 +155,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
             widget.currentPageIndx == barIndex ? activeIcon : inactiveIcon,
             color: widget.currentPageIndx == barIndex
                 ? AppColors.deepBlue
-                : AppColors.fullBlack,
+                : AppColors.fullBlack.withOpacity(0.8),
             size: 30,
           ),
           Text(
@@ -164,7 +164,11 @@ class _CustomNavBarState extends State<CustomNavBar> {
               10,
               widget.currentPageIndx == barIndex
                   ? AppColors.deepBlue
-                  : AppColors.fullBlack,
+                  : AppColors.fullBlack.withOpacity(0.8),
+            ).copyWith(
+              fontWeight: widget.currentPageIndx == barIndex
+                  ? FontWeight.w900
+                  : FontWeight.w400,
             ),
           ),
         ],

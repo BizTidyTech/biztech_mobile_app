@@ -25,7 +25,7 @@ class CustomSlideTransition extends CustomTransitionPage {
             ).animate(animation),
             child: child,
           ),
-          transitionDuration: const Duration(milliseconds: 400),
+          transitionDuration: const Duration(milliseconds: 200),
         );
 }
 
@@ -34,6 +34,16 @@ class CustomFadeTransition extends CustomTransitionPage {
       : super(
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               FadeTransition(opacity: animation, child: child),
-          transitionDuration: const Duration(milliseconds: 500),
+          transitionDuration: const Duration(milliseconds: 200),
+        );
+}
+
+class CustomNormalTransition extends CustomTransitionPage {
+  CustomNormalTransition({required LocalKey super.key, required super.child})
+      : super(
+          transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+              FadeTransition(opacity: animation, child: child),
+          transitionDuration: const Duration(milliseconds: 0),
+          reverseTransitionDuration: const Duration(milliseconds: 0),
         );
 }

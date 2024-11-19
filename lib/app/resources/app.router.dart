@@ -1,7 +1,10 @@
+import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:tidytech/app/resources/app.transitions.dart';
 import 'package:tidytech/app/services/navigation_service.dart';
 import 'package:tidytech/ui/features/auth/auth_view/create_account_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/onboarding_view.dart';
@@ -9,6 +12,7 @@ import 'package:tidytech/ui/features/auth/auth_view/signin_user_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/verify_otp_screen.dart';
 import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
 import 'package:tidytech/ui/features/home/home_view/home_view.dart';
+import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/ui/features/nav_bar/views/custom_navbar.dart';
 import 'package:tidytech/ui/features/splash_screen/splash_screen.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
@@ -42,19 +46,23 @@ class AppRouter {
       ),
       GoRoute(
         path: '/homepageView',
-        builder: (context, state) => const HomepageView(),
+        pageBuilder: (context, state) => CustomNormalTransition(
+            child: const HomepageView(), key: state.pageKey),
       ),
       GoRoute(
         path: '/bookingsPage',
-        builder: (context, state) => const BookingsView(),
+        pageBuilder: (context, state) => CustomNormalTransition(
+            child: const BookingsView(), key: state.pageKey),
       ),
       GoRoute(
         path: '/notificationsView',
-        builder: (context, state) => const NotificationsView(),
+        pageBuilder: (context, state) => CustomNormalTransition(
+            child: const NotificationsView(), key: state.pageKey),
       ),
       GoRoute(
         path: '/profileView',
-        builder: (context, state) => const ProfileView(),
+        pageBuilder: (context, state) => CustomNormalTransition(
+            child: const ProfileView(), key: state.pageKey),
       ),
     ],
   );
@@ -65,22 +73,27 @@ class BookingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-        statusBarColor: AppColors.plainWhite,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: AppColors.plainWhite,
-      ),
-      child: GetBuilder<HomeController>(
-        init: HomeController(),
-        builder: (_) {
-          return Scaffold(
-            backgroundColor: AppColors.plainWhite,
-            bottomNavigationBar: const CustomNavBar(currentPageIndx: 1),
-            body: const Center(child: Text("Bookings")),
-          );
-        },
+    return ConditionalWillPopScope(
+      onWillPop: () => Provider.of<CurrentPage>(context, listen: false)
+          .checkCurrentPageIndex(context),
+      shouldAddCallback: true,
+      child: AnnotatedRegion(
+        value: SystemUiOverlayStyle(
+          statusBarColor: AppColors.plainWhite,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: AppColors.plainWhite,
+        ),
+        child: GetBuilder<HomeController>(
+          init: HomeController(),
+          builder: (_) {
+            return Scaffold(
+              backgroundColor: AppColors.plainWhite,
+              bottomNavigationBar: const CustomNavBar(currentPageIndx: 1),
+              body: const Center(child: Text("Bookings")),
+            );
+          },
+        ),
       ),
     );
   }
@@ -91,22 +104,27 @@ class NotificationsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-        statusBarColor: AppColors.plainWhite,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: AppColors.plainWhite,
-      ),
-      child: GetBuilder<HomeController>(
-        init: HomeController(),
-        builder: (_) {
-          return Scaffold(
-            backgroundColor: AppColors.plainWhite,
-            bottomNavigationBar: const CustomNavBar(currentPageIndx: 2),
-            body: const Center(child: Text("Notifications")),
-          );
-        },
+    return ConditionalWillPopScope(
+      onWillPop: () => Provider.of<CurrentPage>(context, listen: false)
+          .checkCurrentPageIndex(context),
+      shouldAddCallback: true,
+      child: AnnotatedRegion(
+        value: SystemUiOverlayStyle(
+          statusBarColor: AppColors.plainWhite,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: AppColors.plainWhite,
+        ),
+        child: GetBuilder<HomeController>(
+          init: HomeController(),
+          builder: (_) {
+            return Scaffold(
+              backgroundColor: AppColors.plainWhite,
+              bottomNavigationBar: const CustomNavBar(currentPageIndx: 2),
+              body: const Center(child: Text("Notifications")),
+            );
+          },
+        ),
       ),
     );
   }
@@ -117,22 +135,27 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion(
-      value: SystemUiOverlayStyle(
-        statusBarColor: AppColors.plainWhite,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: AppColors.plainWhite,
-      ),
-      child: GetBuilder<HomeController>(
-        init: HomeController(),
-        builder: (_) {
-          return Scaffold(
-            backgroundColor: AppColors.plainWhite,
-            bottomNavigationBar: const CustomNavBar(currentPageIndx: 3),
-            body: const Center(child: Text("Profile")),
-          );
-        },
+    return ConditionalWillPopScope(
+      onWillPop: () => Provider.of<CurrentPage>(context, listen: false)
+          .checkCurrentPageIndex(context),
+      shouldAddCallback: true,
+      child: AnnotatedRegion(
+        value: SystemUiOverlayStyle(
+          statusBarColor: AppColors.plainWhite,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: AppColors.plainWhite,
+        ),
+        child: GetBuilder<HomeController>(
+          init: HomeController(),
+          builder: (_) {
+            return Scaffold(
+              backgroundColor: AppColors.plainWhite,
+              bottomNavigationBar: const CustomNavBar(currentPageIndx: 3),
+              body: const Center(child: Text("Profile")),
+            );
+          },
+        ),
       ),
     );
   }
