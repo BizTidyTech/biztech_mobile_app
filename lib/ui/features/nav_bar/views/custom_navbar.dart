@@ -1,8 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
@@ -55,8 +55,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
             child: _buildNavBarItem(
               barIndex: 0,
               label: AppStrings.home,
-              activeIcon: Icons.home_filled,
-              inactiveIcon: Icons.home_outlined,
+              activeIcon: Iconsax.home_25,
+              inactiveIcon: Iconsax.home_24,
             ),
           ),
 
@@ -75,14 +75,14 @@ class _CustomNavBarState extends State<CustomNavBar> {
 
               logger.i('currentPageIndexCheck: $currentPageIndexCheck');
               currentPageIndexCheck == true
-                  ? context.push('/userExplorePage')
-                  : context.replace('/userExplorePage');
+                  ? context.push('/bookingsPage')
+                  : context.replace('/bookingsPage');
             },
             child: _buildNavBarItem(
               barIndex: 1,
               label: AppStrings.bookings,
-              activeIcon: CupertinoIcons.calendar_today,
-              inactiveIcon: CupertinoIcons.calendar,
+              activeIcon: Iconsax.calendar5,
+              inactiveIcon: Iconsax.calendar_1,
             ),
           ),
 
@@ -100,8 +100,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
                   .setCurrentPageIndex(2);
               logger.i('currentPageIndexCheck: $currentPageIndexCheck');
               currentPageIndexCheck == true
-                  ? context.push('/userFavouritesPage')
-                  : context.replace('/userFavouritesPage');
+                  ? context.push('/notificationsView')
+                  : context.replace('/notificationsView');
             },
             child: _buildNavBarItem(
               barIndex: 2,
@@ -126,8 +126,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
 
               logger.i('currentPageIndexCheck: $currentPageIndexCheck');
               currentPageIndexCheck == true
-                  ? context.push('/userProfilePage')
-                  : context.replace('/userProfilePage');
+                  ? context.push('/profileView')
+                  : context.replace('/profileView');
             },
             child: _buildNavBarItem(
               barIndex: 3,
