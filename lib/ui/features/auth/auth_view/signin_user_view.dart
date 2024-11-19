@@ -31,94 +31,84 @@ class SignInUserView extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: SizedBox(
-              child: Column(
-                children: [
-                  authScreensTopCard(context, AppStrings.login),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: GetBuilder<AuthController>(
+            init: AuthController(),
+            builder: (_) {
+              return Scaffold(
+                body: SingleChildScrollView(
+                  child: SizedBox(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        verticalSpacer(40),
-                        inputWidget(
-                          titleText: AppStrings.email,
-                          textEditingController: controller.emailController,
-                          hintText: 'Enter your email address',
-                        ),
-                        inputWidget(
-                          titleText: AppStrings.password,
-                          textEditingController: controller.passwordController,
-                          hintText: 'Enter your password',
-                        ),
-                        verticalSpacer(40),
-                        Center(
-                          child: GetBuilder<AuthController>(
-                            init: AuthController(),
-                            builder: (_) {
-                              return Text(controller.errMessage,
-                                  style: AppStyles.subStringStyle(
-                                      13, AppColors.coolRed));
-                            },
-                          ),
-                        ),
-                        verticalSpacer(10),
-                        controller.showLoading == true
-                            ? loadingWidget()
-                            : CustomButton(
-                                buttonText: AppStrings.login,
-                                onPressed: () {
-                                  SystemChannels.textInput
-                                      .invokeMethod('TextInput.hide');
-                                  controller.attemptToSignInUser(context);
-                                },
+                        authScreensTopCard(context, AppStrings.login),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              verticalSpacer(40),
+                              inputWidget(
+                                titleText: AppStrings.email,
+                                textEditingController:
+                                    controller.emailController,
+                                hintText: 'Enter your email address',
                               ),
-                        verticalSpacer(12),
-                        controller.showLoading == true
-                            ? const SizedBox.shrink()
-                            : RichText(
-                                text: TextSpan(
-                                  text: 'Don\'t have an account? ',
-                                  style: TextStyle(
-                                    color: AppColors.fullBlack,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: AppStrings.signUp,
-                                      style: AppStyles.regularStringStyle(
-                                          14, AppColors.kPrimaryColor),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          controller.resetValues();
-                                          context.pushReplacement(
-                                              '/createAccountView');
-                                        },
-                                    ),
-                                  ],
-                                ),
-                                textScaler: const TextScaler.linear(1),
+                              inputWidget(
+                                titleText: AppStrings.password,
+                                textEditingController:
+                                    controller.passwordController,
+                                hintText: 'Enter your password',
                               ),
-                        verticalSpacer(40),
-                        GetBuilder<AuthController>(
-                          init: AuthController(),
-                          builder: (_) {
-                            return Center(
-                              child: controller.showLoading == true
+                              verticalSpacer(40),
+                              Center(
+                                child: Text(controller.errMessage,
+                                    style: AppStyles.subStringStyle(
+                                        13, AppColors.coolRed)),
+                              ),
+                              verticalSpacer(10),
+                              controller.showLoading == true
                                   ? loadingWidget()
-                                  : const SizedBox.shrink(),
-                            );
-                          },
+                                  : CustomButton(
+                                      buttonText: AppStrings.login,
+                                      onPressed: () {
+                                        SystemChannels.textInput
+                                            .invokeMethod('TextInput.hide');
+                                        controller.attemptToSignInUser(context);
+                                      },
+                                    ),
+                              verticalSpacer(12),
+                              controller.showLoading == true
+                                  ? const SizedBox.shrink()
+                                  : RichText(
+                                      text: TextSpan(
+                                        text: 'Don\'t have an account? ',
+                                        style: TextStyle(
+                                          color: AppColors.fullBlack,
+                                        ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: AppStrings.signUp,
+                                            style: AppStyles.regularStringStyle(
+                                                14, AppColors.kPrimaryColor),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                controller.resetValues();
+                                                context.pushReplacement(
+                                                    '/createAccountView');
+                                              },
+                                          ),
+                                        ],
+                                      ),
+                                      textScaler: const TextScaler.linear(1),
+                                    ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
+                ),
+              );
+            }),
       ),
     );
   }

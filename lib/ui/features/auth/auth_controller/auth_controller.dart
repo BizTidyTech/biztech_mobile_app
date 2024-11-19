@@ -8,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/ui/features/auth/auth_utils/auth_utils.dart';
@@ -137,7 +136,11 @@ class AuthController extends GetxController {
       final isUserRegistered = await AuthUtil().registerUser(userEnteredData);
       if (isUserRegistered == true) {
         logger.f('Account created successfully.');
-        await attemptToSignInUser(context);
+        await signInUser(
+          context,
+          userEnteredData?.email ?? '',
+          userEnteredData?.password ?? '',
+        );
       } else {
         errMessage = 'Error creating user.';
         logger.w('Error creating user.');
@@ -154,22 +157,27 @@ class AuthController extends GetxController {
     logger.i('attemptToSignInUser . . .');
     if (emailController.text.trim().isNotEmpty &&
         passwordController.text.trim().isNotEmpty) {
-      logger.i('signing in user . . .');
-      startLoading();
-      final isLoggedIn = await AuthUtil().signInUser(
+      signInUser(
+        context,
         emailController.text.trim(),
         passwordController.text.trim(),
       );
-      if (isLoggedIn == true) {
-        logger.f("userEnteredData: ${userEnteredData?.toJson()}");
-        await saveUserDetailsLocally(userEnteredData);
-        context.go('/homepageView');
-      }
     } else {
-      errMessage = 'All fields must be filled, and with no spaces';
+      errMessage = 'Both username and password are required';
       logger.i("Errormessage: $errMessage");
       stopLoading();
     }
+  }
+
+  Future<void> signInUser(
+      BuildContext context, String email, String password) async {
+    logger.i('signing in user . . .');
+    startLoading();
+    final isLoggedIn = await AuthUtil().signInUser(email, password);
+    if (isLoggedIn == true) {
+      context.go('/homepageView');
+    }
+    stopLoading();
   }
 
   Future<void> updateNewUserData(BuildContext context) async {}

@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
+import 'package:tidytech/ui/features/auth/auth_controller/auth_controller.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -41,17 +42,17 @@ class _SplashScreenState extends State<SplashScreen>
         logger.f('Animation completed');
         sleep(const Duration(milliseconds: 200));
 
-        bool accountExisting;
         final existingUserData = await getLocallySavedUserDetails();
         logger.w('existingUserData: ${existingUserData?.toJson()}');
-        if (existingUserData != null) {
-          accountExisting = true;
+        String? userEmail = existingUserData?.email;
+        String? userPassword = existingUserData?.password;
+        if (existingUserData != null &&
+            userEmail != null &&
+            userPassword != null) {
+          AuthController().signInUser(context, userEmail, userPassword);
         } else {
-          accountExisting = false;
+          context.pushReplacement('/onboardingScreen');
         }
-        context.pushReplacement(
-          accountExisting ? '/homepageView' : '/onboardingScreen',
-        );
       }
     });
   }

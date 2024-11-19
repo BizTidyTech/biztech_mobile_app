@@ -10,7 +10,7 @@ import 'package:tidytech/ui/features/splash_screen/splash_screen.dart';
 class AppRouter {
   static final router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
-    // initialLocation: '/onboardingScreen',
+    initialLocation: '/onboardingScreen',
     routes: [
       GoRoute(
         path: '/',

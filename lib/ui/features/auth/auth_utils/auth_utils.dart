@@ -44,6 +44,7 @@ class AuthUtil {
         email: email,
         password: password,
       );
+      await FirebaseService().getUserDetails(email: email);
       return true;
     } on FirebaseAuthException catch (e) {
       logger.e(e);
