@@ -10,6 +10,7 @@ class UserData {
   String? name;
   String? password;
   String? photoUrl;
+  DateTime? timeCreated;
 
   UserData({
     this.userId,
@@ -17,6 +18,7 @@ class UserData {
     this.name,
     this.password,
     this.photoUrl,
+    this.timeCreated,
   });
 
   UserData copyWith({
@@ -25,6 +27,7 @@ class UserData {
     String? name,
     String? password,
     String? photoUrl,
+    DateTime? timeCreated,
   }) =>
       UserData(
         userId: userId ?? this.userId,
@@ -32,6 +35,7 @@ class UserData {
         name: name ?? this.name,
         password: password ?? this.password,
         photoUrl: photoUrl ?? this.photoUrl,
+        timeCreated: timeCreated ?? this.timeCreated,
       );
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
@@ -40,6 +44,9 @@ class UserData {
         name: json["name"],
         password: json["password"],
         photoUrl: json["photoUrl"],
+        timeCreated: json["timeCreated"] == null
+            ? null
+            : DateTime.parse(json["timeCreated"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,5 +55,6 @@ class UserData {
         "name": name,
         "password": password,
         "photoUrl": photoUrl,
+        "timeCreated": timeCreated?.toIso8601String(),
       };
 }
