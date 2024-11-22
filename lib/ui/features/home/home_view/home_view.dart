@@ -1,12 +1,22 @@
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
+import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:tidytech/ui/features/home/data/services_data.dart';
 import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
+import 'package:tidytech/ui/features/home/home_model/services_model.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/ui/features/nav_bar/views/custom_navbar.dart';
+import 'package:tidytech/ui/shared/custom_textfield_.dart';
+import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
+import 'package:tidytech/utils/app_constants/app_strings.dart';
+import 'package:tidytech/utils/app_constants/app_styles.dart';
+import 'package:tidytech/utils/extension_and_methods/screen_utils.dart';
+import 'package:tidytech/utils/extension_and_methods/string_cap_extensions.dart';
 
 class HomepageView extends StatefulWidget {
   const HomepageView({super.key});
@@ -37,15 +47,215 @@ class _HomepageViewState extends State<HomepageView> {
           systemNavigationBarIconBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.plainWhite,
         ),
-        child: GetBuilder<HomeController>(
-          init: HomeController(),
-          builder: (_) {
-            return Scaffold(
-              backgroundColor: AppColors.plainWhite,
-              bottomNavigationBar: const CustomNavBar(currentPageIndx: 0),
-              body: const Center(child: Text("Home")),
-            );
-          },
+        child: Scaffold(
+          backgroundColor: AppColors.plainWhite,
+          bottomNavigationBar: const CustomNavBar(currentPageIndx: 0),
+          appBar: AppBar(
+            backgroundColor: AppColors.plainWhite,
+            title: GetBuilder<HomeController>(
+                init: HomeController(),
+                builder: (_) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: screenWidth(context) - 80,
+                        height: 36,
+                        child: CustomTextfield(
+                          textEditingController: controller.searchController,
+                        ),
+                      ),
+                      const Icon(
+                        IconsaxPlusLinear.setting_3,
+                        size: 36,
+                      ),
+                    ],
+                  );
+                }),
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Column(
+              children: [
+                _serviceCategoryWidget(),
+                verticalSpacer(40),
+                _popularServicesWidget(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _categoriesCard(CleaningCategory category, String image) {
+    double circleRadius =
+        screenWidth(context) < 500 ? (screenWidth(context) - 40) * 0.245 : 120;
+    return Container(
+      height: circleRadius,
+      width: circleRadius,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.kPrimaryColor,
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: circleRadius * 0.55,
+            width: circleRadius,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.transparent,
+              image: DecorationImage(
+                  image: AssetImage(image), fit: BoxFit.contain),
+            ),
+          ),
+          verticalSpacer(2),
+          Text(
+            "${category.name.toSentenceCase}\n${AppStrings.cleaning}",
+            textAlign: TextAlign.center,
+            style: AppStyles.regularStringStyle(
+              circleRadius * 0.116,
+              AppColors.fullBlack,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _serviceCategoryWidget() {
+    return GetBuilder<HomeController>(
+      init: HomeController(),
+      builder: (_) {
+        return SizedBox(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    AppStrings.serviceCategory,
+                    style: AppStyles.regularStringStyle(
+                      20,
+                      AppColors.fullBlack,
+                    ),
+                  ),
+                ],
+              ),
+              verticalSpacer(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Entry.all(
+                    duration: const Duration(seconds: 1),
+                    child: _categoriesCard(
+                      CleaningCategory.commercial,
+                      'assets/commercial.png',
+                    ),
+                  ),
+                  Entry.opacity(
+                    duration: const Duration(seconds: 1),
+                    child: _categoriesCard(
+                      CleaningCategory.residential,
+                      'assets/residential.png',
+                    ),
+                  ),
+                  Entry.scale(
+                    duration: const Duration(seconds: 1),
+                    child: _categoriesCard(
+                      CleaningCategory.industrial,
+                      'assets/industrial.png',
+                    ),
+                  ),
+                  Entry.offset(
+                    duration: const Duration(seconds: 1),
+                    child: _categoriesCard(
+                      CleaningCategory.specialty,
+                      'assets/specialty.png',
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _popularServicesWidget() {
+    return GetBuilder<HomeController>(
+      init: HomeController(),
+      builder: (_) {
+        return SizedBox(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    AppStrings.mostPopularService,
+                    style: AppStyles.regularStringStyle(
+                      20,
+                      AppColors.fullBlack,
+                    ),
+                  ),
+                ],
+              ),
+              verticalSpacer(20),
+              GridView.builder(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: popularServices.length,
+                itemBuilder: (context, index) => GestureDetector(
+                  child: _popularServiceCard(popularServices[index]),
+                ),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 5,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _popularServiceCard(ServiceModel service) {
+    return Card(
+      borderOnForeground: false,
+      color: AppColors.plainWhite,
+      elevation: 1,
+      child: Container(
+        padding: const EdgeInsets.only(bottom: 5),
+        height: 160,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 127,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  image: AssetImage(service.imageUrl ?? ''),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                service.name ?? '',
+                style: AppStyles.normalStringStyle(
+                  16,
+                  AppColors.fullBlack,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

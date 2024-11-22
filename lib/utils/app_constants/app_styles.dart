@@ -41,6 +41,15 @@ class AppStyles {
         family: family,
       );
 
+  static TextStyle normalStringStyle(double fontSize, Color textcolor,
+          {String? family}) =>
+      _base(
+        fontSize,
+        _regularWeight,
+        textcolor,
+        family: family,
+      );
+
   static TextStyle subStringStyle(double fontSize, Color textcolor) => _base(
         fontSize,
         _normalWeight,

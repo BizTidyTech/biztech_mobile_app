@@ -26,15 +26,14 @@ class AppStrings {
   static String email = 'Email';
   static String password = 'Password';
   static String confirmPassword = 'Confirm Password';
+  static String cleaning = 'Cleaning';
+  static String serviceCategory = 'Service Category';
+  static String mostPopularService = 'Most Popular Services';
   static String termsOfUse = 'Terms of Use';
   static String privacyPolicy = 'Privacy Policy';
   static String addCoverPictures = 'Add Cover Pictures';
   static String addPictures = 'Add Pictures';
   static String upload = 'Upload';
   static String choose = 'Choose';
-  static String homepage = 'Homepage';
-  static String toponym = 'Toponym';
-  static String toponymDesc = 'Toponym Description';
-  static String toponymType = 'Toponym Type';
   static String test = 'test';
 }
