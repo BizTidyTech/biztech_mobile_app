@@ -36,6 +36,7 @@ dependencies:
   iconsax_plus: ^1.0.0
   cupertino_will_pop_scope: ^1.2.1
   entry: ^1.0.0
+  quds_popup_menu: ^0.0.1+1
 
 dev_dependencies:
   flutter_test:

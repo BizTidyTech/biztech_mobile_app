@@ -1,6 +1,6 @@
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
 
-enum CleaningCategory { commercial, residential, industrial, specialty }
+enum CleaningCategory { all, commercial, residential, industrial, specialty }
 
 List<ServiceModel> commercialServices = [
   ServiceModel(

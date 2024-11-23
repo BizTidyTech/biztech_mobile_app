@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/home/data/services_data.dart';
 import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
@@ -32,7 +33,6 @@ class _HomepageViewState extends State<HomepageView> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<CurrentPage>(context, listen: false).setCurrentPageIndex(0);
   }
 
   @override
@@ -64,11 +64,19 @@ class _HomepageViewState extends State<HomepageView> {
                         height: 36,
                         child: CustomTextfield(
                           textEditingController: controller.searchController,
+                          hintText:
+                              "Search for ${controller.selectedCleaningCategory.name} cleaning services ",
                         ),
                       ),
-                      const Icon(
-                        IconsaxPlusLinear.setting_3,
-                        size: 36,
+                      QudsPopupButton(
+                        backgroundColor: AppColors.plainWhite,
+                        tooltip: 'T',
+                        radius: 12,
+                        items: getCategoriesMenuItems(controller),
+                        child: const Icon(
+                          IconsaxPlusLinear.setting_3,
+                          size: 36,
+                        ),
                       ),
                     ],
                   );
@@ -271,4 +279,77 @@ class _HomepageViewState extends State<HomepageView> {
       ),
     );
   }
+}
+
+List<QudsPopupMenuBase> getCategoriesMenuItems(HomeController controller) {
+  return [
+    QudsPopupMenuItem(
+      title: Text(
+        CleaningCategory.all.name.toSentenceCase,
+        style: AppStyles.normalStringStyle(14, AppColors.fullBlack),
+      ),
+      trailing: CleaningCategory.all == controller.selectedCleaningCategory
+          ? const Icon(Icons.check_rounded)
+          : null,
+      onPressed: () async {
+        controller.chnageSearchFilterCategory(CleaningCategory.all);
+      },
+    ),
+    QudsPopupMenuDivider(height: 0.5, color: AppColors.lightGray),
+    QudsPopupMenuItem(
+      title: Text(
+        CleaningCategory.commercial.name.toSentenceCase,
+        style: AppStyles.normalStringStyle(14, AppColors.fullBlack),
+      ),
+      trailing:
+          CleaningCategory.commercial == controller.selectedCleaningCategory
+              ? const Icon(Icons.check_rounded)
+              : null,
+      onPressed: () async {
+        controller.chnageSearchFilterCategory(CleaningCategory.commercial);
+      },
+    ),
+    QudsPopupMenuDivider(height: 0.5, color: AppColors.lightGray),
+    QudsPopupMenuItem(
+      title: Text(
+        CleaningCategory.residential.name.toSentenceCase,
+        style: AppStyles.normalStringStyle(14, AppColors.fullBlack),
+      ),
+      trailing:
+          CleaningCategory.residential == controller.selectedCleaningCategory
+              ? const Icon(Icons.check_rounded)
+              : null,
+      onPressed: () async {
+        controller.chnageSearchFilterCategory(CleaningCategory.residential);
+      },
+    ),
+    QudsPopupMenuDivider(height: 0.5, color: AppColors.lightGray),
+    QudsPopupMenuItem(
+      title: Text(
+        CleaningCategory.industrial.name.toSentenceCase,
+        style: AppStyles.normalStringStyle(14, AppColors.fullBlack),
+      ),
+      trailing:
+          CleaningCategory.industrial == controller.selectedCleaningCategory
+              ? const Icon(Icons.check_rounded)
+              : null,
+      onPressed: () async {
+        controller.chnageSearchFilterCategory(CleaningCategory.industrial);
+      },
+    ),
+    QudsPopupMenuDivider(height: 0.5, color: AppColors.lightGray),
+    QudsPopupMenuItem(
+      title: Text(
+        CleaningCategory.specialty.name.toSentenceCase,
+        style: AppStyles.normalStringStyle(14, AppColors.fullBlack),
+      ),
+      trailing:
+          CleaningCategory.specialty == controller.selectedCleaningCategory
+              ? const Icon(Icons.check_rounded)
+              : null,
+      onPressed: () async {
+        controller.chnageSearchFilterCategory(CleaningCategory.specialty);
+      },
+    ),
+  ];
 }
