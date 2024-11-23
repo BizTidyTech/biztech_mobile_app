@@ -3,7 +3,6 @@ import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:tidytech/tidytech_app.dart';
@@ -12,7 +11,6 @@ import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/ui/features/nav_bar/views/custom_navbar.dart';
-import 'package:tidytech/ui/shared/custom_textfield_.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -33,6 +31,7 @@ class _HomepageViewState extends State<HomepageView> {
   @override
   void initState() {
     super.initState();
+    controller.getUserData();
   }
 
   @override
@@ -51,34 +50,34 @@ class _HomepageViewState extends State<HomepageView> {
         child: Scaffold(
           backgroundColor: AppColors.plainWhite,
           bottomNavigationBar: const CustomNavBar(currentPageIndx: 0),
-          appBar: AppBar(
-            backgroundColor: AppColors.plainWhite,
-            title: GetBuilder<HomeController>(
+          appBar: PreferredSize(
+            preferredSize: Size(screenWidth(context), 90),
+            child: GetBuilder<HomeController>(
                 init: HomeController(),
                 builder: (_) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: screenWidth(context) - 80,
-                        height: 36,
-                        child: CustomTextfield(
-                          textEditingController: controller.searchController,
-                          hintText:
-                              "Search for ${controller.selectedCleaningCategory.name} cleaning services ",
+                  return Container(
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).viewPadding.top),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    color: AppColors.plainWhite,
+                    width: screenWidth(context) - 20,
+                    height: 90,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Welcome${controller.userData?.name == null ? "" : ", ${controller.userData?.name?.split(' ')[0].toSentenceCase}"}",
+                          style: AppStyles.defaultKeyStringStyle(23, 'Alice'),
                         ),
-                      ),
-                      QudsPopupButton(
-                        backgroundColor: AppColors.plainWhite,
-                        tooltip: 'T',
-                        radius: 12,
-                        items: getCategoriesMenuItems(controller),
-                        child: const Icon(
-                          IconsaxPlusLinear.setting_3,
-                          size: 36,
+                        verticalSpacer(4),
+                        Text(
+                          AppStrings.tidyTechCaption.toSentenceCase,
+                          style: AppStyles.regularStringStyle(
+                              14, AppColors.deepBlue),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 }),
           ),
