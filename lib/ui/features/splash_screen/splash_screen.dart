@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     SystemChannels.textInput.invokeMethod('TextInput.hide');
     animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 2800))
+        vsync: this, duration: const Duration(milliseconds: 1000))
       ..forward();
 
     sizeAnimation = Tween(begin: 20.0, end: 50.0).animate(CurvedAnimation(

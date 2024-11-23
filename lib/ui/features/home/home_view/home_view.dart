@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/home/data/services_data.dart';
 import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
@@ -147,28 +148,28 @@ class _HomepageViewState extends State<HomepageView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Entry.all(
-                    duration: const Duration(seconds: 1),
+                    duration: const Duration(seconds: 4),
                     child: _categoriesCard(
                       CleaningCategory.commercial,
                       'assets/commercial.png',
                     ),
                   ),
                   Entry.opacity(
-                    duration: const Duration(seconds: 1),
+                    duration: const Duration(seconds: 4),
                     child: _categoriesCard(
                       CleaningCategory.residential,
                       'assets/residential.png',
                     ),
                   ),
                   Entry.scale(
-                    duration: const Duration(seconds: 1),
+                    duration: const Duration(seconds: 4),
                     child: _categoriesCard(
                       CleaningCategory.industrial,
                       'assets/industrial.png',
                     ),
                   ),
                   Entry.offset(
-                    duration: const Duration(seconds: 1),
+                    duration: const Duration(seconds: 4),
                     child: _categoriesCard(
                       CleaningCategory.specialty,
                       'assets/specialty.png',
@@ -202,18 +203,23 @@ class _HomepageViewState extends State<HomepageView> {
                 ],
               ),
               verticalSpacer(20),
-              GridView.builder(
-                physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: popularServices.length,
-                itemBuilder: (context, index) => GestureDetector(
-                  child: _popularServiceCard(popularServices[index]),
-                ),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 5,
+              Entry.offset(
+                duration: const Duration(seconds: 4),
+                xOffset: 300,
+                yOffset: 1500,
+                child: GridView.builder(
+                  physics: const ClampingScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: popularServices.length,
+                  itemBuilder: (context, index) => GestureDetector(
+                    child: _popularServiceCard(popularServices[index]),
+                  ),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 5,
+                  ),
                 ),
               ),
             ],
@@ -228,34 +234,39 @@ class _HomepageViewState extends State<HomepageView> {
       borderOnForeground: false,
       color: AppColors.plainWhite,
       elevation: 1,
-      child: Container(
-        padding: const EdgeInsets.only(bottom: 5),
-        height: 160,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 127,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: AssetImage(service.imageUrl ?? ''),
-                  fit: BoxFit.cover,
+      child: InkWell(
+        onTap: () {
+          logger.i("Pressed ${service.name}");
+        },
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 5),
+          height: 160,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 127,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: AssetImage(service.imageUrl ?? ''),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                service.name ?? '',
-                style: AppStyles.normalStringStyle(
-                  16,
-                  AppColors.fullBlack,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(
+                  service.name ?? '',
+                  style: AppStyles.normalStringStyle(
+                    16,
+                    AppColors.fullBlack,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
