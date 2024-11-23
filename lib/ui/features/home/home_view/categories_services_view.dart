@@ -5,7 +5,6 @@ import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/home/data/services_data.dart';
 import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
-import 'package:tidytech/ui/features/nav_bar/views/custom_navbar.dart';
 import 'package:tidytech/ui/shared/custom_button.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -46,7 +45,6 @@ class _CategoryServicesViewState extends State<CategoryServicesView> {
       ),
       child: Scaffold(
         backgroundColor: AppColors.plainWhite,
-        bottomNavigationBar: const CustomNavBar(currentPageIndx: 0),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: AppColors.plainWhite.withOpacity(0.4),
