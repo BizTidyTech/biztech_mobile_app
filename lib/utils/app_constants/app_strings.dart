@@ -20,6 +20,7 @@ class AppStrings {
   static String proceed = 'Proceed';
   static String home = 'Home';
   static String bookings = 'Bookings';
+  static String book = 'Book';
   static String notifications = 'Notifications';
   static String profile = 'Profile';
   static String fullName = 'Name';

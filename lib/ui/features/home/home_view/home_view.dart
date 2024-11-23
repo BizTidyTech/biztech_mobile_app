@@ -9,6 +9,7 @@ import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/home/data/services_data.dart';
 import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
+import 'package:tidytech/ui/features/home/home_view/categories_services_view.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/ui/features/nav_bar/views/custom_navbar.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
@@ -96,38 +97,55 @@ class _HomepageViewState extends State<HomepageView> {
     );
   }
 
-  Widget _categoriesCard(CleaningCategory category, String image) {
+  Widget _categoriesCard(
+    CleaningCategory category,
+    String image,
+    List<ServiceModel> servicesList,
+  ) {
     double circleRadius =
         screenWidth(context) < 500 ? (screenWidth(context) - 40) * 0.245 : 120;
-    return Container(
-      height: circleRadius,
-      width: circleRadius,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.kPrimaryColor,
-      ),
-      child: Column(
-        children: [
-          Container(
-            height: circleRadius * 0.55,
-            width: circleRadius,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.transparent,
-              image: DecorationImage(
-                  image: AssetImage(image), fit: BoxFit.contain),
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryServicesView(
+              cleaningCategory: category,
+              servicesList: servicesList,
             ),
           ),
-          verticalSpacer(2),
-          Text(
-            "${category.name.toSentenceCase}\n${AppStrings.cleaning}",
-            textAlign: TextAlign.center,
-            style: AppStyles.regularStringStyle(
-              circleRadius * 0.116,
-              AppColors.fullBlack,
+        );
+      },
+      child: Container(
+        height: circleRadius,
+        width: circleRadius,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.kPrimaryColor,
+        ),
+        child: Column(
+          children: [
+            Container(
+              height: circleRadius * 0.55,
+              width: circleRadius,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.transparent,
+                image: DecorationImage(
+                    image: AssetImage(image), fit: BoxFit.contain),
+              ),
             ),
-          ),
-        ],
+            verticalSpacer(2),
+            Text(
+              "${category.name.toSentenceCase}\n${AppStrings.cleaning}",
+              textAlign: TextAlign.center,
+              style: AppStyles.regularStringStyle(
+                circleRadius * 0.116,
+                AppColors.fullBlack,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -159,6 +177,7 @@ class _HomepageViewState extends State<HomepageView> {
                     child: _categoriesCard(
                       CleaningCategory.commercial,
                       'assets/commercial.png',
+                      commercialServices,
                     ),
                   ),
                   Entry.opacity(
@@ -166,6 +185,7 @@ class _HomepageViewState extends State<HomepageView> {
                     child: _categoriesCard(
                       CleaningCategory.residential,
                       'assets/residential.png',
+                      residentialServices,
                     ),
                   ),
                   Entry.scale(
@@ -173,6 +193,7 @@ class _HomepageViewState extends State<HomepageView> {
                     child: _categoriesCard(
                       CleaningCategory.industrial,
                       'assets/industrial.png',
+                      industrialServices,
                     ),
                   ),
                   Entry.offset(
@@ -180,6 +201,7 @@ class _HomepageViewState extends State<HomepageView> {
                     child: _categoriesCard(
                       CleaningCategory.specialty,
                       'assets/specialty.png',
+                      specialtyServices,
                     ),
                   ),
                 ],
