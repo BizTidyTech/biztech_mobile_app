@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
+import 'package:tidytech/app/services/firebase_service.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/booking/booking_model/booking_model.dart';
 import 'package:tidytech/ui/features/booking/booking_view/bookings_review_screen.dart';
@@ -88,7 +89,7 @@ class BookingsController extends GetxController {
         phoneNumber: phoneController.text.trim(),
       ),
     );
-    logger.f('Booking Data . . . ${newBookingData.toJson()}');
+    logger.w('Booking Data . . . ${newBookingData.toJson()}');
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -99,5 +100,20 @@ class BookingsController extends GetxController {
     );
   }
 
-  bookAppointment() async {}
+  makePayment(){}
+
+  bookAppointment(BookingModel bookingData) async {
+    showLoading = true;
+    update();
+    logger.f('Booking appointment . . . ${bookingData.toJson()}');
+    final bookingResponse = await FirebaseService().bookAppointment(
+      booking: bookingData,
+    );
+    if (bookingResponse == true) {
+      // Show dialog
+            
+    }
+    showLoading = false;
+    update();
+  }
 }

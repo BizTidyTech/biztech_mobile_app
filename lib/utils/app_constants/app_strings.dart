@@ -30,6 +30,7 @@ class AppStrings {
   static String confirmPassword = 'Confirm Password';
   static String cleaning = 'Cleaning';
   static String serviceCategory = 'Service Category';
+  static String service = 'Service';
   static String mostPopularService = 'Most Popular Services';
   static String termsOfUse = 'Terms of Use';
   static String privacyPolicy = 'Privacy Policy';

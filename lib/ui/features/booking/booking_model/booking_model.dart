@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final bookingModel = bookingModelFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';

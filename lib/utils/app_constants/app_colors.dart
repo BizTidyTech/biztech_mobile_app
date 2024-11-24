@@ -9,6 +9,8 @@ class AppColors {
 
   static Color primaryThemeColor = fromHex('#00B4B4');
 
+  static Color reviewValueColor = fromHex('#001F3F');
+
   static Color plainWhite = fromHex('#ffffff');
 
   static Color fullBlack = fromHex('#000000');

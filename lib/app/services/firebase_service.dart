@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
+import 'package:tidytech/ui/features/booking/booking_model/booking_model.dart';
 import 'package:tidytech/utils/app_constants/fb_collection_names.dart';
 
 class FirebaseService {
@@ -56,6 +57,21 @@ class FirebaseService {
     } catch (e) {
       logger.e(e);
       Fluttertoast.showToast(msg: 'Error getting your data.');
+      return false;
+    }
+  }
+
+  Future<bool> bookAppointment({required BookingModel booking}) async {
+    try {
+      firebaseFirestore
+          .collection(FbCollectionNames.bookings)
+          .doc(booking.bookingId)
+          .set(booking.toJson());
+      Fluttertoast.showToast(msg: "Booked successfully!");
+      return true;
+    } catch (e) {
+      logger.e(e);
+      Fluttertoast.showToast(msg: 'Error booking appointmnet! Retry.');
       return false;
     }
   }
