@@ -16,40 +16,42 @@ TextStyle hintTextStyles = const TextStyle(
 );
 
 class CustomTextfield extends StatefulWidget {
-  const CustomTextfield(
-      {super.key,
-      this.fillColor,
-      this.labelText,
-      this.hintText,
-      this.textEditingController,
-      this.hasSuffixIcon = false,
-      this.onSuffixIconPressed,
-      this.suffixIcon,
-      this.focusNode,
-      this.initialValue,
-      this.hasPrefixIcon = false,
-      this.onPrefixIconPressed,
-      this.keyboardType,
-      this.prefixText,
-      this.readOnly,
-      this.prefixStyle,
-      this.floatingLabelStyle,
-      this.suffixIconSize,
-      this.letterSpacing,
-      this.obscureText,
-      this.onChanged,
-      this.maxLines,
-      this.onTap,
-      this.inputStringStyle,
-      this.textInputAction = TextInputAction.next,
-      this.textCapitalization,
-      this.contentpadding,
-      this.scrollPadding,
-      this.onSubmitted,
-      this.autofocus,
-      this.enabled = true,
-      this.suffixText,
-      this.textMaxLength});
+  const CustomTextfield({
+    super.key,
+    this.fillColor,
+    this.labelText,
+    this.hintText,
+    this.textEditingController,
+    this.hasSuffixIcon = false,
+    this.onSuffixIconPressed,
+    this.suffixIcon,
+    this.focusNode,
+    this.initialValue,
+    this.hasPrefixIcon = false,
+    this.onPrefixIconPressed,
+    this.keyboardType,
+    this.prefixText,
+    this.readOnly,
+    this.prefixStyle,
+    this.floatingLabelStyle,
+    this.suffixIconSize,
+    this.letterSpacing,
+    this.obscureText,
+    this.onChanged,
+    this.maxLines,
+    this.minLines,
+    this.onTap,
+    this.inputStringStyle,
+    this.textInputAction = TextInputAction.next,
+    this.textCapitalization,
+    this.contentpadding,
+    this.scrollPadding,
+    this.onSubmitted,
+    this.autofocus,
+    this.enabled = true,
+    this.suffixText,
+    this.textMaxLength,
+  });
 
   final EdgeInsets? scrollPadding;
   final Color? fillColor;
@@ -64,6 +66,7 @@ class CustomTextfield extends StatefulWidget {
   final bool? readOnly;
   final bool? autofocus;
   final int? maxLines;
+  final int? minLines;
   final int? textMaxLength;
   final bool hasSuffixIcon;
   final bool hasPrefixIcon;
@@ -101,6 +104,8 @@ class _CustomTextfieldState extends State<CustomTextfield> {
         keyboardType: widget.keyboardType,
         textInputAction: widget.textInputAction,
         obscureText: widget.obscureText ?? false,
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
         decoration: InputDecoration(
           labelText: widget.labelText,
           hintText: widget.hintText,

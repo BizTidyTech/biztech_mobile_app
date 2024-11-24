@@ -13,6 +13,8 @@ Widget inputWidget({
   TextInputAction? textInputAction = TextInputAction.next,
   TextInputType? keyboardType,
   bool? isObscurable,
+  int? maxLines,
+  int? minLines,
 }) {
   final controller = Get.put(AuthController());
 
@@ -35,6 +37,8 @@ Widget inputWidget({
           hintText: hintText,
           textInputAction: textInputAction ?? TextInputAction.next,
           keyboardType: keyboardType,
+          minLines: minLines,
+          maxLines: maxLines,
           obscureText: isObscurable != true ? false : controller.isObscured,
           suffixIcon: isObscurable != true
               ? null

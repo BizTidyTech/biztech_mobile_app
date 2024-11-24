@@ -7,6 +7,7 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/booking/booking_controller/booking_controller.dart';
+import 'package:tidytech/ui/features/booking/booking_view/bookings_details_screen.dart';
 import 'package:tidytech/ui/features/home/data/services_data.dart';
 import 'package:tidytech/ui/features/home/home_view/widgets/service_card.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
@@ -34,8 +35,7 @@ class _BookingsViewState extends State<BookingsView> {
       onWillPop: () async {
         Provider.of<CurrentPage>(context, listen: false)
             .checkCurrentPageIndex(context);
-        controller.changeSelectedService(null);
-        controller.changeSelectedAppointmentDate(null);
+        controller.clearVals();
         return false;
       },
       shouldAddCallback: true,
@@ -166,7 +166,13 @@ class _BookingsViewState extends State<BookingsView> {
                                   fontSize: 12,
                                   width: 45,
                                   onPressed: () {
-                                    _chooseAppointmentDate(controller);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const BookingsDetailsScreen(),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
@@ -184,7 +190,7 @@ class _BookingsViewState extends State<BookingsView> {
 
   Widget _timeSelectorWidget() {
     final List<TimeOfDay> availableTimes = [];
-    for (int hour = 8; hour < 18; hour++) {
+    for (int hour = 6; hour < 18; hour++) {
       availableTimes.add(TimeOfDay(hour: hour, minute: 0));
     }
 
@@ -248,7 +254,7 @@ class _BookingsViewState extends State<BookingsView> {
       logger.w("No Chosen date");
     } else {
       final setDateTime =
-          DateTime(dateTime.year, dateTime.month, dateTime.day, 8, 0, 0);
+          DateTime(dateTime.year, dateTime.month, dateTime.day, 6, 0, 0);
       controller.changeSelectedAppointmentDate(setDateTime);
     }
   }

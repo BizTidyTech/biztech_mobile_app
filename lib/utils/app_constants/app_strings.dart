@@ -21,6 +21,7 @@ class AppStrings {
   static String home = 'Home';
   static String bookings = 'Bookings';
   static String book = 'Book';
+  static String reviewDetails = 'Review Details';
   static String notifications = 'Notifications';
   static String profile = 'Profile';
   static String fullName = 'Name';

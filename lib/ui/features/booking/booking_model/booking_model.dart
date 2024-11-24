@@ -1,4 +1,10 @@
+// To parse this JSON data, do
+//
+//     final bookingModel = bookingModelFromJson(jsonString);
+
 import 'dart:convert';
+
+import 'package:tidytech/ui/features/home/home_model/services_model.dart';
 
 BookingModel bookingModelFromJson(String str) =>
     BookingModel.fromJson(json.decode(str));
@@ -6,67 +12,118 @@ BookingModel bookingModelFromJson(String str) =>
 String bookingModelToJson(BookingModel data) => json.encode(data.toJson());
 
 class BookingModel {
-  final String? serviceName;
-  final double? baseCost;
+  final String? bookingId;
   final DateTime? dateTime;
   final String? locationName;
   final String? locationAddress;
   final int? rooms;
-  final int? durationInMins;
-  final String? roomSqFt;
+  final int? duration;
+  final double? roomSqFt;
+  final String? additionalInfo;
+  final ServiceModel? service;
+  final Customer? customer;
 
   BookingModel({
-    this.serviceName,
-    this.baseCost,
+    this.bookingId,
     this.dateTime,
     this.locationName,
     this.locationAddress,
     this.rooms,
-    this.durationInMins,
+    this.duration,
     this.roomSqFt,
+    this.additionalInfo,
+    this.service,
+    this.customer,
   });
 
   BookingModel copyWith({
-    String? serviceName,
-    double? baseCost,
+    String? bookingId,
     DateTime? dateTime,
     String? locationName,
     String? locationAddress,
     int? rooms,
-    int? durationInMins,
-    String? roomSqFt,
+    int? duration,
+    double? roomSqFt,
+    String? additionalInfo,
+    ServiceModel? service,
+    Customer? customer,
   }) =>
       BookingModel(
-        serviceName: serviceName ?? this.serviceName,
-        baseCost: baseCost ?? this.baseCost,
+        bookingId: bookingId ?? this.bookingId,
         dateTime: dateTime ?? this.dateTime,
         locationName: locationName ?? this.locationName,
         locationAddress: locationAddress ?? this.locationAddress,
         rooms: rooms ?? this.rooms,
-        durationInMins: durationInMins ?? this.durationInMins,
+        duration: duration ?? this.duration,
         roomSqFt: roomSqFt ?? this.roomSqFt,
+        service: service ?? this.service,
+        additionalInfo: additionalInfo ?? this.additionalInfo,
+        customer: customer ?? this.customer,
       );
 
   factory BookingModel.fromJson(Map<String, dynamic> json) => BookingModel(
-        serviceName: json["serviceName"],
-        baseCost: json["baseCost"]?.toDouble(),
+        bookingId: json["bookingId"],
         dateTime:
             json["dateTime"] == null ? null : DateTime.parse(json["dateTime"]),
         locationName: json["locationName"],
         locationAddress: json["locationAddress"],
         rooms: json["rooms"],
-        durationInMins: json["durationInMins"],
-        roomSqFt: json["roomSqFt"],
+        duration: json["duration"],
+        roomSqFt: json["roomSqFt"]?.toDouble(),
+        additionalInfo: json["additionalInfo"],
+        service: json["service"] == null
+            ? null
+            : ServiceModel.fromJson(json["service"]),
+        customer: json["customer"] == null
+            ? null
+            : Customer.fromJson(json["customer"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "serviceName": serviceName,
-        "baseCost": baseCost,
+        "bookingId": bookingId,
         "dateTime": dateTime?.toIso8601String(),
         "locationName": locationName,
         "locationAddress": locationAddress,
         "rooms": rooms,
-        "durationInMins": durationInMins,
+        "duration": duration,
         "roomSqFt": roomSqFt,
+        "additionalInfo": additionalInfo,
+        "service": service?.toJson(),
+        "customer": customer?.toJson(),
+      };
+}
+
+class Customer {
+  final String? userId;
+  final String? name;
+  final String? phoneNumber;
+
+  Customer({
+    this.userId,
+    this.name,
+    this.phoneNumber,
+  });
+
+  Customer copyWith({
+    String? userId,
+    String? name,
+    String? phoneNumber,
+  }) =>
+      Customer(
+        userId: userId ?? this.userId,
+        name: name ?? this.name,
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+      );
+
+  factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+        userId: json["userId"],
+        name: json["name"],
+        phoneNumber: json["phoneNumber"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "userId": userId,
+        "name": name,
+        "phoneNumber": phoneNumber,
       };
 }
