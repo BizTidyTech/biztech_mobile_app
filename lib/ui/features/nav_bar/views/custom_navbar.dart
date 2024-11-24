@@ -64,7 +64,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           /// Bookings Icon
           GestureDetector(
             onTap: () {
-              logger.i('Explore selected');
+              logger.i('Bookings selected');
               final bool currentPageIndexCheck =
                   Provider.of<CurrentPage>(context, listen: false)
                               .currentPageIndex ==
@@ -89,7 +89,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
           /// Notification Icon
           GestureDetector(
             onTap: () {
-              logger.i('Favourite selected');
+              logger.i('Notification selected');
               final bool currentPageIndexCheck =
                   Provider.of<CurrentPage>(context, listen: false)
                               .currentPageIndex ==

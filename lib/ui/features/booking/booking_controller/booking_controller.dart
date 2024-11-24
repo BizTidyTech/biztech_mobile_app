@@ -3,12 +3,15 @@ import 'package:get/get.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
-import 'package:tidytech/ui/features/home/data/services_data.dart';
+import 'package:tidytech/ui/features/home/home_model/services_model.dart';
 
 class BookingsController extends GetxController {
   BookingsController();
-  CleaningCategory selectedCleaningCategory = CleaningCategory.all;
+  ServiceModel? selectedService;
   UserData? userData;
+  DateTime? appointmentDateSelected;
+
+  TextEditingController searchController = TextEditingController();
 
   getUserData() async {
     userData = await getLocallySavedUserDetails();
@@ -16,14 +19,16 @@ class BookingsController extends GetxController {
     update();
   }
 
-  TextEditingController searchController = TextEditingController();
-
-  chnageSearchFilterCategory(CleaningCategory category) {
-    selectedCleaningCategory = category;
+  changeSelectedService(ServiceModel? service) {
+    logger.i("Selected ${service?.name}");
+    selectedService = service;
     update();
   }
 
-  searchForServices(String searchText) {}
+  changeSelectedAppointmentDate(DateTime? dateTimeSelected) {
+    appointmentDateSelected = dateTimeSelected;
+    update();
+  }
 
   bookAppointment() {}
 }

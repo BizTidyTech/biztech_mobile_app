@@ -3,9 +3,10 @@ import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:quds_popup_menu/quds_popup_menu.dart';
-import 'package:tidytech/tidytech_app.dart';
+import 'package:tidytech/ui/features/booking/booking_controller/booking_controller.dart';
 import 'package:tidytech/ui/features/home/data/services_data.dart';
 import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
@@ -265,7 +266,10 @@ class _HomepageViewState extends State<HomepageView> {
       elevation: 1,
       child: InkWell(
         onTap: () {
-          logger.i("Pressed ${service.name}");
+          Get.put(BookingsController()).changeSelectedService(service);
+          Provider.of<CurrentPage>(context, listen: false)
+              .setCurrentPageIndex(1);
+          context.push('/bookingsPage');
         },
         child: Container(
           padding: const EdgeInsets.only(bottom: 5),
@@ -313,7 +317,7 @@ List<QudsPopupMenuBase> getCategoriesMenuItems(HomeController controller) {
           ? const Icon(Icons.check_rounded)
           : null,
       onPressed: () async {
-        controller.chnageSearchFilterCategory(CleaningCategory.all);
+        controller.changeSearchFilterCategory(CleaningCategory.all);
       },
     ),
     QudsPopupMenuDivider(height: 0.5, color: AppColors.lightGray),
@@ -327,7 +331,7 @@ List<QudsPopupMenuBase> getCategoriesMenuItems(HomeController controller) {
               ? const Icon(Icons.check_rounded)
               : null,
       onPressed: () async {
-        controller.chnageSearchFilterCategory(CleaningCategory.commercial);
+        controller.changeSearchFilterCategory(CleaningCategory.commercial);
       },
     ),
     QudsPopupMenuDivider(height: 0.5, color: AppColors.lightGray),
@@ -341,7 +345,7 @@ List<QudsPopupMenuBase> getCategoriesMenuItems(HomeController controller) {
               ? const Icon(Icons.check_rounded)
               : null,
       onPressed: () async {
-        controller.chnageSearchFilterCategory(CleaningCategory.residential);
+        controller.changeSearchFilterCategory(CleaningCategory.residential);
       },
     ),
     QudsPopupMenuDivider(height: 0.5, color: AppColors.lightGray),
@@ -355,7 +359,7 @@ List<QudsPopupMenuBase> getCategoriesMenuItems(HomeController controller) {
               ? const Icon(Icons.check_rounded)
               : null,
       onPressed: () async {
-        controller.chnageSearchFilterCategory(CleaningCategory.industrial);
+        controller.changeSearchFilterCategory(CleaningCategory.industrial);
       },
     ),
     QudsPopupMenuDivider(height: 0.5, color: AppColors.lightGray),
@@ -369,7 +373,7 @@ List<QudsPopupMenuBase> getCategoriesMenuItems(HomeController controller) {
               ? const Icon(Icons.check_rounded)
               : null,
       onPressed: () async {
-        controller.chnageSearchFilterCategory(CleaningCategory.specialty);
+        controller.changeSearchFilterCategory(CleaningCategory.specialty);
       },
     ),
   ];

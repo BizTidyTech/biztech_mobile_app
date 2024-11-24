@@ -4,9 +4,12 @@ import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/ui/features/home/data/services_data.dart';
+import 'package:tidytech/ui/features/home/home_model/services_model.dart';
 
 class HomeController extends GetxController {
   HomeController();
+
+  TextEditingController searchController = TextEditingController();
   CleaningCategory selectedCleaningCategory = CleaningCategory.all;
   UserData? userData;
 
@@ -16,11 +19,12 @@ class HomeController extends GetxController {
     update();
   }
 
-  TextEditingController searchController = TextEditingController();
-
-  chnageSearchFilterCategory(CleaningCategory category) {
+  changeSearchFilterCategory(CleaningCategory category) {
     selectedCleaningCategory = category;
     update();
+  }
+
+  chooseServiceToBook(ServiceModel service) {
   }
 
   searchForServices(String searchText) {}

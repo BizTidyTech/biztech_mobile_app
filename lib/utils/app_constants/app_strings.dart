@@ -36,5 +36,6 @@ class AppStrings {
   static String addPictures = 'Add Pictures';
   static String upload = 'Upload';
   static String choose = 'Choose';
+  static String change = 'Change';
   static String test = 'test';
 }

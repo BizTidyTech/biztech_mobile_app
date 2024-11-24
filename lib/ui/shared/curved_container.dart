@@ -30,12 +30,13 @@ class CustomCurvedContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 61,
+      height: height ?? 55,
       width: width ?? screenWidth(context),
       decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(23)),
-        border: Border.all(color: borderColor ?? AppColors.transparent),
-        color: fillColor ?? AppColors.lightGray,
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        border:
+            Border.all(color: borderColor ?? AppColors.transparent, width: 2),
+        color: fillColor ?? AppColors.kPrimaryColor,
       ),
       padding: EdgeInsets.only(
         top: topPadding,
