@@ -66,11 +66,11 @@ class BookingsController extends GetxController {
     } else {
       errMessage = '';
       update();
-      await reviewAppointment(context, durationValue, roomSqft);
+      await reviewBookingData(context, durationValue, roomSqft);
     }
   }
 
-  reviewAppointment(
+  reviewBookingData(
       BuildContext context, double durationValue, double roomSqft) async {
     final userData = await getLocallySavedUserDetails();
     final newBookingData = BookingModel(
@@ -100,8 +100,6 @@ class BookingsController extends GetxController {
     );
   }
 
-  makePayment(){}
-
   bookAppointment(BookingModel bookingData) async {
     showLoading = true;
     update();
@@ -111,9 +109,10 @@ class BookingsController extends GetxController {
     );
     if (bookingResponse == true) {
       // Show dialog
-            
     }
     showLoading = false;
     update();
   }
+  
+  makePayment(BookingModel bookingData) {}
 }

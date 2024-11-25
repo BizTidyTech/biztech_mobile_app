@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:tidytech/ui/features/booking/booking_controller/booking_controller.dart';
 import 'package:tidytech/ui/features/booking/booking_model/booking_model.dart';
@@ -110,6 +111,19 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                           width: screenWidth(context) * 0.5,
                           onPressed: () {
                             controller.bookAppointment(widget.booking);
+                          },
+                        ),
+                  verticalSpacer(10),
+                  controller.showLoading == true
+                      ? const SizedBox.shrink()
+                      : CustomButton(
+                          buttonText: AppStrings.change,
+                          width: screenWidth(context) * 0.5,
+                          borderColor: AppColors.deepBlue,
+                          color: AppColors.plainWhite,
+                          textcolor: AppColors.deepBlue,
+                          onPressed: () {
+                            context.pop();
                           },
                         ),
                   verticalSpacer(20),
