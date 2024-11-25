@@ -56,9 +56,9 @@ class AppRouter {
             child: const BookingsView(), key: state.pageKey),
       ),
       GoRoute(
-        path: '/notificationsView',
+        path: '/bookingsListScreen',
         pageBuilder: (context, state) => CustomNormalTransition(
-            child: const NotificationsView(), key: state.pageKey),
+            child: const BookingsListScreen(), key: state.pageKey),
       ),
       GoRoute(
         path: '/profileView',
@@ -69,8 +69,8 @@ class AppRouter {
   );
 }
 
-class NotificationsView extends StatelessWidget {
-  const NotificationsView({super.key});
+class BookingsListScreen extends StatelessWidget {
+  const BookingsListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class NotificationsView extends StatelessWidget {
             return Scaffold(
               backgroundColor: AppColors.plainWhite,
               bottomNavigationBar: const CustomNavBar(currentPageIndx: 2),
-              body: const Center(child: Text("Notifications")),
+              body: const Center(child: Text("Booked Appointments")),
             );
           },
         ),

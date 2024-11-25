@@ -2,18 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/app/services/firebase_service.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/booking/booking_model/booking_model.dart';
+import 'package:tidytech/ui/features/booking/booking_utils/booking_success_dialog.dart';
 import 'package:tidytech/ui/features/booking/booking_view/bookings_review_screen.dart';
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
+import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/utils/extension_and_methods/string_cap_extensions.dart';
 
 class BookingsController extends GetxController {
   BookingsController();
   ServiceModel? selectedService;
   DateTime? appointmentDateSelected;
+  BookingModel? bookingData;
   String errMessage = '';
   bool showLoading = false;
 
@@ -29,6 +34,7 @@ class BookingsController extends GetxController {
     roomsCountController.clear();
     descriptionController.clear();
     phoneController.clear();
+    bookingData = null;
     showLoading = false;
     errMessage = '';
     appointmentDateSelected = null;
@@ -89,7 +95,8 @@ class BookingsController extends GetxController {
         phoneNumber: phoneController.text.trim(),
       ),
     );
-    logger.w('Booking Data . . . ${newBookingData.toJson()}');
+    bookingData = newBookingData;
+    logger.w('Booking Data . . . ${bookingData?.toJson()}');
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -100,7 +107,7 @@ class BookingsController extends GetxController {
     );
   }
 
-  bookAppointment(BookingModel bookingData) async {
+  bookAppointment(BuildContext context, BookingModel bookingData) async {
     showLoading = true;
     update();
     logger.f('Booking appointment . . . ${bookingData.toJson()}');
@@ -109,10 +116,15 @@ class BookingsController extends GetxController {
     );
     if (bookingResponse == true) {
       // Show dialog
+      await showBookingConfirmationDialog(context);
     }
     showLoading = false;
     update();
   }
-  
-  makePayment(BookingModel bookingData) {}
+
+  goToBookingsListScreen(BuildContext context) {
+    logger.w("Going to bookings list screen . . . ");
+    Provider.of<CurrentPage>(context, listen: false).setCurrentPageIndex(2);
+    context.push('/bookingsListScreen');
+  }
 }

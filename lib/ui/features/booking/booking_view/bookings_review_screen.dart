@@ -110,7 +110,7 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                           buttonText: AppStrings.confirm,
                           width: screenWidth(context) * 0.5,
                           onPressed: () {
-                            controller.bookAppointment(widget.booking);
+                            controller.bookAppointment(context, widget.booking);
                           },
                         ),
                   verticalSpacer(10),

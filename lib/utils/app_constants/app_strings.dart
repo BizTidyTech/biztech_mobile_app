@@ -23,6 +23,7 @@ class AppStrings {
   static String book = 'Book';
   static String reviewDetails = 'Review Details';
   static String notifications = 'Notifications';
+  static String appointments = 'Appointments';
   static String profile = 'Profile';
   static String fullName = 'Name';
   static String email = 'Email';

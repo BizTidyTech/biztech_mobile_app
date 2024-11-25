@@ -86,10 +86,10 @@ class _CustomNavBarState extends State<CustomNavBar> {
             ),
           ),
 
-          /// Notification Icon
+          /// Appointments Icon
           GestureDetector(
             onTap: () {
-              logger.i('Notification selected');
+              logger.i('Appointments selected');
               final bool currentPageIndexCheck =
                   Provider.of<CurrentPage>(context, listen: false)
                               .currentPageIndex ==
@@ -100,14 +100,16 @@ class _CustomNavBarState extends State<CustomNavBar> {
                   .setCurrentPageIndex(2);
               logger.i('currentPageIndexCheck: $currentPageIndexCheck');
               currentPageIndexCheck == true
-                  ? context.push('/notificationsView')
-                  : context.replace('/notificationsView');
+                  ? context.push('/bookingsListScreen')
+                  : context.replace('/bookingsListScreen');
             },
             child: _buildNavBarItem(
               barIndex: 2,
-              label: AppStrings.notifications,
-              activeIcon: Iconsax.notification5,
-              inactiveIcon: Iconsax.notification4,
+              label: AppStrings.appointments,
+              activeIcon: IconsaxPlusBold.archive_book,
+              inactiveIcon: IconsaxPlusLinear.archive_book,
+              // activeIcon: Iconsax.notification5,
+              // inactiveIcon: Iconsax.notification4,
             ),
           ),
 
