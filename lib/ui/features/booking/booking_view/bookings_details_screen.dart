@@ -154,7 +154,7 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
                           onPressed: () {
                             SystemChannels.textInput
                                 .invokeMethod('TextInput.hide');
-                            controller.attemptToBookAppointment(
+                            controller.attemptToCreateAppointment(
                                 context, _durationValue, _roomSqFtValue);
                           },
                         ),

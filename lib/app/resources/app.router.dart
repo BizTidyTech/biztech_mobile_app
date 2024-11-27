@@ -10,6 +10,7 @@ import 'package:tidytech/ui/features/auth/auth_view/create_account_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/onboarding_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/signin_user_view.dart';
 import 'package:tidytech/ui/features/auth/auth_view/verify_otp_screen.dart';
+import 'package:tidytech/ui/features/booking/booking_list_view/booking_list_view.dart';
 import 'package:tidytech/ui/features/booking/booking_view/booking_view.dart';
 import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
 import 'package:tidytech/ui/features/home/home_view/home_view.dart';
@@ -67,37 +68,6 @@ class AppRouter {
       ),
     ],
   );
-}
-
-class BookingsListScreen extends StatelessWidget {
-  const BookingsListScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ConditionalWillPopScope(
-      onWillPop: () => Provider.of<CurrentPage>(context, listen: false)
-          .checkCurrentPageIndex(context),
-      shouldAddCallback: true,
-      child: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-          statusBarColor: AppColors.plainWhite,
-          statusBarIconBrightness: Brightness.dark,
-          systemNavigationBarIconBrightness: Brightness.dark,
-          systemNavigationBarColor: AppColors.plainWhite,
-        ),
-        child: GetBuilder<HomeController>(
-          init: HomeController(),
-          builder: (_) {
-            return Scaffold(
-              backgroundColor: AppColors.plainWhite,
-              bottomNavigationBar: const CustomNavBar(currentPageIndx: 2),
-              body: const Center(child: Text("Booked Appointments")),
-            );
-          },
-        ),
-      ),
-    );
-  }
 }
 
 class ProfileView extends StatelessWidget {
