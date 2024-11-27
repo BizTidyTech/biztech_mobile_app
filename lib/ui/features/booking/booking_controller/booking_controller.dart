@@ -130,12 +130,25 @@ class BookingsController extends GetxController {
           backgroundColor: AppColors.coolRed,
         );
       } else {
+        final initialDepositPayment = PaymentDetails(
+          paidAt: DateTime.now(),
+          paymentId: paymentData.paymentId,
+          payerId: paymentData.payerId,
+          status: paymentData.status,
+          payerEmail: paymentData.data?.payer?.payerInfo?.email,
+          amount: depositBookingAmount.toString(),
+          payerName:
+              "${paymentData.data?.payer?.payerInfo?.firstName} ${paymentData.data?.payer?.payerInfo?.lastName}",
+        );
+        bookingDetails.copyWith(depositPayment: initialDepositPayment);
+        logger.w("Updated bookingDetails: ${bookingDetails.toJson()}");
         await bookAppointment(context, bookingDetails);
       }
     } catch (e) {
       logger.w("Error occured");
+      Fluttertoast.showToast(msg: "Error occured. Kindly retry");
     }
-    showLoading = true;
+    showLoading = false;
     update();
   }
 

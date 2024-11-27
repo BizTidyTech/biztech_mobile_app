@@ -57,11 +57,11 @@ List<ServiceModel> industrialServices = [
 ];
 
 List<ServiceModel> specialtyServices = [
-  ServiceModel(
-    imageUrl: 'assets/ac.png',
-    name: 'AC',
-    baseCost: 150,
-  ),
+  // ServiceModel(
+  //   imageUrl: 'assets/ac.png',
+  //   name: 'AC',
+  //   baseCost: 150,
+  // ),
   ServiceModel(
     imageUrl: 'assets/post_construction.png',
     name: 'Post Construction',

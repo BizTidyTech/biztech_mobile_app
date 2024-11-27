@@ -82,8 +82,10 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                               children: [
                                 _valueText(
                                     "${widget.booking.service?.name ?? ''} Cleaning"),
+                                // _valueText(
+                                //     "\$${widget.booking.service?.baseCost ?? ''}"),
                                 _valueText(
-                                    "\$${widget.booking.service?.baseCost ?? ''}"),
+                                    "\$${controller.depositBookingAmount}"),
                                 _valueText(widget.booking.locationName ?? ''),
                                 _valueText(
                                     widget.booking.locationAddress ?? ''),
@@ -104,6 +106,12 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                     ),
                   ),
                   const Spacer(),
+                  Text(
+                    "You are to deposit a sum of \$${controller.depositBookingAmount} to confirm your booking.",
+                    textAlign: TextAlign.center,
+                    style: AppStyles.normalStringStyle(15, AppColors.fullBlack),
+                  ),
+                  verticalSpacer(20),
                   controller.showLoading == true
                       ? loadingWidget()
                       : CustomButton(

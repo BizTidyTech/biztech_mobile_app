@@ -18,6 +18,8 @@ class BookingModel {
   final String? additionalInfo;
   final ServiceModel? service;
   final Customer? customer;
+  final PaymentDetails? depositPayment;
+  final PaymentDetails? finalPayment;
 
   BookingModel({
     this.bookingId,
@@ -30,6 +32,8 @@ class BookingModel {
     this.additionalInfo,
     this.service,
     this.customer,
+    this.depositPayment,
+    this.finalPayment,
   });
 
   BookingModel copyWith({
@@ -43,6 +47,8 @@ class BookingModel {
     String? additionalInfo,
     ServiceModel? service,
     Customer? customer,
+    PaymentDetails? depositPayment,
+    PaymentDetails? finalPayment,
   }) =>
       BookingModel(
         bookingId: bookingId ?? this.bookingId,
@@ -55,6 +61,8 @@ class BookingModel {
         service: service ?? this.service,
         additionalInfo: additionalInfo ?? this.additionalInfo,
         customer: customer ?? this.customer,
+        depositPayment: depositPayment ?? this.depositPayment,
+        finalPayment: finalPayment ?? this.finalPayment,
       );
 
   factory BookingModel.fromJson(Map<String, dynamic> json) => BookingModel(
@@ -73,6 +81,12 @@ class BookingModel {
         customer: json["customer"] == null
             ? null
             : Customer.fromJson(json["customer"]),
+        depositPayment: json["depositPayment"] == null
+            ? null
+            : PaymentDetails.fromJson(json["depositPayment"]),
+        finalPayment: json["finalPayment"] == null
+            ? null
+            : PaymentDetails.fromJson(json["finalPayment"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -86,6 +100,8 @@ class BookingModel {
         "additionalInfo": additionalInfo,
         "service": service?.toJson(),
         "customer": customer?.toJson(),
+        "depositPayment": depositPayment?.toJson(),
+        "finalPayment": finalPayment?.toJson(),
       };
 }
 
@@ -121,5 +137,65 @@ class Customer {
         "userId": userId,
         "name": name,
         "phoneNumber": phoneNumber,
+      };
+}
+
+class PaymentDetails {
+  final String? paymentId;
+  final String? payerId;
+  final String? status;
+  final String? payerEmail;
+  final String? payerName;
+  final String? amount;
+  final DateTime? paidAt;
+
+  PaymentDetails({
+    this.paymentId,
+    this.payerId,
+    this.status,
+    this.payerEmail,
+    this.payerName,
+    this.amount,
+    this.paidAt,
+  });
+
+  PaymentDetails copyWith({
+    String? paymentId,
+    String? payerId,
+    String? status,
+    String? payerEmail,
+    String? payerName,
+    String? amount,
+    DateTime? paidAt,
+  }) =>
+      PaymentDetails(
+        paymentId: paymentId ?? this.paymentId,
+        payerId: payerId ?? this.payerId,
+        status: status ?? this.status,
+        payerEmail: payerEmail ?? this.payerEmail,
+        payerName: payerName ?? this.payerName,
+        amount: amount ?? this.amount,
+        paidAt: paidAt ?? this.paidAt,
+      );
+
+  factory PaymentDetails.fromJson(Map<String, dynamic> json) => PaymentDetails(
+        paymentId: json["paymentId"],
+        payerId: json["payerId"],
+        status: json["status"],
+        payerEmail: json["payerEmail"],
+        payerName: json["payerName"],
+        amount: json["amount"],
+        paidAt:
+            json["paid_at"] == null ? null : DateTime.parse(json["paid_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "paymentId": paymentId,
+        "payerId": payerId,
+        "status": status,
+        "payerEmail": payerEmail,
+        "payerName": payerName,
+        "amount": amount,
+        "paid_at": paidAt?.toIso8601String(),
       };
 }
