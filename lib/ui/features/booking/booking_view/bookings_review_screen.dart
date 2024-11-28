@@ -115,13 +115,10 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                   controller.showLoading == true
                       ? loadingWidget()
                       : CustomButton(
-                          buttonText: AppStrings.confirm,
+                          buttonText: AppStrings.contineu,
                           width: screenWidth(context) * 0.5,
                           onPressed: () {
-                            controller.makeDepositPayment(
-                              context,
-                              widget.booking,
-                            );
+                            controller.makeDepositPayment(widget.booking);
                           },
                         ),
                   verticalSpacer(10),

@@ -50,8 +50,8 @@ class _CustomNavBarState extends State<CustomNavBar> {
               Provider.of<CurrentPage>(context, listen: false)
                   .setCurrentPageIndex(0);
               context.canPop()
-                  ? goPopUntil(context, "homePage")
-                  : context.go("/userHomePage");
+                  ? goPopUntil(context, "homepageView")
+                  : context.go("/homepageView");
             },
             child: _buildNavBarItem(
               barIndex: 0,

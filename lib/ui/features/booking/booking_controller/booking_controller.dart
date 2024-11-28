@@ -7,10 +7,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/app/services/firebase_service.dart';
+import 'package:tidytech/app/services/navigation_service.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/booking/booking_controller/payment_utils.dart';
 import 'package:tidytech/ui/features/booking/booking_model/booking_model.dart';
-import 'package:tidytech/ui/features/booking/booking_utils/booking_success_dialog.dart';
+import 'package:tidytech/ui/features/booking/booking_model/paypal_response_model.dart';
 import 'package:tidytech/ui/features/booking/booking_view/bookings_review_screen.dart';
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
@@ -111,39 +112,17 @@ class BookingsController extends GetxController {
     );
   }
 
-  makeDepositPayment(BuildContext context, BookingModel bookingDetails) async {
+  makeDepositPayment(BookingModel bookingDetails) async {
     showLoading = true;
     update();
     try {
       final description =
           "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
-      final paymentData = await PaypalUtils().makePayment(
-        context,
+      await PaypalUtils().makePayment(
         amount: depositBookingAmount,
-        bookingId: bookingDetails.bookingId,
+        bookingDetails: bookingDetails,
         description: description,
       );
-      logger.f("Returned paymentData: ${paymentData?.toJson()}");
-      if (paymentData == null) {
-        Fluttertoast.showToast(
-          msg: "Error making payment. Kindly retry",
-          backgroundColor: AppColors.coolRed,
-        );
-      } else {
-        final initialDepositPayment = PaymentDetails(
-          paidAt: DateTime.now(),
-          paymentId: paymentData.paymentId,
-          payerId: paymentData.payerId,
-          status: paymentData.status,
-          payerEmail: paymentData.data?.payer?.payerInfo?.email,
-          amount: depositBookingAmount.toString(),
-          payerName:
-              "${paymentData.data?.payer?.payerInfo?.firstName} ${paymentData.data?.payer?.payerInfo?.lastName}",
-        );
-        bookingDetails.copyWith(depositPayment: initialDepositPayment);
-        logger.w("Updated bookingDetails: ${bookingDetails.toJson()}");
-        await bookAppointment(context, bookingDetails);
-      }
     } catch (e) {
       logger.w("Error occured");
       Fluttertoast.showToast(msg: "Error occured. Kindly retry");
@@ -152,25 +131,44 @@ class BookingsController extends GetxController {
     update();
   }
 
-  bookAppointment(BuildContext context, BookingModel bookingDetails) async {
+  bookAppointment(
+      BookingModel bookingDetails, PaypalResponseModel paymentData) async {
     showLoading = true;
     update();
-    logger.f('Booking appointment . . . ${bookingDetails.toJson()}');
+    final initialDepositPayment = PaymentDetails(
+      paidAt: DateTime.now(),
+      paymentId: paymentData.paymentId,
+      payerId: paymentData.payerId,
+      status: paymentData.status,
+      payerEmail: paymentData.data?.payer?.payerInfo?.email,
+      amount: depositBookingAmount.toString(),
+      payerName:
+          "${paymentData.data?.payer?.payerInfo?.firstName} ${paymentData.data?.payer?.payerInfo?.lastName}",
+    );
+    final updatedBookingDetails =
+        bookingDetails.copyWith(depositPayment: initialDepositPayment);
+    logger.w("Updated bookingDetails: ${updatedBookingDetails.toJson()}");
+
+    logger.f('Booking appointment . . . ');
     final bookingResponse = await FirebaseService().bookAppointment(
-      booking: bookingDetails,
+      booking: updatedBookingDetails,
     );
     if (bookingResponse == true) {
-      // Show booking uploaded successfully dialog
-      await showBookingConfirmationDialog(context);
+      NavigationService.navigatorKey.currentContext!.pop();
+      logger.f('Booked successfully . . . ');
+      clearVals();
+      // Go to bookings list screen
+      Provider.of<CurrentPage>(NavigationService.navigatorKey.currentContext!,
+              listen: false)
+          .setCurrentPageIndex(0);
+      NavigationService.navigatorKey.currentContext!.go('/homepageView');
+      Fluttertoast.showToast(
+        msg: "Your appointment has been booked successfully",
+        backgroundColor: AppColors.normalGreen,
+      );
     }
     showLoading = false;
     update();
   }
-
-  goToBookingsListScreen(BuildContext context) {
-    logger.w("Going to bookings list screen . . . ");
-    Provider.of<CurrentPage>(context, listen: false).setCurrentPageIndex(2);
-    context.push('/bookingsListScreen');
-    clearVals();
-  }
 }
+// ENIOLAsodiq5.

@@ -3,19 +3,22 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:tidytech/app/services/navigation_service.dart';
 import 'package:tidytech/tidytech_app.dart';
+import 'package:tidytech/ui/features/booking/booking_controller/booking_controller.dart';
 import 'package:tidytech/ui/features/booking/booking_model/paypal_response_model.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 
 class PaypalUtils {
-  Future<PaypalResponseModel?> makePayment(
-    BuildContext context, {
+  makePayment({
     required double amount,
-    required bookingId,
-    required description,
+    required bookingDetails,
+    required String description,
   }) async {
-    final PaypalResponseModel? paymentResponse =
-        await Navigator.of(context).push(
+    await Navigator.of(
+      NavigationService.navigatorKey.currentContext!,
+    ).push(
       MaterialPageRoute(
         builder: (BuildContext context) => UsePaypal(
           sandboxMode: true,
@@ -40,7 +43,7 @@ class PaypalUtils {
               "item_list": {
                 "items": [
                   {
-                    "name": "$bookingId booking",
+                    "name": "${bookingDetails.bookingId} booking",
                     "quantity": 1,
                     "price": amount.toString(),
                     "currency": "USD"
@@ -59,32 +62,34 @@ class PaypalUtils {
               );
               logger.w("Status: ${paypalResponse.status}");
             } catch (e) {
-              logger.w("error parsing data: $e");
+              logger.w("Error parsing data: $e");
             }
             Fluttertoast.showToast(
               msg: "Payment successful",
               backgroundColor: AppColors.normalGreen,
             );
 
-            // Return Payment details here
-            return paypalResponse;
+            // NavigationService.navigatorKey.currentContext!.pop();
+            // Navigator.pop(context);
+            // Update and book appointment here
+            await Get.put(BookingsController())
+                .bookAppointment(bookingDetails, paypalResponse);
           },
           onError: (error) {
             logger.w("onError: $error");
+            Fluttertoast.showToast(
+              msg: "Payment unsuccessful. Kindly retry",
+              backgroundColor: AppColors.coolRed,
+            );
             return null;
           },
           onCancel: (params) {
             logger.w('cancelled: $params');
+            Fluttertoast.showToast(msg: "Payment cancelled");
             return null;
           },
         ),
       ),
     );
-    logger.f("Payment response: ${paymentResponse?.toJson()}");
-    if (paymentResponse == null) {
-      return null;
-    } else {
-      return paymentResponse;
-    }
   }
 }

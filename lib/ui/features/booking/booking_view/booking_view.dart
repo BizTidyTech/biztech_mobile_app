@@ -236,10 +236,7 @@ class _BookingsViewState extends State<BookingsView> {
       secondsInterval: 1,
       type: OmniDateTimePickerType.date,
       borderRadius: const BorderRadius.all(Radius.circular(16)),
-      constraints: const BoxConstraints(
-        maxWidth: 350,
-        maxHeight: 650,
-      ),
+      constraints: const BoxConstraints(maxWidth: 350, maxHeight: 650),
       transitionBuilder: (context, anim1, anim2, child) {
         return FadeTransition(
           opacity: anim1.drive(Tween(begin: 0, end: 1)),
