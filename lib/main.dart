@@ -16,7 +16,7 @@ void main() async {
   await setupLocator();
   Firebase.initializeApp();
   configureEmailOtp();
-  runApp(TidyTechApp());
+  runApp(const TidyTechApp());
 }
 
 void configureEmailOtp() {

@@ -2,6 +2,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/app/services/firebase_service.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
@@ -45,7 +47,11 @@ class AuthUtil {
         email: email,
         password: password,
       );
-      await FirebaseService().getUserDetails(email: email);
+      final userData = await FirebaseService().getUserDetails(email: email);
+      if (userData != null) {
+        await saveUserDetailsLocally(userData);
+        OneSignal.login(userData.userId!);
+      }
       return true;
     } on FirebaseAuthException catch (e) {
       logger.e(e);

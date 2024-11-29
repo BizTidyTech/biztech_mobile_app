@@ -6,6 +6,7 @@ import 'package:animate_gradient/animate_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/auth/auth_controller/auth_controller.dart';
@@ -41,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (status == AnimationStatus.completed) {
         logger.f('Animation completed');
         sleep(const Duration(milliseconds: 200));
+        OneSignal.Notifications.requestPermission(true);
 
         final existingUserData = await getLocallySavedUserDetails();
         logger.w('existingUserData: ${existingUserData?.toJson()}');

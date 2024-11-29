@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:quds_popup_menu/quds_popup_menu.dart';
 import 'package:tidytech/ui/features/booking/booking_controller/booking_controller.dart';
@@ -30,10 +31,15 @@ class HomepageView extends StatefulWidget {
 class _HomepageViewState extends State<HomepageView> {
   final controller = Get.put(HomeController());
 
+  void optInNotification() async {
+    await OneSignal.User.pushSubscription.optIn();
+  }
+
   @override
   void initState() {
     super.initState();
     controller.getUserData();
+    optInNotification();
   }
 
   @override

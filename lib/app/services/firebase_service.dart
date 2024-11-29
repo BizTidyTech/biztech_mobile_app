@@ -37,7 +37,7 @@ class FirebaseService {
     }
   }
 
-  Future<bool> getUserDetails({required String email}) async {
+  Future<UserData?> getUserDetails({required String email}) async {
     try {
       final QuerySnapshot result = await firebaseFirestore
           .collection(FbCollectionNames.user)
@@ -47,17 +47,16 @@ class FirebaseService {
       final List<DocumentSnapshot> documents = result.docs;
       if (documents.isEmpty) {
         Fluttertoast.showToast(msg: 'User with email $email does not exist.');
-        return false;
+        return null;
       } else {
         final userData =
             UserData.fromJson(result.docs[0].data() as Map<String, dynamic>);
-        await saveUserDetailsLocally(userData);
-        return true;
+        return userData;
       }
     } catch (e) {
       logger.e(e);
       Fluttertoast.showToast(msg: 'Error getting your data.');
-      return false;
+      return null;
     }
   }
 
