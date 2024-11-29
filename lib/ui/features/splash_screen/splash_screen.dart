@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (status == AnimationStatus.completed) {
         logger.f('Animation completed');
         sleep(const Duration(milliseconds: 200));
-        OneSignal.Notifications.requestPermission(true);
+        await OneSignal.Notifications.requestPermission(true);
 
         final existingUserData = await getLocallySavedUserDetails();
         logger.w('existingUserData: ${existingUserData?.toJson()}');
