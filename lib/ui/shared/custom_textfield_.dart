@@ -105,7 +105,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
         textInputAction: widget.textInputAction,
         obscureText: widget.obscureText ?? false,
         minLines: widget.minLines,
-        maxLines: widget.maxLines,
+        maxLines: widget.obscureText == true ? 1 : widget.maxLines,
         decoration: InputDecoration(
           labelText: widget.labelText,
           hintText: widget.hintText,

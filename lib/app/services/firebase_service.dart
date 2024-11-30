@@ -74,4 +74,17 @@ class FirebaseService {
       return false;
     }
   }
+
+  Future<String?> fetchNotificationApiKey() async {
+    try {
+      DocumentSnapshot document =
+          await firebaseFirestore.collection('Keys').doc('keysData').get();
+
+      final notificationApiKey = document['notificationApiKey'];
+      logger.f("notificationApiKey: $notificationApiKey");
+      return notificationApiKey;
+    } catch (e) {
+      return null;
+    }
+  }
 }

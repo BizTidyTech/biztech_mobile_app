@@ -22,7 +22,7 @@ class TidyTechApp extends StatefulWidget {
 
 class _TidyTechAppState extends State<TidyTechApp> {
   Future<void> initOneSignalPlatformState() async {
-    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    OneSignal.Debug.setLogLevel(OSLogLevel.warn);
     OneSignal.initialize(oneSignalAppId);
     OneSignal.Notifications.requestPermission(true);
   }

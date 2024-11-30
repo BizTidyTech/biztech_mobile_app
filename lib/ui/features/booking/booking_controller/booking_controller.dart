@@ -12,6 +12,7 @@ import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features/booking/booking_controller/payment_utils.dart';
 import 'package:tidytech/ui/features/booking/booking_model/booking_model.dart';
 import 'package:tidytech/ui/features/booking/booking_model/paypal_response_model.dart';
+import 'package:tidytech/ui/features/booking/booking_utils/push_notification_utils.dart';
 import 'package:tidytech/ui/features/booking/booking_view/bookings_review_screen.dart';
 import 'package:tidytech/ui/features/home/home_model/services_model.dart';
 import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
@@ -156,6 +157,8 @@ class BookingsController extends GetxController {
     if (bookingResponse == true) {
       NavigationService.navigatorKey.currentContext!.pop();
       logger.f('Booked successfully . . . ');
+      sendBookingNotificationToAdmin(
+          bookingDetails.service?.name ?? 'cleaning service');
       clearVals();
       // Go to bookings list screen
       Provider.of<CurrentPage>(NavigationService.navigatorKey.currentContext!,
@@ -169,6 +172,25 @@ class BookingsController extends GetxController {
     }
     showLoading = false;
     update();
+  }
+
+  sendBookingNotificationToAdmin(String service) async {
+    final notificationApiKey =
+        await FirebaseService().fetchNotificationApiKey();
+
+    final userData = await getLocallySavedUserDetails();
+
+    if (notificationApiKey != null && userData != null) {
+      PushNotificationUtils().sendNotificationToAdmin(
+        notificationApiKey: notificationApiKey,
+        service: service,
+        senderName: userData.name ?? 'Client',
+        receiverExternalId: userData.userId ?? '', // To be removed
+        // receiverExternalId: "TideyTechAdmin",
+      );
+    } else {
+      logger.e("Error sending notification");
+    }
   }
 }
 // ENIOLAsodiq5.
