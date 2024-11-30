@@ -52,7 +52,7 @@ class BookingsListController extends GetxController {
       double balanceAmount;
       try {
         balanceAmount = bookingDetails.totalCalculatedServiceCharge! -
-            int.parse(bookingDetails.depositPayment!.amount!);
+            double.parse(bookingDetails.depositPayment!.amount!);
       } catch (e) {
         balanceAmount = bookingDetails.service!.baseCost! - 100;
       }

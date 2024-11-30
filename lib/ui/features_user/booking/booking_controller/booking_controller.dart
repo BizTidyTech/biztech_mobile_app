@@ -87,6 +87,7 @@ class BookingsController extends GetxController {
     final userData = await getLocallySavedUserDetails();
     final newBookingData = BookingModel(
       bookingId: generateRandomString(),
+      userId: userData?.userId,
       dateTime: appointmentDateSelected,
       locationName: locationController.text.trim(),
       locationAddress: addressController.text.trim(),

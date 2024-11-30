@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -111,17 +112,32 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                     ),
                   ),
                   const Spacer(),
-                  Text(
-                    widget.booking.totalCalculatedServiceCharge == null
-                        ? "You will know the balance to pay when the total service charges are calculated"
-                        : "You are to pay the balance of \$${widget.booking.totalCalculatedServiceCharge! - int.parse(widget.booking.depositPayment!.amount!)}.",
-                    textAlign: TextAlign.center,
-                    style: AppStyles.normalStringStyle(15, AppColors.fullBlack),
+                  Icon(
+                    widget.booking.finalPayment == null
+                        ? CupertinoIcons.hourglass
+                        : CupertinoIcons.check_mark_circled,
+                    color: widget.booking.finalPayment == null
+                        ? AppColors.regularGray
+                        : AppColors.normalGreen,
+                    size: 80,
                   ),
-                  verticalSpacer(20),
+                  const Spacer(),
+                  Text(
+                    widget.booking.finalPayment != null
+                        ? "Final payment done!"
+                        : widget.booking.totalCalculatedServiceCharge == null
+                            ? "You will know the balance to pay when the total service charges are calculated"
+                            : "You are to pay the balance of \$${widget.booking.totalCalculatedServiceCharge! - double.parse(widget.booking.depositPayment!.amount!)}.",
+                    textAlign: TextAlign.center,
+                    style: widget.booking.finalPayment != null
+                        ? AppStyles.regularStringStyle(17, AppColors.fullBlack)
+                        : AppStyles.normalStringStyle(15, AppColors.fullBlack),
+                  ),
+                  const Spacer(),
                   controller.showLoading == true
                       ? loadingWidget()
-                      : widget.booking.totalCalculatedServiceCharge != null
+                      : widget.booking.totalCalculatedServiceCharge == null ||
+                              widget.booking.finalPayment != null
                           ? const SizedBox.shrink()
                           : CustomButton(
                               buttonText: AppStrings.payBalance,
