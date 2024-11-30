@@ -6,17 +6,18 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/app/resources/app.transitions.dart';
 import 'package:tidytech/app/services/navigation_service.dart';
-import 'package:tidytech/ui/features/auth/auth_view/create_account_view.dart';
-import 'package:tidytech/ui/features/auth/auth_view/onboarding_view.dart';
-import 'package:tidytech/ui/features/auth/auth_view/signin_user_view.dart';
-import 'package:tidytech/ui/features/auth/auth_view/verify_otp_screen.dart';
-import 'package:tidytech/ui/features/booking/booking_list_view/booking_list_view.dart';
-import 'package:tidytech/ui/features/booking/booking_view/booking_view.dart';
-import 'package:tidytech/ui/features/home/home_controller/home_controller.dart';
-import 'package:tidytech/ui/features/home/home_view/home_view.dart';
-import 'package:tidytech/ui/features/nav_bar/data/page_index_class.dart';
-import 'package:tidytech/ui/features/nav_bar/views/custom_navbar.dart';
-import 'package:tidytech/ui/features/splash_screen/splash_screen.dart';
+import 'package:tidytech/ui/features_admin/admin_booking/admin_booking_list_view/admin_booking_list_view.dart';
+import 'package:tidytech/ui/features_user/auth/auth_view/create_account_view.dart';
+import 'package:tidytech/ui/features_user/auth/auth_view/onboarding_view.dart';
+import 'package:tidytech/ui/features_user/auth/auth_view/signin_user_view.dart';
+import 'package:tidytech/ui/features_user/auth/auth_view/verify_otp_screen.dart';
+import 'package:tidytech/ui/features_user/booking/booking_list_view/booking_list_view.dart';
+import 'package:tidytech/ui/features_user/booking/booking_view/booking_view.dart';
+import 'package:tidytech/ui/features_user/home/home_controller/home_controller.dart';
+import 'package:tidytech/ui/features_user/home/home_view/home_view.dart';
+import 'package:tidytech/ui/features_user/nav_bar/data/page_index_class.dart';
+import 'package:tidytech/ui/features_user/nav_bar/views/custom_navbar.dart';
+import 'package:tidytech/ui/features_user/splash_screen/splash_screen.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 
 class AppRouter {
@@ -65,6 +66,13 @@ class AppRouter {
         path: '/profileView',
         pageBuilder: (context, state) => CustomNormalTransition(
             child: const ProfileView(), key: state.pageKey),
+      ),
+
+      // Admin screens
+      GoRoute(
+        path: '/adminBookingsListScreen',
+        pageBuilder: (context, state) => CustomNormalTransition(
+            child: const AdminBookingsListScreen(), key: state.pageKey),
       ),
     ],
   );

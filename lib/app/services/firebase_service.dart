@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
-import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
-import 'package:tidytech/ui/features/booking/booking_model/booking_model.dart';
+import 'package:tidytech/ui/features_user/auth/auth_model/user_data_model.dart';
+import 'package:tidytech/ui/features_user/booking/booking_model/booking_model.dart';
 import 'package:tidytech/utils/app_constants/fb_collection_names.dart';
 
 class FirebaseService {
@@ -73,6 +73,75 @@ class FirebaseService {
       Fluttertoast.showToast(msg: 'Error booking appointmnet! Retry.');
       return false;
     }
+  }
+
+  Future<bool> updateBookingForFinalPayment(BookingModel booking) async {
+    try {
+      firebaseFirestore
+          .collection(FbCollectionNames.bookings)
+          .doc(booking.bookingId)
+          .set(booking.toJson());
+      Fluttertoast.showToast(msg: "Booking updated successfully!");
+      return true;
+    } catch (e) {
+      logger.e(e);
+      Fluttertoast.showToast(
+          msg: 'Error updating your booking! Kindly contact us');
+      return false;
+    }
+  }
+
+  Future<List<BookingModel>?> fetchMyBookings() async {
+    try {
+      final userId = (await getLocallySavedUserDetails())?.userId;
+      logger.i("Fetching my bookings list with id $userId . . .");
+
+      final QuerySnapshot result = await firebaseFirestore
+          .collection(FbCollectionNames.bookings)
+          .where("userId", isEqualTo: userId)
+          .get();
+
+      final List<DocumentSnapshot> documents = result.docs;
+      if (documents.isEmpty) {
+        Fluttertoast.showToast(msg: 'No bookings found');
+      } else {
+        final List<DocumentSnapshot> documents = result.docs;
+        List<BookingModel> listOfBookings = List.generate(
+          documents.length,
+          (index) => BookingModel.fromJson(
+              documents.elementAt(index).data() as Map<String, dynamic>),
+        );
+        return listOfBookings;
+      }
+    } catch (e) {
+      logger.e(e);
+      Fluttertoast.showToast(msg: 'Error getting my bookings');
+    }
+    return <BookingModel>[];
+  }
+
+  Future<List<BookingModel>?> adminFetchAllBookings() async {
+    try {
+      final QuerySnapshot result =
+          await firebaseFirestore.collection(FbCollectionNames.bookings).get();
+
+      final List<DocumentSnapshot> documents = result.docs;
+      if (documents.isEmpty) {
+        Fluttertoast.showToast(msg: 'No bookings found');
+      } else {
+        final List<DocumentSnapshot> documents = result.docs;
+        List<BookingModel> listOfBookings = List.generate(
+          documents.length,
+          (index) => BookingModel.fromJson(
+              documents.elementAt(index).data() as Map<String, dynamic>),
+        );
+        return listOfBookings;
+      }
+    } catch (e) {
+      logger.e(e);
+      Fluttertoast.showToast(msg: 'Error getting all bookings');
+    }
+    return <BookingModel>[];
   }
 
   Future<String?> fetchNotificationApiKey() async {

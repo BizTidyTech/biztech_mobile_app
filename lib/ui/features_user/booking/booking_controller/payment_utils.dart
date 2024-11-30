@@ -1,0 +1,100 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_paypal/flutter_paypal.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:tidytech/app/services/navigation_service.dart';
+import 'package:tidytech/tidytech_app.dart';
+import 'package:tidytech/ui/features_user/booking/booking_controller/booking_controller.dart';
+import 'package:tidytech/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
+import 'package:tidytech/ui/features_user/booking/booking_model/paypal_response_model.dart';
+import 'package:tidytech/utils/app_constants/app_colors.dart';
+
+class PaypalUtils {
+  makePayment({
+    required double amount,
+    required bookingDetails,
+    required String description,
+    required bool isBalancePayment,
+  }) async {
+    await Navigator.of(
+      NavigationService.navigatorKey.currentContext!,
+    ).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => UsePaypal(
+          sandboxMode: true,
+          clientId:
+              "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
+          secretKey:
+              "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
+          returnURL: "https://samplesite.com/return",
+          cancelURL: "https://samplesite.com/cancel",
+          transactions: [
+            {
+              "amount": {
+                "total": amount.toString(),
+                "currency": "USD",
+                "details": {
+                  "subtotal": amount.toString(),
+                  "shipping": '0',
+                  "shipping_discount": 0
+                }
+              },
+              "description": description,
+              "item_list": {
+                "items": [
+                  {
+                    "name": "${bookingDetails.bookingId} booking",
+                    "quantity": 1,
+                    "price": amount.toString(),
+                    "currency": "USD"
+                  }
+                ],
+              }
+            }
+          ],
+          note: "Contact us for any questions on your booking.",
+          onSuccess: (Map response) async {
+            logger.f("onSuccess: $response");
+            PaypalResponseModel paypalResponse = PaypalResponseModel();
+            try {
+              paypalResponse = paypalResponseModelFromJson(
+                json.encode(response),
+              );
+              logger.w("Status: ${paypalResponse.status}");
+            } catch (e) {
+              logger.w("Error parsing data: $e");
+            }
+            Fluttertoast.showToast(
+              msg: "Payment successful",
+              backgroundColor: AppColors.normalGreen,
+            );
+
+            // Update and book appointment here
+            if (isBalancePayment == true) {
+              await Get.put(BookingsListController())
+                  .updateBookingFinalPayment(bookingDetails, paypalResponse);
+            } else {
+              await Get.put(BookingsController())
+                  .bookAppointment(bookingDetails, paypalResponse);
+            }
+          },
+          onError: (error) {
+            logger.w("onError: $error");
+            Fluttertoast.showToast(
+              msg: "Payment unsuccessful. Kindly retry",
+              backgroundColor: AppColors.coolRed,
+            );
+            return null;
+          },
+          onCancel: (params) {
+            logger.w('cancelled: $params');
+            Fluttertoast.showToast(msg: "Payment cancelled");
+            return null;
+          },
+        ),
+      ),
+    );
+  }
+}

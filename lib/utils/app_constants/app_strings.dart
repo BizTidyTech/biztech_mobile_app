@@ -20,8 +20,12 @@ class AppStrings {
   static String proceed = 'Proceed';
   static String home = 'Home';
   static String bookings = 'Bookings';
+  static String myBookings = 'My Bookings';
+  static String allBookings = 'All Bookings';
+  static String payBalance = 'Pay Balance';
   static String book = 'Book';
   static String reviewDetails = 'Review Details';
+  static String bookingDetails = 'Booking Details';
   static String notifications = 'Notifications';
   static String appointments = 'Appointments';
   static String profile = 'Profile';

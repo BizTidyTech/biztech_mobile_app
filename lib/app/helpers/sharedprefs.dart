@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tidytech/ui/features/auth/auth_model/user_data_model.dart';
+import 'package:tidytech/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/utils/app_constants/fb_collection_names.dart';
 
 Future<void> saveSharedPrefsStringValue(
