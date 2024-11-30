@@ -21,13 +21,11 @@ class PushNotificationUtils {
       "app_id": oneSignalAppId,
       "target_channel": "push",
       "headings": {
-        "en": isNewBooking == true
-            ? "New booking alert"
-            : "Updated booking alert",
+        "en": "${isNewBooking != false ? "New" : "Updated"} booking alert",
       },
       "contents": {
         "en":
-            "There is ${isNewBooking == true ? "a new" : "an updated"} booking from $senderName for $service"
+            "There is ${isNewBooking != false ? "a new" : "an updated"} booking from $senderName for $service"
       },
       "include_aliases": {
         "external_id": [receiverExternalId],
