@@ -121,7 +121,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                   verticalSpacer(20),
                   controller.showLoading == true
                       ? loadingWidget()
-                      : widget.booking.totalCalculatedServiceCharge == null
+                      : widget.booking.totalCalculatedServiceCharge != null
                           ? const SizedBox.shrink()
                           : CustomButton(
                               buttonText: AppStrings.payBalance,

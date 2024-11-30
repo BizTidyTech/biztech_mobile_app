@@ -49,8 +49,15 @@ class BookingsListController extends GetxController {
     try {
       final description =
           "Making balance payment for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
+      double balanceAmount;
+      try {
+        balanceAmount = bookingDetails.totalCalculatedServiceCharge! -
+            int.parse(bookingDetails.depositPayment!.amount!);
+      } catch (e) {
+        balanceAmount = bookingDetails.service!.baseCost! - 100;
+      }
       await PaypalUtils().makePayment(
-        amount: double.parse(bookingDetails.depositPayment?.amount ?? '100'),
+        amount: balanceAmount,
         bookingDetails: bookingDetails,
         description: description,
         isBalancePayment: true,
@@ -94,6 +101,7 @@ class BookingsListController extends GetxController {
         msg: "Your appointment has been updated successfully",
         backgroundColor: AppColors.normalGreen,
       );
+      fetchBookingsList();
     }
     showLoading = false;
     update();

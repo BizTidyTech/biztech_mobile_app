@@ -30,7 +30,7 @@ class AppRouter {
         builder: (context, state) => const SplashScreen(),
       ),
 
-      /// App Pages
+      /// User App Pages
       GoRoute(
         path: '/onboardingScreen',
         builder: (context, state) => const OnboardingScreen(),
@@ -68,7 +68,7 @@ class AppRouter {
             child: const ProfileView(), key: state.pageKey),
       ),
 
-      // Admin screens
+      /// Admin App Pages
       GoRoute(
         path: '/adminBookingsListScreen',
         pageBuilder: (context, state) => CustomNormalTransition(
