@@ -7,10 +7,9 @@ import 'package:tidytech/utils/app_constants/constants.dart';
 class PushNotificationUtils {
   Future<void> sendNotificationToAdmin({
     required String notificationApiKey,
-    required String service,
     required String receiverExternalId,
-    required String senderName,
-    bool? isNewBooking = true,
+    required String title,
+    required String body,
   }) async {
     // This function send Push Notification to the admin app
     // to inform them of the new bookings
@@ -20,13 +19,8 @@ class PushNotificationUtils {
     final Map<String, dynamic> requestBody = {
       "app_id": oneSignalAppId,
       "target_channel": "push",
-      "headings": {
-        "en": "${isNewBooking != false ? "New" : "Updated"} booking alert",
-      },
-      "contents": {
-        "en":
-            "There is ${isNewBooking != false ? "a new" : "an updated"} booking from $senderName for $service"
-      },
+      "headings": {"en": title},
+      "contents": {"en": body},
       "include_aliases": {
         "external_id": [receiverExternalId],
       },

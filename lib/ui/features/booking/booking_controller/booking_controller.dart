@@ -183,8 +183,9 @@ class BookingsController extends GetxController {
     if (notificationApiKey != null && userData != null) {
       PushNotificationUtils().sendNotificationToAdmin(
         notificationApiKey: notificationApiKey,
-        service: service,
-        senderName: userData.name ?? 'Client',
+        title: "New booking alert",
+        body:
+            "There is a new booking from ${userData.name ?? 'Client'} for $service",
         receiverExternalId: userData.userId ?? '', // To be removed
         // receiverExternalId: "TideyTechAdmin",
       );
