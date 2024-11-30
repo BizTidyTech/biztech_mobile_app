@@ -9,6 +9,7 @@ String bookingModelToJson(BookingModel data) => json.encode(data.toJson());
 
 class BookingModel {
   final String? bookingId;
+  final String? userId;
   final DateTime? dateTime;
   final String? locationName;
   final String? locationAddress;
@@ -24,6 +25,7 @@ class BookingModel {
 
   BookingModel({
     this.bookingId,
+    this.userId,
     this.dateTime,
     this.locationName,
     this.locationAddress,
@@ -40,6 +42,7 @@ class BookingModel {
 
   BookingModel copyWith({
     String? bookingId,
+  final String? userId,
     DateTime? dateTime,
     String? locationName,
     String? locationAddress,
@@ -55,6 +58,7 @@ class BookingModel {
   }) =>
       BookingModel(
         bookingId: bookingId ?? this.bookingId,
+        userId: userId ?? this.userId,
         dateTime: dateTime ?? this.dateTime,
         locationName: locationName ?? this.locationName,
         locationAddress: locationAddress ?? this.locationAddress,
@@ -72,6 +76,7 @@ class BookingModel {
 
   factory BookingModel.fromJson(Map<String, dynamic> json) => BookingModel(
         bookingId: json["bookingId"],
+        userId: json["userId"],
         dateTime:
             json["dateTime"] == null ? null : DateTime.parse(json["dateTime"]),
         locationName: json["locationName"],
@@ -97,6 +102,7 @@ class BookingModel {
 
   Map<String, dynamic> toJson() => {
         "bookingId": bookingId,
+        "userId": userId,
         "dateTime": dateTime?.toIso8601String(),
         "locationName": locationName,
         "locationAddress": locationAddress,
