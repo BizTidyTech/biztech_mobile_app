@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/app/resources/app.transitions.dart';
 import 'package:tidytech/app/services/navigation_service.dart';
+import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_view/admin_signin_view.dart';
 import 'package:tidytech/ui/features_admin/admin_booking/admin_booking_list_view/admin_booking_list_view.dart';
 import 'package:tidytech/ui/features_user/auth/auth_view/create_account_view.dart';
 import 'package:tidytech/ui/features_user/auth/auth_view/onboarding_view.dart';
@@ -66,6 +67,19 @@ class AppRouter {
         path: '/profileView',
         pageBuilder: (context, state) => CustomNormalTransition(
             child: const ProfileView(), key: state.pageKey),
+      ),
+    ],
+  );
+}
+
+class AdminAppRouter {
+  static final router = GoRouter(
+    navigatorKey: NavigationService.navigatorKey,
+    // initialLocation: '/onboardingScreen',
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => AdminSignInView(),
       ),
 
       /// Admin App Pages

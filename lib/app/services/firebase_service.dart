@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/tidytech_app.dart';
+import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_model/admin_data_model.dart';
 import 'package:tidytech/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/ui/features_user/booking/booking_model/booking_model.dart';
 import 'package:tidytech/utils/app_constants/fb_collection_names.dart';
@@ -153,6 +154,22 @@ class FirebaseService {
       logger.f("notificationApiKey: $notificationApiKey");
       return notificationApiKey;
     } catch (e) {
+      return null;
+    }
+  }
+
+  Future<AdminAuthModel?> getAdminAuthDetails() async {
+    try {
+      DocumentSnapshot document = await firebaseFirestore
+          .collection(FbCollectionNames.admin)
+          .doc('auth')
+          .get();
+      final adminAuthDetails =
+          AdminAuthModel.fromJson(document.data() as Map<String, dynamic>);
+      return adminAuthDetails;
+    } catch (e) {
+      logger.e(e);
+      Fluttertoast.showToast(msg: 'Error occured! Retry.');
       return null;
     }
   }

@@ -3,15 +3,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tidytech/app/services/firebase_service.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_model/admin_data_model.dart';
-import 'package:tidytech/ui/features_user/auth/auth_utils/auth_utils.dart';
+import 'package:tidytech/utils/app_constants/app_colors.dart';
 
 class AdminAuthController extends GetxController {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController adminIdController = TextEditingController();
+  TextEditingController adminPasswordController = TextEditingController();
   AdminAuthModel? adminEnteredData;
 
   AdminAuthController();
@@ -22,8 +24,8 @@ class AdminAuthController extends GetxController {
   File? imageFile;
 
   disposeAllControllers() {
-    emailController.dispose();
-    passwordController.dispose();
+    adminIdController.dispose();
+    adminPasswordController.dispose();
     resetValues();
   }
 
@@ -58,28 +60,38 @@ class AdminAuthController extends GetxController {
   }
 
   Future<void> attemptToSignInAdmin(BuildContext context) async {
-    logger.i('attemptToSignInUser . . .');
-    if (emailController.text.trim().isNotEmpty &&
-        passwordController.text.trim().isNotEmpty) {
+    logger.i('attemptToSignInAdmin . . .');
+    if (adminIdController.text.trim().isNotEmpty &&
+        adminPasswordController.text.trim().isNotEmpty) {
       signInAdmin(
         context,
-        emailController.text.trim(),
-        passwordController.text.trim(),
+        adminIdController.text.trim(),
+        adminPasswordController.text.trim(),
       );
     } else {
-      errMessage = 'Both username and password are required';
+      errMessage = 'Both ID and password are required';
       logger.i("Errormessage: $errMessage");
       stopLoading();
     }
   }
 
   Future<void> signInAdmin(
-      BuildContext context, String email, String password) async {
-    logger.i('signing in user . . .');
+      BuildContext context, String adminID, String adminPassword) async {
+    logger.i('signing in admin . . .');
+    errMessage = '';
     startLoading();
-    final isLoggedIn = await AuthUtil().signInUser(email, password);
-    if (isLoggedIn == true) {
+    final adminAuthData = await FirebaseService().getAdminAuthDetails();
+
+    if (adminID == adminAuthData?.id &&
+        adminPassword == adminAuthData?.password) {
+      Fluttertoast.showToast(msg: "Logged in successfully");
       context.go('/adminBookingsListScreen');
+    } else {
+      errMessage = 'Incorrect ID and password';
+      Fluttertoast.showToast(
+        msg: "Incorrect credentials",
+        backgroundColor: AppColors.coolRed,
+      );
     }
     stopLoading();
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_controller/auth_controller.dart';
+import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_controller/admin_auth_controller.dart';
 import 'package:tidytech/ui/shared/custom_textfield_.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_styles.dart';

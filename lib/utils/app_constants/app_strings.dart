@@ -6,6 +6,7 @@ class AppStrings {
   static String welcome = 'Welcome';
   static String to = 'to';
   static String login = 'Log in';
+  static String adminLogin = 'Log in as Admin';
   static String signUp = 'Sign up';
   static String getStarted = 'Get Started';
   static String emailVerification = 'Email verification';
@@ -30,6 +31,7 @@ class AppStrings {
   static String appointments = 'Appointments';
   static String profile = 'Profile';
   static String fullName = 'Name';
+  static String adminIdText = 'Admin ID';
   static String email = 'Email';
   static String password = 'Password';
   static String confirmPassword = 'Confirm Password';

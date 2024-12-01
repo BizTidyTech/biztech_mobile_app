@@ -1,8 +1,15 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/utils/app_constants/constants.dart';
+
+Future<void> initOneSignalPlatformState() async {
+  OneSignal.Debug.setLogLevel(OSLogLevel.warn);
+  OneSignal.initialize(oneSignalAppId);
+  OneSignal.Notifications.requestPermission(true);
+}
 
 class PushNotificationUtils {
   Future<void> sendNotificationToAdmin({

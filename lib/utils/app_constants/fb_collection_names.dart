@@ -4,4 +4,5 @@ class FbCollectionNames {
   static const String bookings = "Bookings";
   static const String patient = 'Patient';
   static const String user = 'User';
+  static const String admin = 'Admin';
 }
