@@ -32,6 +32,9 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
   void initState() {
     super.initState();
     controller.selectCurrentBooking(widget.booking);
+    controller.totalAmountController = TextEditingController(
+      text: widget.booking.totalCalculatedServiceCharge?.toString(),
+    );
   }
 
   @override
@@ -130,35 +133,6 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
                                           null
                                       ? "Pending"
                                       : "Done"),
-                                  /*
-                                  _valueText(
-                                      "${widget.booking.service?.name ?? ''} Cleaning"),
-                                  _valueText(
-                                      "\$${widget.booking.depositPayment?.amount}"),
-                                  _valueText(widget.booking.locationName ?? ''),
-                                  _valueText(
-                                      widget.booking.locationAddress ?? ''),
-                                  _valueText(
-                                      widget.booking.customer?.phoneNumber ??
-                                          ''),
-                                  _valueText("${widget.booking.rooms ?? ''}"),
-                                  _valueText(
-                                      "${widget.booking.duration ?? ''} hours"),
-                                  _valueText(DateFormat('MMM d, y').format(
-                                      widget.booking.dateTime ??
-                                          DateTime.now())),
-                                  _valueText(DateFormat('h:mm a').format(
-                                      widget.booking.dateTime ??
-                                          DateTime.now())),
-                                  _valueText(widget.booking
-                                              .totalCalculatedServiceCharge ==
-                                          null
-                                      ? "Pending"
-                                      : "\$${widget.booking.totalCalculatedServiceCharge}"),
-                                  _valueText(widget.booking.finalPayment == null
-                                      ? "Pending"
-                                      : "Done"),
-                                      */
                                 ],
                               ),
                             ),
@@ -179,6 +153,8 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
                             buttonText: AppStrings.update,
                             width: screenWidth(context) * 0.5,
                             onPressed: () {
+                              SystemChannels.textInput
+                                  .invokeMethod('TextInput.hide');
                               controller.updateBookingTotalChargesAmount();
                             },
                           ),

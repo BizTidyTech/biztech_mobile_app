@@ -2,6 +2,7 @@ import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/ui/features_admin/admin_booking/widgets/admin_booking_card.dart';
 import 'package:tidytech/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
@@ -22,10 +23,15 @@ class AdminBookingsListScreen extends StatefulWidget {
 class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
   final controller = Get.put(BookingsListController());
 
+  void optInNotification() async {
+    await OneSignal.User.pushSubscription.optIn();
+  }
+
   @override
   void initState() {
     super.initState();
     controller.fetchBookingsList();
+    optInNotification();
   }
 
   @override
