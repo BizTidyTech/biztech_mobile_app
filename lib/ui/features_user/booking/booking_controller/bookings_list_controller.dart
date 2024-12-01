@@ -12,6 +12,7 @@ import 'package:tidytech/ui/features_user/booking/booking_model/booking_model.da
 import 'package:tidytech/ui/features_user/booking/booking_model/paypal_response_model.dart';
 import 'package:tidytech/ui/features_user/booking/booking_utils/push_notification_utils.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
+import 'package:tidytech/utils/app_constants/constants.dart';
 
 class BookingsListController extends GetxController {
   BookingsListController();
@@ -89,9 +90,8 @@ class BookingsListController extends GetxController {
     logger.w("Updated bookingDetails: ${updatedBookingDetails.toJson()}");
 
     logger.f('Updating Booking . . . ');
-    final bookingResponse = await FirebaseService().bookAppointment(
-      booking: updatedBookingDetails,
-    );
+    final bookingResponse =
+        await FirebaseService().updateBooking(updatedBookingDetails);
     if (bookingResponse == true) {
       NavigationService.navigatorKey.currentContext!.pop();
       logger.f('Booked successfully . . . ');
@@ -119,8 +119,7 @@ class BookingsListController extends GetxController {
         title: "Updated booking alert",
         body:
             "There is an updated booking from ${userData.name ?? 'Client'} for $service",
-        receiverExternalId: userData.userId ?? '', // To be removed
-        // receiverExternalId: "TidyTechAdmin",
+        receiverExternalId: adminOnesignalExternalID,
       );
     } else {
       logger.e("Error sending notification");

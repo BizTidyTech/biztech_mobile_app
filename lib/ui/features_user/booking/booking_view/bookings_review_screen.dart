@@ -58,7 +58,7 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 110,
+                          width: 115,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

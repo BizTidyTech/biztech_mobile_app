@@ -24,6 +24,8 @@ class AppStrings {
   static String myBookings = 'My Bookings';
   static String allBookings = 'All Bookings';
   static String payBalance = 'Pay Balance';
+  static String updateTotalServiceCharge = 'Update Total Service Charge';
+  static String update = 'Update';
   static String book = 'Book';
   static String reviewDetails = 'Review Details';
   static String bookingDetails = 'Booking Details';

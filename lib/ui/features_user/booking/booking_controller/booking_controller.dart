@@ -17,6 +17,7 @@ import 'package:tidytech/ui/features_user/booking/booking_view/bookings_review_s
 import 'package:tidytech/ui/features_user/home/home_model/services_model.dart';
 import 'package:tidytech/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
+import 'package:tidytech/utils/app_constants/constants.dart';
 import 'package:tidytech/utils/extension_and_methods/string_cap_extensions.dart';
 
 class BookingsController extends GetxController {
@@ -188,8 +189,7 @@ class BookingsController extends GetxController {
         title: "New booking alert",
         body:
             "There is a new booking from ${userData.name ?? 'Client'} for $service",
-        receiverExternalId: userData.userId ?? '', // To be removed
-        // receiverExternalId: "TidyTechAdmin",
+        receiverExternalId: adminOnesignalExternalID,
       );
     } else {
       logger.e("Error sending notification");

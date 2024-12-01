@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:tidytech/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
+import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_view/widgets/admin_input_widget.dart';
+import 'package:tidytech/ui/features_admin/admin_booking/admin_booking_controller/admin_bookings_list_controller.dart';
 import 'package:tidytech/ui/features_user/booking/booking_model/booking_model.dart';
 import 'package:tidytech/ui/shared/curved_container.dart';
 import 'package:tidytech/ui/shared/custom_button.dart';
@@ -15,21 +16,28 @@ import 'package:tidytech/utils/app_constants/app_strings.dart';
 import 'package:tidytech/utils/app_constants/app_styles.dart';
 import 'package:tidytech/utils/extension_and_methods/screen_utils.dart';
 
-class BookingDetailsScreen extends StatefulWidget {
-  const BookingDetailsScreen({super.key, required this.booking});
+class AdminBookingDetailsScreen extends StatefulWidget {
+  const AdminBookingDetailsScreen({super.key, required this.booking});
   final BookingModel booking;
 
   @override
-  State<BookingDetailsScreen> createState() => _BookingDetailsScreenState();
+  State<AdminBookingDetailsScreen> createState() =>
+      _AdminBookingDetailsScreenState();
 }
 
-class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
-  final controller = Get.put(BookingsListController());
+class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
+  final controller = Get.put(AdminBookingsController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.selectCurrentBooking(widget.booking);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BookingsListController>(
-      init: BookingsListController(),
+    return GetBuilder<AdminBookingsController>(
+      init: AdminBookingsController(),
       builder: (_) {
         return GestureDetector(
           onTap: () => SystemChannels.textInput.invokeMethod('TextInput.hide'),
@@ -45,94 +53,138 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                 style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
               ),
             ),
-            body: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              child: Column(
-                children: [
-                  CustomCurvedContainer(
-                    height: 390,
-                    fillColor: AppColors.kPrimaryColor,
-                    topPadding: 15,
-                    leftPadding: 15,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 110,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _keyText(AppStrings.service),
-                              _keyText("Deposit Cost"),
-                              _keyText("Location"),
-                              _keyText("Address"),
-                              _keyText("Phone No"),
-                              _keyText("Rooms"),
-                              _keyText("Duration"),
-                              _keyText("Date"),
-                              _keyText("Time"),
-                              _keyText("Total Cost"),
-                            ],
-                          ),
-                        ),
-                        horizontalSpacer(8),
-                        Expanded(
-                          child: SizedBox(
+            body: SingleChildScrollView(
+              child: Container(
+                height: screenHeight(context),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: Column(
+                  children: [
+                    CustomCurvedContainer(
+                      height: 420,
+                      fillColor: AppColors.kPrimaryColor,
+                      topPadding: 15,
+                      leftPadding: 15,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 115,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                _valueText(
-                                    "${widget.booking.service?.name ?? ''} Cleaning"),
-                                _valueText(
-                                    "\$${widget.booking.depositPayment?.amount}"),
-                                _valueText(widget.booking.locationName ?? ''),
-                                _valueText(
-                                    widget.booking.locationAddress ?? ''),
-                                _valueText(
-                                    widget.booking.customer?.phoneNumber ?? ''),
-                                _valueText("${widget.booking.rooms ?? ''}"),
-                                _valueText(
-                                    "${widget.booking.duration ?? ''} hours"),
-                                _valueText(DateFormat('MMM d, y').format(
-                                    widget.booking.dateTime ?? DateTime.now())),
-                                _valueText(DateFormat('h:mm a').format(
-                                    widget.booking.dateTime ?? DateTime.now())),
-                                _valueText(widget.booking
-                                            .totalCalculatedServiceCharge ==
-                                        null
-                                    ? "Pending"
-                                    : "\$${widget.booking.totalCalculatedServiceCharge}"),
+                                _keyText(AppStrings.service),
+                                _keyText("Deposit Cost"),
+                                _keyText("Location"),
+                                _keyText("Address"),
+                                _keyText("Phone No"),
+                                _keyText("Rooms"),
+                                _keyText("Duration"),
+                                _keyText("Date"),
+                                _keyText("Time"),
+                                _keyText("Total Charges"),
+                                _keyText("Final Payment"),
                               ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    widget.booking.totalCalculatedServiceCharge == null
-                        ? "You will know the balance to pay when the total service charges are calculated"
-                        : "You are to pay the balance of \$${widget.booking.totalCalculatedServiceCharge! - int.parse(widget.booking.depositPayment!.amount!)}.",
-                    textAlign: TextAlign.center,
-                    style: AppStyles.normalStringStyle(15, AppColors.fullBlack),
-                  ),
-                  verticalSpacer(20),
-                  controller.showLoading == true
-                      ? loadingWidget()
-                      : widget.booking.totalCalculatedServiceCharge == null
-                          ? const SizedBox.shrink()
-                          : CustomButton(
-                              buttonText: AppStrings.payBalance,
-                              width: screenWidth(context) * 0.5,
-                              onPressed: () {
-                                controller
-                                    .makeBalanceFinalPayment(widget.booking);
-                              },
+                          horizontalSpacer(8),
+                          Expanded(
+                            child: SizedBox(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _valueText(
+                                      "${controller.selectedBookingData?.service?.name ?? ''} Cleaning"),
+                                  _valueText(
+                                      "\$${controller.selectedBookingData?.depositPayment?.amount}"),
+                                  _valueText(controller
+                                          .selectedBookingData?.locationName ??
+                                      ''),
+                                  _valueText(controller.selectedBookingData
+                                          ?.locationAddress ??
+                                      ''),
+                                  _valueText(controller.selectedBookingData
+                                          ?.customer?.phoneNumber ??
+                                      ''),
+                                  _valueText(
+                                      "${controller.selectedBookingData?.rooms ?? ''}"),
+                                  _valueText(
+                                      "${controller.selectedBookingData?.duration ?? ''} hours"),
+                                  _valueText(DateFormat('MMM d, y').format(
+                                      controller
+                                              .selectedBookingData?.dateTime ??
+                                          DateTime.now())),
+                                  _valueText(DateFormat('h:mm a').format(
+                                      controller
+                                              .selectedBookingData?.dateTime ??
+                                          DateTime.now())),
+                                  _valueText(controller.selectedBookingData
+                                              ?.totalCalculatedServiceCharge ==
+                                          null
+                                      ? "Pending"
+                                      : "\$${controller.selectedBookingData?.totalCalculatedServiceCharge}"),
+                                  _valueText(controller.selectedBookingData
+                                              ?.finalPayment ==
+                                          null
+                                      ? "Pending"
+                                      : "Done"),
+                                  /*
+                                  _valueText(
+                                      "${widget.booking.service?.name ?? ''} Cleaning"),
+                                  _valueText(
+                                      "\$${widget.booking.depositPayment?.amount}"),
+                                  _valueText(widget.booking.locationName ?? ''),
+                                  _valueText(
+                                      widget.booking.locationAddress ?? ''),
+                                  _valueText(
+                                      widget.booking.customer?.phoneNumber ??
+                                          ''),
+                                  _valueText("${widget.booking.rooms ?? ''}"),
+                                  _valueText(
+                                      "${widget.booking.duration ?? ''} hours"),
+                                  _valueText(DateFormat('MMM d, y').format(
+                                      widget.booking.dateTime ??
+                                          DateTime.now())),
+                                  _valueText(DateFormat('h:mm a').format(
+                                      widget.booking.dateTime ??
+                                          DateTime.now())),
+                                  _valueText(widget.booking
+                                              .totalCalculatedServiceCharge ==
+                                          null
+                                      ? "Pending"
+                                      : "\$${widget.booking.totalCalculatedServiceCharge}"),
+                                  _valueText(widget.booking.finalPayment == null
+                                      ? "Pending"
+                                      : "Done"),
+                                      */
+                                ],
+                              ),
                             ),
-                  const Spacer(),
-                ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    verticalSpacer(20),
+                    adminInputWidget(
+                      titleText: AppStrings.updateTotalServiceCharge,
+                      textEditingController: controller.totalAmountController,
+                      hintText: "Enter calculated total service charge",
+                    ),
+                    verticalSpacer(20),
+                    controller.showLoading == true
+                        ? loadingWidget()
+                        : CustomButton(
+                            buttonText: AppStrings.update,
+                            width: screenWidth(context) * 0.5,
+                            onPressed: () {
+                              controller.updateBookingTotalChargesAmount();
+                            },
+                          ),
+                    const Spacer(),
+                  ],
+                ),
               ),
             ),
           ),

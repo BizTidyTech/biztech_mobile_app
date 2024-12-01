@@ -1,105 +1,86 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/app/services/firebase_service.dart';
-import 'package:tidytech/app/services/navigation_service.dart';
 import 'package:tidytech/tidytech_app.dart';
-import 'package:tidytech/ui/features_user/booking/booking_controller/payment_utils.dart';
 import 'package:tidytech/ui/features_user/booking/booking_model/booking_model.dart';
-import 'package:tidytech/ui/features_user/booking/booking_model/paypal_response_model.dart';
 import 'package:tidytech/ui/features_user/booking/booking_utils/push_notification_utils.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 
-class BookingsListController extends GetxController {
-  BookingsListController();
-  BookingModel? bookingData;
+class AdminBookingsController extends GetxController {
+  AdminBookingsController();
+  BookingModel? selectedBookingData;
   List<BookingModel>? bookingsList = [];
   String errMessage = '';
   bool showLoading = false;
 
+  TextEditingController totalAmountController = TextEditingController();
+
   clearVals() {
     showLoading = false;
     errMessage = '';
-    bookingData = null;
+    selectedBookingData = null;
     bookingsList = [];
     update();
   }
 
-  fetchBookingsList() async {
+  selectCurrentBooking(BookingModel booking) {
+    selectedBookingData = booking;
+    update();
+  }
+
+  fetchAllBooking() async {
     showLoading = true;
     update();
-    bookingsList = await FirebaseService().fetchMyBookings();
+    bookingsList = await FirebaseService().adminFetchAllBookings();
     try {
       bookingsList?.sort((a, b) =>
           b.depositPayment!.paidAt!.compareTo(a.depositPayment!.paidAt!));
     } catch (e) {
       logger.e("Error sorting list");
     }
-    logger.w("Bookings: ${bookingsList?.length}");
+    logger.w("All Bookings: ${bookingsList?.length}");
     showLoading = false;
     update();
   }
 
-  makeBalanceFinalPayment(BookingModel bookingDetails) async {
-    showLoading = true;
-    update();
-    try {
-      final description =
-          "Making balance payment for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
-      await PaypalUtils().makePayment(
-        amount: double.parse(bookingDetails.depositPayment?.amount ?? '100'),
-        bookingDetails: bookingDetails,
-        description: description,
-        isBalancePayment: true,
-      );
-    } catch (e) {
-      logger.w("Error occured");
-      Fluttertoast.showToast(msg: "Error occured. Kindly retry");
+  updateBookingTotalChargesAmount() async {
+    if (totalAmountController.text.trim().isNotEmpty == true &&
+        double.tryParse(totalAmountController.text.trim()) != null) {
+      errMessage = '';
+      showLoading = true;
+      update();
+      // Update amount here
+      final totalServicecharge =
+          double.tryParse(totalAmountController.text.trim());
+      final updatedBookingDetails = selectedBookingData!
+          .copyWith(totalCalculatedServiceCharge: totalServicecharge);
+      logger.f('Updating Booking . . . ');
+      final bookingResponse =
+          await FirebaseService().updateBooking(updatedBookingDetails);
+      if (bookingResponse == true) {
+        selectedBookingData = updatedBookingDetails;
+        logger.f('Updated successfully . . . ');
+        sendBookingUpdateNotificationToClient(
+            'Your total service charge is \$$totalServicecharge.');
+        Fluttertoast.showToast(
+          msg: "Update successfully",
+          backgroundColor: AppColors.normalGreen,
+        );
+        fetchAllBooking();
+      }
+    } else {
+      errMessage = "Enter a valid amount";
+      Fluttertoast.showToast(msg: 'Enter a valid amout');
     }
     showLoading = false;
     update();
   }
 
-  updateBookingFinalPayment(
-      BookingModel bookingDetails, PaypalResponseModel paymentData) async {
-    showLoading = true;
-    update();
-    final finalPaymentData = PaymentDetails(
-      paidAt: DateTime.now(),
-      paymentId: paymentData.paymentId,
-      payerId: paymentData.payerId,
-      status: paymentData.status,
-      payerEmail: paymentData.data?.payer?.payerInfo?.email,
-      amount: bookingDetails.depositPayment?.amount.toString(),
-      payerName:
-          "${paymentData.data?.payer?.payerInfo?.firstName} ${paymentData.data?.payer?.payerInfo?.lastName}",
-    );
-    final updatedBookingDetails =
-        bookingDetails.copyWith(finalPayment: finalPaymentData);
-    logger.w("Updated bookingDetails: ${updatedBookingDetails.toJson()}");
-
-    logger.f('Updating Booking . . . ');
-    final bookingResponse = await FirebaseService().bookAppointment(
-      booking: updatedBookingDetails,
-    );
-    if (bookingResponse == true) {
-      NavigationService.navigatorKey.currentContext!.pop();
-      logger.f('Booked successfully . . . ');
-      sendUpdatedBookingNotificationToAdmin(
-          bookingDetails.service?.name ?? 'cleaning service');
-      Fluttertoast.showToast(
-        msg: "Your appointment has been updated successfully",
-        backgroundColor: AppColors.normalGreen,
-      );
-    }
-    showLoading = false;
-    update();
-  }
-
-  sendUpdatedBookingNotificationToAdmin(String service) async {
+  sendBookingUpdateNotificationToClient(String description) async {
     final notificationApiKey =
         await FirebaseService().fetchNotificationApiKey();
 
@@ -109,10 +90,8 @@ class BookingsListController extends GetxController {
       PushNotificationUtils().sendNotificationToAdmin(
         notificationApiKey: notificationApiKey,
         title: "Updated booking alert",
-        body:
-            "There is an updated booking from ${userData.name ?? 'Client'} for $service",
-        receiverExternalId: userData.userId ?? '', // To be removed
-        // receiverExternalId: "TidyTechAdmin",
+        body: description,
+        receiverExternalId: userData.userId ?? '',
       );
     } else {
       logger.e("Error sending notification");

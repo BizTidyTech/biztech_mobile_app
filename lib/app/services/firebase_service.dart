@@ -76,7 +76,7 @@ class FirebaseService {
     }
   }
 
-  Future<bool> updateBookingForFinalPayment(BookingModel booking) async {
+  Future<bool> updateBooking(BookingModel booking) async {
     try {
       firebaseFirestore
           .collection(FbCollectionNames.bookings)

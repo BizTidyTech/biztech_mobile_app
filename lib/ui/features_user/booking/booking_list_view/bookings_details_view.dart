@@ -58,7 +58,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 110,
+                          width: 115,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

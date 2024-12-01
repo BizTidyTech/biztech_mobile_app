@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:tidytech/app/services/firebase_service.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_model/admin_data_model.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
+import 'package:tidytech/utils/app_constants/constants.dart';
 
 class AdminAuthController extends GetxController {
   TextEditingController adminIdController = TextEditingController();
@@ -85,6 +87,7 @@ class AdminAuthController extends GetxController {
     if (adminID == adminAuthData?.id &&
         adminPassword == adminAuthData?.password) {
       Fluttertoast.showToast(msg: "Logged in successfully");
+      await OneSignal.login(adminOnesignalExternalID);
       context.go('/adminBookingsListScreen');
     } else {
       errMessage = 'Incorrect ID and password';

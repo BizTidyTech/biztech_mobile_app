@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:tidytech/ui/features_admin/admin_booking/widgets/admin_booking_card.dart';
 import 'package:tidytech/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
-import 'package:tidytech/ui/features_user/booking/widgets/booking_card.dart';
 import 'package:tidytech/ui/features_user/nav_bar/data/page_index_class.dart';
-import 'package:tidytech/ui/features_user/nav_bar/views/custom_navbar.dart';
 import 'package:tidytech/ui/shared/loading_widget.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -16,7 +15,8 @@ class AdminBookingsListScreen extends StatefulWidget {
   const AdminBookingsListScreen({super.key});
 
   @override
-  State<AdminBookingsListScreen> createState() => _AdminBookingsListScreenState();
+  State<AdminBookingsListScreen> createState() =>
+      _AdminBookingsListScreenState();
 }
 
 class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
@@ -45,7 +45,6 @@ class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
           init: BookingsListController(),
           builder: (_) {
             return Scaffold(
-              bottomNavigationBar: const CustomNavBar(currentPageIndx: 2),
               appBar: AppBar(
                 elevation: 3,
                 automaticallyImplyLeading: false,
@@ -75,7 +74,7 @@ class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
                                 return Padding(
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: bookingCard(context, booking),
+                                  child: adminBookingCard(context, booking),
                                 );
                               },
                             ),
