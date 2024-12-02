@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/app/services/firebase_service.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features_user/booking/booking_model/booking_model.dart';
@@ -87,9 +86,7 @@ class AdminBookingsController extends GetxController {
     final notificationApiKey =
         await FirebaseService().fetchNotificationApiKey();
 
-    final userData = await getLocallySavedUserDetails();
-
-    if (notificationApiKey != null && userData != null) {
+    if (notificationApiKey != null) {
       PushNotificationUtils().sendNotificationToAdmin(
         notificationApiKey: notificationApiKey,
         title: "Updated booking alert",

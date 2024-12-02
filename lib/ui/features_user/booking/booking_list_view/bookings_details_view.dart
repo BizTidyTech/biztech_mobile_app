@@ -127,7 +127,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                         ? "Final payment done!"
                         : widget.booking.totalCalculatedServiceCharge == null
                             ? "You will know the balance to pay when the total service charges are calculated"
-                            : "You are to pay the balance of \$${widget.booking.totalCalculatedServiceCharge! - double.parse(widget.booking.depositPayment!.amount!)}.",
+                            : "You are to pay the balance of \$${(widget.booking.totalCalculatedServiceCharge! - double.parse(widget.booking.depositPayment!.amount!)).toStringAsFixed(1)}.",
                     textAlign: TextAlign.center,
                     style: widget.booking.finalPayment != null
                         ? AppStyles.regularStringStyle(17, AppColors.fullBlack)
