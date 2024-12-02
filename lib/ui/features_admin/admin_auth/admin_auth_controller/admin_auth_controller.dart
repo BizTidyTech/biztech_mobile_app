@@ -87,7 +87,7 @@ class AdminAuthController extends GetxController {
     if (adminID == adminAuthData?.id &&
         adminPassword == adminAuthData?.password) {
       Fluttertoast.showToast(msg: "Logged in successfully");
-      await OneSignal.login(adminOnesignalExternalID);
+      OneSignal.login(adminOnesignalExternalID);
       context.go('/adminBookingsListScreen');
     } else {
       errMessage = 'Incorrect ID and password';

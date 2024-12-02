@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_controller/admin_auth_controller.dart';
 import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_view/widgets/admin_input_widget.dart';
 import 'package:tidytech/ui/features_user/auth/auth_view/widgets/top_card.dart';
@@ -13,10 +14,21 @@ import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
 import 'package:tidytech/utils/app_constants/app_styles.dart';
 
-class AdminSignInView extends StatelessWidget {
-  AdminSignInView({super.key});
+class AdminSignInView extends StatefulWidget {
+  const AdminSignInView({super.key});
 
+  @override
+  State<AdminSignInView> createState() => _AdminSignInViewState();
+}
+
+class _AdminSignInViewState extends State<AdminSignInView> {
   final controller = Get.put(AdminAuthController());
+
+  @override
+  void initState() {
+    super.initState();
+    OneSignal.Notifications.requestPermission(true);
+  }
 
   @override
   Widget build(BuildContext context) {
