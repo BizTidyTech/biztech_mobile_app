@@ -141,23 +141,28 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
                       ),
                     ),
                     verticalSpacer(20),
-                    adminInputWidget(
-                      titleText: AppStrings.updateTotalServiceCharge,
-                      textEditingController: controller.totalAmountController,
-                      hintText: "Enter calculated total service charge",
-                    ),
+                    controller.selectedBookingData?.finalPayment == null
+                        ? adminInputWidget(
+                            titleText: AppStrings.updateTotalServiceCharge,
+                            textEditingController:
+                                controller.totalAmountController,
+                            hintText: "Enter calculated total service charge",
+                          )
+                        : const SizedBox.shrink(),
                     verticalSpacer(20),
-                    controller.showLoading == true
-                        ? loadingWidget()
-                        : CustomButton(
-                            buttonText: AppStrings.update,
-                            width: screenWidth(context) * 0.5,
-                            onPressed: () {
-                              SystemChannels.textInput
-                                  .invokeMethod('TextInput.hide');
-                              controller.updateBookingTotalChargesAmount();
-                            },
-                          ),
+                    controller.selectedBookingData?.finalPayment == null
+                        ? controller.showLoading == true
+                            ? loadingWidget()
+                            : CustomButton(
+                                buttonText: AppStrings.update,
+                                width: screenWidth(context) * 0.5,
+                                onPressed: () {
+                                  SystemChannels.textInput
+                                      .invokeMethod('TextInput.hide');
+                                  controller.updateBookingTotalChargesAmount();
+                                },
+                              )
+                        : const SizedBox.shrink(),
                     const Spacer(),
                   ],
                 ),
