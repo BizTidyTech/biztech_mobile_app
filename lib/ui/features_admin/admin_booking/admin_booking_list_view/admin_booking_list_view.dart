@@ -34,6 +34,10 @@ class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
     optInNotification();
   }
 
+  Future<void> _refresBookingsList() async {
+    controller.fetchBookingsList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ConditionalWillPopScope(
@@ -50,41 +54,47 @@ class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
         child: GetBuilder<BookingsListController>(
           init: BookingsListController(),
           builder: (_) {
-            return Scaffold(
-              appBar: AppBar(
-                elevation: 3,
-                automaticallyImplyLeading: false,
-                shadowColor: AppColors.lightGray,
-                backgroundColor: AppColors.primaryThemeColor,
-                title: Text(
-                  AppStrings.myBookings,
-                  style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
+            return RefreshIndicator(
+              color: AppColors.primaryThemeColor,
+              backgroundColor: AppColors.scaffoldBackgroundColor(context),
+              onRefresh: _refresBookingsList,
+              child: Scaffold(
+                appBar: AppBar(
+                  elevation: 3,
+                  automaticallyImplyLeading: false,
+                  shadowColor: AppColors.lightGray,
+                  backgroundColor: AppColors.primaryThemeColor,
+                  title: Text(
+                    AppStrings.myBookings,
+                    style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
+                  ),
                 ),
-              ),
-              body: controller.showLoading == true
-                  ? loadingWidget()
-                  : Container(
-                      padding: const EdgeInsets.all(12.0),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20.0),
+                body: controller.showLoading == true
+                    ? loadingWidget()
+                    : Container(
+                        padding: const EdgeInsets.all(12.0),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(20.0),
+                          ),
                         ),
+                        child: controller.bookingsList?.isEmpty == true
+                            ? const Center(child: Text("No bookings found"))
+                            : ListView.builder(
+                                itemCount: controller.bookingsList?.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final booking =
+                                      controller.bookingsList?[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5.0),
+                                    child: adminBookingCard(context, booking),
+                                  );
+                                },
+                              ),
                       ),
-                      child: controller.bookingsList?.isEmpty == true
-                          ? const Center(child: Text("No bookings found"))
-                          : ListView.builder(
-                              itemCount: controller.bookingsList?.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final booking = controller.bookingsList?[index];
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: adminBookingCard(context, booking),
-                                );
-                              },
-                            ),
-                    ),
+              ),
             );
           },
         ),

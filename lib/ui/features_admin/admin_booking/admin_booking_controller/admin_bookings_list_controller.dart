@@ -65,7 +65,9 @@ class AdminBookingsController extends GetxController {
         selectedBookingData = updatedBookingDetails;
         logger.f('Updated successfully . . . ');
         sendBookingUpdateNotificationToClient(
-            'Your total service charge is \$$totalServicecharge.');
+          'Your total service charge is \$$totalServicecharge.',
+          updatedBookingDetails.userId ?? '',
+        );
         Fluttertoast.showToast(
           msg: "Update successfully",
           backgroundColor: AppColors.normalGreen,
@@ -80,7 +82,8 @@ class AdminBookingsController extends GetxController {
     update();
   }
 
-  sendBookingUpdateNotificationToClient(String description) async {
+  sendBookingUpdateNotificationToClient(
+      String description, String userID) async {
     final notificationApiKey =
         await FirebaseService().fetchNotificationApiKey();
 
@@ -91,7 +94,7 @@ class AdminBookingsController extends GetxController {
         notificationApiKey: notificationApiKey,
         title: "Updated booking alert",
         body: description,
-        receiverExternalId: userData.userId ?? '',
+        receiverExternalId: userID,
       );
     } else {
       logger.e("Error sending notification");
