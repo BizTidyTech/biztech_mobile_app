@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:tidytech/app/resources/app.locator.dart';
 import 'package:tidytech/tidytech_app.dart';
+import 'package:tidytech/utils/app_constants/app_strings.dart';
 
 import 'firebase_options.dart';
 
@@ -22,7 +23,7 @@ void main() async {
 
 void configureEmailOtp() {
   EmailOTP.config(
-    appName: 'TidyTech',
+    appName: AppStrings.tidyTechTitle,
     otpType: OTPType.numeric,
     expiry: 600000,
     emailTheme: EmailTheme.v6,

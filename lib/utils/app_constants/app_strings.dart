@@ -1,5 +1,5 @@
 class AppStrings {
-  static String tidyTechTitle = 'TidyTech';
+  static String tidyTechTitle = 'BizTidy';
   static String tidyTechCaption = 'A Tidy Space Starts With Smart Choices';
   static String tidyTechSub =
       "Your ‘go-to’ for professional cleaning\nservice.";
