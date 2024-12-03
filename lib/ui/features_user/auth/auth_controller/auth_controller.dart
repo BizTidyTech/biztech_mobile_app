@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/ui/features_user/auth/auth_utils/auth_utils.dart';
@@ -178,33 +177,5 @@ class AuthController extends GetxController {
       context.go('/homepageView');
     }
     stopLoading();
-  }
-
-  Future<void> updateNewUserData(BuildContext context) async {}
-
-  /// Upload image from gallery
-  getFromGallery() async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
-      update();
-    }
-  }
-
-  /// Snap image with Camera
-  getFromCamera() async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      imageFile = File(pickedFile.path);
-      update();
-    }
   }
 }

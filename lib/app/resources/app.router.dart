@@ -1,9 +1,4 @@
-import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:tidytech/app/resources/app.transitions.dart';
 import 'package:tidytech/app/services/navigation_service.dart';
 import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_view/admin_signin_view.dart';
@@ -14,12 +9,9 @@ import 'package:tidytech/ui/features_user/auth/auth_view/signin_user_view.dart';
 import 'package:tidytech/ui/features_user/auth/auth_view/verify_otp_screen.dart';
 import 'package:tidytech/ui/features_user/booking/booking_list_view/booking_list_view.dart';
 import 'package:tidytech/ui/features_user/booking/booking_view/booking_view.dart';
-import 'package:tidytech/ui/features_user/home/home_controller/home_controller.dart';
 import 'package:tidytech/ui/features_user/home/home_view/home_view.dart';
-import 'package:tidytech/ui/features_user/nav_bar/data/page_index_class.dart';
-import 'package:tidytech/ui/features_user/nav_bar/views/custom_navbar.dart';
+import 'package:tidytech/ui/features_user/profile/profile_views/profile_views.dart';
 import 'package:tidytech/ui/features_user/splash_screen/splash_screen.dart';
-import 'package:tidytech/utils/app_constants/app_colors.dart';
 
 class AppRouter {
   static final router = GoRouter(
@@ -79,7 +71,7 @@ class AdminAppRouter {
     routes: [
       GoRoute(
         path: '/',
-        builder: (context, state) => AdminSignInView(),
+        builder: (context, state) => const AdminSignInView(),
       ),
 
       /// Admin App Pages
@@ -90,35 +82,4 @@ class AdminAppRouter {
       ),
     ],
   );
-}
-
-class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ConditionalWillPopScope(
-      onWillPop: () => Provider.of<CurrentPage>(context, listen: false)
-          .checkCurrentPageIndex(context),
-      shouldAddCallback: true,
-      child: AnnotatedRegion(
-        value: SystemUiOverlayStyle(
-          statusBarColor: AppColors.plainWhite,
-          statusBarIconBrightness: Brightness.dark,
-          systemNavigationBarIconBrightness: Brightness.dark,
-          systemNavigationBarColor: AppColors.plainWhite,
-        ),
-        child: GetBuilder<HomeController>(
-          init: HomeController(),
-          builder: (_) {
-            return Scaffold(
-              backgroundColor: AppColors.plainWhite,
-              bottomNavigationBar: const CustomNavBar(currentPageIndx: 3),
-              body: const Center(child: Text("Profile")),
-            );
-          },
-        ),
-      ),
-    );
-  }
 }

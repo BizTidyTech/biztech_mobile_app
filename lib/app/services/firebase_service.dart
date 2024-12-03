@@ -5,6 +5,7 @@ import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features_admin/admin_auth/admin_auth_model/admin_data_model.dart';
 import 'package:tidytech/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/ui/features_user/booking/booking_model/booking_model.dart';
+import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/fb_collection_names.dart';
 
 class FirebaseService {
@@ -58,6 +59,27 @@ class FirebaseService {
       logger.e(e);
       Fluttertoast.showToast(msg: 'Error getting your data.');
       return null;
+    }
+  }
+
+  Future<bool> updateUserProfile(UserData userData) async {
+    try {
+      firebaseFirestore
+          .collection(FbCollectionNames.user)
+          .doc(userData.userId)
+          .set(userData.toJson());
+      Fluttertoast.showToast(
+        msg: "Profile updated successfully!",
+        backgroundColor: AppColors.normalGreen,
+      );
+      return true;
+    } catch (e) {
+      logger.e(e);
+      Fluttertoast.showToast(
+        msg: 'Error updating your profile! Retry',
+        backgroundColor: AppColors.coolRed,
+      );
+      return false;
     }
   }
 
