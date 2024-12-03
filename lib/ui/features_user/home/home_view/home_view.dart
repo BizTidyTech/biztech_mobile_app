@@ -299,9 +299,11 @@ class _HomepageViewState extends State<HomepageView> {
                 child: Text(
                   service.name ?? '',
                   style: AppStyles.normalStringStyle(
-                    16,
+                    15,
                     AppColors.fullBlack,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],

@@ -57,7 +57,7 @@ Widget serviceCard(ServiceModel service, {bool? popPage}) {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      /*
+                      /* !To be reveiewed later
                       RichText(
                         text: TextSpan(
                           text: "From: ",
@@ -83,7 +83,7 @@ Widget serviceCard(ServiceModel service, {bool? popPage}) {
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           style: AppStyles.regularStringStyle(
-                              17, AppColors.fullBlack),
+                              16, AppColors.fullBlack),
                         ),
                       ),
                       horizontalSpacer(10),
