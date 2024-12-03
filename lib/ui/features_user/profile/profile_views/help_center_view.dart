@@ -15,9 +15,9 @@ class HelpCenterView extends StatelessWidget {
       path: 'tidy1tech@gmail.com',
       query: 'subject=Help Needed&body=Describe your issue here',
     );
-    if (await canLaunchUrl(emailUri)) {
+    try {
       await launchUrl(emailUri);
-    } else {
+    } catch (e) {
       Fluttertoast.showToast(msg: "Could not launch email");
     }
   }
@@ -27,19 +27,19 @@ class HelpCenterView extends StatelessWidget {
     const String message = "Hello, I need help with . . .";
     final Uri whatsappUri =
         Uri.parse("https://wa.me/$whatsappNumber?text=$message");
-    if (await canLaunchUrl(whatsappUri)) {
+    try {
       await launchUrl(whatsappUri);
-    } else {
-      debugPrint("Could not launch WhatsApp");
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Could not launch WhatsApp");
     }
   }
 
   void _launchPhoneCall() async {
     final Uri phoneUri = Uri(scheme: 'tel', path: '+2348175403998');
-    if (await canLaunchUrl(phoneUri)) {
+    try {
       await launchUrl(phoneUri);
-    } else {
-      debugPrint("Could not launch phone call");
+    } catch (e) {
+      Fluttertoast.showToast(msg: "Could not launch phone call");
     }
   }
 
