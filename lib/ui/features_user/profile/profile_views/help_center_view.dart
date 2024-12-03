@@ -60,7 +60,7 @@ class HelpCenterView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Have questions or need any help? Contact us via any of the following options.',
+              'Have questions or need any help? Contact us via any of the following channels.',
               style: AppStyles.regularStringStyle(16, AppColors.fullBlack),
               textAlign: TextAlign.center,
             ),
@@ -74,14 +74,14 @@ class HelpCenterView extends StatelessWidget {
               label: Text(
                 'Email',
                 style: AppStyles.normalStringStyle(
-                  18,
+                  17,
                   Colors.blue,
                 ),
               ),
               style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15)),
             ),
-            const SizedBox(height: 16),
+            verticalSpacer(16),
             ElevatedButton.icon(
               onPressed: _launchWhatsApp,
               icon: Icon(
@@ -91,14 +91,14 @@ class HelpCenterView extends StatelessWidget {
               label: Text(
                 'WhatsApp',
                 style: AppStyles.normalStringStyle(
-                  18,
+                  17,
                   AppColors.normalGreen,
                 ),
               ),
               style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15)),
             ),
-            const SizedBox(height: 16),
+            verticalSpacer(16),
             ElevatedButton.icon(
               onPressed: _launchPhoneCall,
               icon: Icon(
@@ -108,7 +108,7 @@ class HelpCenterView extends StatelessWidget {
               label: Text(
                 'Call',
                 style: AppStyles.normalStringStyle(
-                  18,
+                  17,
                   AppColors.deepBlue,
                 ),
               ),
