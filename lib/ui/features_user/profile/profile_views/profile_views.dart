@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/tidytech_app.dart';
+import 'package:tidytech/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/ui/features_user/nav_bar/views/custom_navbar.dart';
 import 'package:tidytech/ui/features_user/profile/profile_controller/profile_controller.dart';
@@ -114,6 +115,18 @@ class _ProfileViewState extends State<ProfileView> {
               InkWell(
                 onTap: () {
                   logger.w("Show profile image in full screen");
+                  if (controller.myProfileData != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ImageFullScreen(
+                            userData: controller.myProfileData!,
+                          );
+                        },
+                      ),
+                    );
+                  }
                 },
                 child: CircleAvatar(
                   radius: 51,
@@ -147,19 +160,6 @@ class _ProfileViewState extends State<ProfileView> {
               ),
             ],
           ),
-          // Container(
-          //   height: 100,
-          //   width: 100,
-          //   decoration: BoxDecoration(
-          //     shape: BoxShape.circle,
-          //     color: AppColors.coolRed,
-          //     image: DecorationImage(
-          //       image: CachedNetworkImageProvider(
-          //         controller.myProfileData?.photoUrl ?? dummyImageUrl,
-          //       ),
-          //     ),
-          //   ),
-          // ),
           horizontalSpacer(15),
           Expanded(
             child: Column(
@@ -178,6 +178,8 @@ class _ProfileViewState extends State<ProfileView> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+                verticalSpacer(5),
+                const Divider(height: 1, thickness: 1)
               ],
             ),
           ),
@@ -224,11 +226,39 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
           verticalSpacer(10),
-          const Divider(
-            height: 2,
-            thickness: 2,
-          )
+          const Divider(height: 2, thickness: 2)
         ],
+      ),
+    );
+  }
+}
+
+class ImageFullScreen extends StatelessWidget {
+  final UserData userData;
+  const ImageFullScreen({super.key, required this.userData});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColors.primaryThemeColor,
+        title: Text(
+          userData.name ?? '',
+          style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
+        ),
+      ),
+      backgroundColor: AppColors.fullBlack,
+      body: Container(
+        width: screenWidth(context),
+        height: screenHeight(context) -
+            (MediaQuery.of(context).viewPadding.top + 55),
+        decoration: BoxDecoration(
+          color: AppColors.fullBlack,
+          image: DecorationImage(
+            image: CachedNetworkImageProvider(userData.photoUrl ?? ''),
+            fit: BoxFit.contain,
+          ),
+        ),
       ),
     );
   }
