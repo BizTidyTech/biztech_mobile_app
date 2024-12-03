@@ -19,9 +19,6 @@ class ProfileController extends GetxController {
   bool showLoading = false;
   UserData? myProfileData;
 
-  // File? imageFile;
-  // String? imageUrl;
-
   TextEditingController fullnameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();

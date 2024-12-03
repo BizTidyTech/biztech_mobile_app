@@ -43,8 +43,7 @@ dependencies:
   onesignal_flutter: ^5.2.8
   http: ^1.2.2
   cached_network_image: ^3.4.1
-  full_screen_image: ^2.0.0
-  cloudinary_public: ^0.23.1
+  cloudinary_public: ^0.21.0
 
 dev_dependencies:
   flutter_test:
