@@ -7,11 +7,13 @@ import 'package:get/get.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/tidytech_app.dart';
-import 'package:tidytech/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/ui/features_user/nav_bar/views/custom_navbar.dart';
 import 'package:tidytech/ui/features_user/profile/profile_controller/profile_controller.dart';
+import 'package:tidytech/ui/features_user/profile/profile_views/about_view.dart';
 import 'package:tidytech/ui/features_user/profile/profile_views/edit_profile_view.dart';
+import 'package:tidytech/ui/features_user/profile/profile_views/help_center_view.dart';
+import 'package:tidytech/ui/features_user/profile/profile_views/widgets/image_full_screen_view.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -83,7 +85,7 @@ class _ProfileViewState extends State<ProfileView> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return EditProfileView();
+                                return const EditProfileView();
                               },
                             ),
                           );
@@ -94,6 +96,14 @@ class _ProfileViewState extends State<ProfileView> {
                         titleText: 'Help Center',
                         onPressed: () {
                           logger.i("Pressed Help Center");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const HelpCenterView();
+                              },
+                            ),
+                          );
                         },
                       ),
                       _profileOptionsCard(
@@ -101,6 +111,14 @@ class _ProfileViewState extends State<ProfileView> {
                         titleText: 'About',
                         onPressed: () {
                           logger.i("Pressed About");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const AboutView();
+                              },
+                            ),
+                          );
                         },
                       ),
                       _profileOptionsCard(
@@ -224,7 +242,6 @@ class _ProfileViewState extends State<ProfileView> {
         width: screenWidth(context),
         padding: const EdgeInsets.symmetric(vertical: 10),
         margin: const EdgeInsets.symmetric(vertical: 10),
-        // color: AppColors.blueGray,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -253,37 +270,6 @@ class _ProfileViewState extends State<ProfileView> {
             verticalSpacer(10),
             const Divider(height: 2, thickness: 2)
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ImageFullScreen extends StatelessWidget {
-  final UserData userData;
-  const ImageFullScreen({super.key, required this.userData});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.primaryThemeColor,
-        title: Text(
-          userData.name ?? '',
-          style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
-        ),
-      ),
-      backgroundColor: AppColors.fullBlack,
-      body: Container(
-        width: screenWidth(context),
-        height: screenHeight(context) -
-            (MediaQuery.of(context).viewPadding.top + 55),
-        decoration: BoxDecoration(
-          color: AppColors.fullBlack,
-          image: DecorationImage(
-            image: CachedNetworkImageProvider(userData.photoUrl ?? ''),
-            fit: BoxFit.contain,
-          ),
         ),
       ),
     );
