@@ -110,6 +110,7 @@ class _ProfileViewState extends State<ProfileView> {
                         showTrailingIcon: false,
                         onPressed: () {
                           logger.w("Pressed Logout");
+                          controller.logout(context);
                         },
                       ),
                     ],

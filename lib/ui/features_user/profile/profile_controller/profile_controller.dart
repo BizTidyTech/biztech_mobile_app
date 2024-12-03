@@ -3,9 +3,11 @@
 import 'dart:io';
 
 import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tidytech/app/helpers/sharedprefs.dart';
 import 'package:tidytech/app/services/firebase_service.dart';
@@ -145,6 +147,12 @@ class ProfileController extends GetxController {
       );
     }
     stopLoading();
+  }
+
+  logout(BuildContext context) {
+    FirebaseAuth.instance.signOut();
+    saveUserDetailsLocally(null);
+    context.go('/onboardingScreen');
   }
 
   startLoading() {
