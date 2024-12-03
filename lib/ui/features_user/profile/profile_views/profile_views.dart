@@ -11,6 +11,7 @@ import 'package:tidytech/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:tidytech/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/ui/features_user/nav_bar/views/custom_navbar.dart';
 import 'package:tidytech/ui/features_user/profile/profile_controller/profile_controller.dart';
+import 'package:tidytech/ui/features_user/profile/profile_views/edit_profile_view.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -76,20 +77,40 @@ class _ProfileViewState extends State<ProfileView> {
                       _profileOptionsCard(
                         leadingIcon: IconsaxPlusLinear.user,
                         titleText: 'Personal  Details',
+                        onPressed: () {
+                          logger.i("Pressed Personal Details");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return EditProfileView();
+                              },
+                            ),
+                          );
+                        },
                       ),
                       _profileOptionsCard(
                         leadingIcon: CupertinoIcons.question_circle,
                         titleText: 'Help Center',
+                        onPressed: () {
+                          logger.i("Pressed Help Center");
+                        },
                       ),
                       _profileOptionsCard(
                         leadingIcon: IconsaxPlusLinear.info_circle,
                         titleText: 'About',
+                        onPressed: () {
+                          logger.i("Pressed About");
+                        },
                       ),
                       _profileOptionsCard(
                         leadingIcon: IconsaxPlusLinear.logout_1,
                         titleText: 'Logout',
                         color: AppColors.coolRed,
                         showTrailingIcon: false,
+                        onPressed: () {
+                          logger.w("Pressed Logout");
+                        },
                       ),
                     ],
                   ),
@@ -193,41 +214,45 @@ class _ProfileViewState extends State<ProfileView> {
     bool? showTrailingIcon,
     required String titleText,
     Color? color,
+    required final void Function()? onPressed,
   }) {
-    return Container(
-      height: 70,
-      width: screenWidth(context),
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      // color: AppColors.blueGray,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Row(
-            children: [
-              Icon(
-                leadingIcon,
-                color: color ?? AppColors.fullBlack,
-              ),
-              horizontalSpacer(15),
-              Text(
-                titleText,
-                style: AppStyles.normalStringStyle(
-                    17, color ?? AppColors.fullBlack),
-              ),
-              const Spacer(),
-              showTrailingIcon == false
-                  ? const SizedBox.shrink()
-                  : Icon(
-                      IconsaxPlusLinear.arrow_right_3,
-                      color: AppColors.fullBlack,
-                      size: 25,
-                    ),
-            ],
-          ),
-          verticalSpacer(10),
-          const Divider(height: 2, thickness: 2)
-        ],
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: 70,
+        width: screenWidth(context),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        // color: AppColors.blueGray,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  leadingIcon,
+                  color: color ?? AppColors.fullBlack,
+                ),
+                horizontalSpacer(15),
+                Text(
+                  titleText,
+                  style: AppStyles.normalStringStyle(
+                      17, color ?? AppColors.fullBlack),
+                ),
+                const Spacer(),
+                showTrailingIcon == false
+                    ? const SizedBox.shrink()
+                    : Icon(
+                        IconsaxPlusLinear.arrow_right_3,
+                        color: AppColors.fullBlack,
+                        size: 25,
+                      ),
+              ],
+            ),
+            verticalSpacer(10),
+            const Divider(height: 2, thickness: 2)
+          ],
+        ),
       ),
     );
   }

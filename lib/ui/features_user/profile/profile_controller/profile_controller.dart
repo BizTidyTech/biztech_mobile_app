@@ -22,6 +22,7 @@ class ProfileController extends GetxController {
   TextEditingController fullnameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   clearVals() {
     fullnameController.clear();
@@ -43,12 +44,15 @@ class ProfileController extends GetxController {
     if (fullnameController.text.trim().isEmpty == true) {
       errMessage = "Full name field is required";
       Fluttertoast.showToast(msg: "Full name field is required");
+      update();
     } else {
+      errMessage = '';
       await updateProfileData();
     }
   }
 
   updateProfileData() async {
+    errMessage = '';
     startLoading();
     try {
       final updatedUserProfile = myProfileData!.copyWith(
@@ -91,27 +95,6 @@ class ProfileController extends GetxController {
     }
   }
 
-/*
-  Future<String?> uploadProfilePhoto(File selectedImagefile) async {
-    startLoading();
-    try {
-      /// Upload image to cloud storage
-      final firebaseStorage = FirebaseStorage.instance;
-      var file = File(selectedImagefile.path);
-      var snapshot = await firebaseStorage
-          .ref()
-          .child('tidytech/profile_images/${myProfileData?.userId}')
-          .putFile(file);
-
-      var downloadUrl = await snapshot.ref.getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      logger.e("Error uploading image: ${e.toString()}");
-    }
-    stopLoading();
-    return null;
-  }
-*/
   Future<String?> uploadProfilePhoto(File selectedImagefile) async {
     startLoading();
     try {

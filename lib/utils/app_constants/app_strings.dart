@@ -32,6 +32,7 @@ class AppStrings {
   static String notifications = 'Notifications';
   static String appointments = 'Appointments';
   static String profile = 'Profile';
+  static String editProfile = 'Edit Profile';
   static String fullName = 'Name';
   static String adminIdText = 'Admin ID';
   static String email = 'Email';

@@ -111,6 +111,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
           hintText: widget.hintText,
           fillColor: widget.fillColor ?? AppColors.plainWhite,
           filled: true,
+          enabled: widget.enabled ?? true,
           suffixIcon: widget.suffixIcon,
           contentPadding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
           enabledBorder: OutlineInputBorder(
