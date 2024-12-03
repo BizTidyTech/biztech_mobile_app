@@ -39,7 +39,7 @@ class ProfileController extends GetxController {
     startLoading();
     myProfileData = await getLocallySavedUserDetails();
     logger.f("myProfileData: ${myProfileData?.toJson()}");
-    update();
+    stopLoading();
   }
 
   attemptToUpdateProfileData() async {

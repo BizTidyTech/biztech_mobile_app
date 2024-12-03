@@ -14,6 +14,7 @@ import 'package:tidytech/ui/features_user/profile/profile_views/about_view.dart'
 import 'package:tidytech/ui/features_user/profile/profile_views/edit_profile_view.dart';
 import 'package:tidytech/ui/features_user/profile/profile_views/help_center_view.dart';
 import 'package:tidytech/ui/features_user/profile/profile_views/widgets/image_full_screen_view.dart';
+import 'package:tidytech/ui/shared/loading_widget.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
 import 'package:tidytech/utils/app_constants/app_strings.dart';
@@ -147,84 +148,87 @@ class _ProfileViewState extends State<ProfileView> {
       padding: const EdgeInsets.symmetric(vertical: 10),
       height: 125,
       width: screenWidth(context),
-      child: Row(
-        children: [
-          Stack(
-            alignment: AlignmentDirectional.bottomEnd,
-            children: [
-              InkWell(
-                onTap: () {
-                  logger.w("Show profile image in full screen");
-                  if (controller.myProfileData != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return ImageFullScreen(
-                            userData: controller.myProfileData!,
-                          );
-                        },
-                      ),
-                    );
-                  }
-                },
-                child: CircleAvatar(
-                  radius: 51,
-                  backgroundColor: AppColors.primaryThemeColor,
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: CachedNetworkImageProvider(
-                      controller.myProfileData?.photoUrl ?? dummyImageUrl,
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  logger.w("Change profile image");
-                  controller.changeProfileImage();
-                },
-                child: CircleAvatar(
-                  backgroundColor: AppColors.primaryThemeColor,
-                  radius: 18.5,
-                  child: CircleAvatar(
-                    backgroundColor: AppColors.plainWhite,
-                    radius: 18,
-                    child: Icon(
-                      IconsaxPlusLinear.gallery_edit,
-                      size: 20,
-                      color: AppColors.kPrimaryColor,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          horizontalSpacer(15),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: controller.showLoading == true
+          ? loadingWidget()
+          : Row(
               children: [
-                Text(
-                  controller.myProfileData?.name ?? '',
-                  style: AppStyles.normalStringStyle(17, AppColors.fullBlack),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                Stack(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        logger.w("Show profile image in full screen");
+                        if (controller.myProfileData != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ImageFullScreen(
+                                  userData: controller.myProfileData!,
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
+                      child: CircleAvatar(
+                        radius: 51,
+                        backgroundColor: AppColors.primaryThemeColor,
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundImage: CachedNetworkImageProvider(
+                            controller.myProfileData?.photoUrl ?? dummyImageUrl,
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        logger.w("Change profile image");
+                        controller.changeProfileImage();
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.primaryThemeColor,
+                        radius: 18.5,
+                        child: CircleAvatar(
+                          backgroundColor: AppColors.plainWhite,
+                          radius: 18,
+                          child: Icon(
+                            IconsaxPlusLinear.gallery_edit,
+                            size: 20,
+                            color: AppColors.kPrimaryColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  controller.myProfileData?.email ?? '',
-                  style: AppStyles.hintStringStyle(14),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                horizontalSpacer(15),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.myProfileData?.name ?? '',
+                        style: AppStyles.normalStringStyle(
+                            17, AppColors.fullBlack),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        controller.myProfileData?.email ?? '',
+                        style: AppStyles.hintStringStyle(14),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      verticalSpacer(5),
+                      const Divider(height: 1, thickness: 1)
+                    ],
+                  ),
                 ),
-                verticalSpacer(5),
-                const Divider(height: 1, thickness: 1)
               ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
