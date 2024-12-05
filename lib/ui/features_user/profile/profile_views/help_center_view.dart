@@ -23,7 +23,7 @@ class HelpCenterView extends StatelessWidget {
   }
 
   void _launchWhatsApp() async {
-    const String whatsappNumber = "+2348175403998";
+    const String whatsappNumber = "+16823953303";
     const String message = "Hello, I need help with . . .";
     final Uri whatsappUri =
         Uri.parse("https://wa.me/$whatsappNumber?text=$message");
@@ -35,7 +35,7 @@ class HelpCenterView extends StatelessWidget {
   }
 
   void _launchPhoneCall() async {
-    final Uri phoneUri = Uri(scheme: 'tel', path: '+2348175403998');
+    final Uri phoneUri = Uri(scheme: 'tel', path: '+16823237358');
     try {
       await launchUrl(phoneUri);
     } catch (e) {

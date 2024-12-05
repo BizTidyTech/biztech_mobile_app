@@ -247,13 +247,16 @@ class _BookingsViewState extends State<BookingsView> {
       barrierDismissible: true,
     );
     logger.f("Chosen date: $dateTime");
-    if (dateTime == null) {
-      logger.w("No Chosen date");
-    } else {
-      final setDateTime =
-          DateTime(dateTime.year, dateTime.month, dateTime.day, 6, 0, 0);
-      controller.changeSelectedAppointmentDate(setDateTime);
-    }
+
+    final setDateTime = DateTime(
+      dateTime?.year ?? initialDate.year,
+      dateTime?.month ?? initialDate.month,
+      dateTime?.day ?? initialDate.day,
+      6,
+      0,
+      0,
+    );
+    controller.changeSelectedAppointmentDate(setDateTime);
   }
 
   void _showServicesSheet(BuildContext context) {
