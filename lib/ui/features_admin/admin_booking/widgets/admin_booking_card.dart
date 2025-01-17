@@ -28,6 +28,9 @@ Widget adminBookingCard(BuildContext context, BookingModel? booking) {
         leftPadding: 12,
         rightPadding: 12,
         fillColor: AppColors.plainWhite,
+        borderColor: booking?.finalPayment != null
+            ? AppColors.normalGreen
+            : AppColors.transparent,
         child: Column(
           children: [
             SizedBox(
