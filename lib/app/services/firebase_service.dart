@@ -47,6 +47,7 @@ class FirebaseService {
           .get();
 
       final List<DocumentSnapshot> documents = result.docs;
+      logger.w("documents: ${documents.length}");
       if (documents.isEmpty) {
         Fluttertoast.showToast(msg: 'User with email $email does not exist.');
         return null;
@@ -64,6 +65,7 @@ class FirebaseService {
 
   Future<bool> updateUserProfile(UserData userData) async {
     try {
+      await
       firebaseFirestore
           .collection(FbCollectionNames.user)
           .doc(userData.userId)

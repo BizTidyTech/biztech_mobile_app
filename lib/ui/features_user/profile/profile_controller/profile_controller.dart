@@ -155,6 +155,26 @@ class ProfileController extends GetxController {
     context.go('/onboardingScreen');
   }
 
+  deleteAccount(BuildContext context) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        await user.delete();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account deleted successfully')),
+        );
+        saveUserDetailsLocally(null);
+        context.go('/onboardingScreen');
+      }
+    } catch (e) {
+      logger.e('Error deleting account: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error deleting your account. Retry')),
+      );
+    }
+  }
+
   startLoading() {
     showLoading = true;
     update();

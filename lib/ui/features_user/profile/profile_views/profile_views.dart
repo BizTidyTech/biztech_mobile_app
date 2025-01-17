@@ -78,7 +78,7 @@ class _ProfileViewState extends State<ProfileView> {
                       verticalSpacer(
                           MediaQuery.of(context).viewPadding.top + 55),
                       _profileDetailsCard(),
-                      verticalSpacer(30),
+                      verticalSpacer(20),
                       _profileOptionsCard(
                         leadingIcon: IconsaxPlusLinear.user,
                         titleText: 'Personal  Details',
@@ -95,7 +95,7 @@ class _ProfileViewState extends State<ProfileView> {
                         },
                       ),
                       _profileOptionsCard(
-                        leadingIcon: CupertinoIcons.question_circle,
+                        leadingIcon: Icons.perm_contact_calendar_outlined,
                         titleText: 'Help Center',
                         onPressed: () {
                           logger.i("Pressed Help Center");
@@ -110,7 +110,7 @@ class _ProfileViewState extends State<ProfileView> {
                         },
                       ),
                       _profileOptionsCard(
-                        leadingIcon: IconsaxPlusLinear.info_circle,
+                        leadingIcon: CupertinoIcons.question_circle,
                         titleText: 'About',
                         onPressed: () {
                           logger.i("Pressed About");
@@ -122,9 +122,45 @@ class _ProfileViewState extends State<ProfileView> {
                         },
                       ),
                       _profileOptionsCard(
+                        leadingIcon: CupertinoIcons.doc_append,
+                        titleText: 'Terms of Use',
+                        onPressed: () {
+                          logger.i("Pressed Terms of Use");
+                          goToWebViewPage(
+                            context,
+                            title: "Terms of Use",
+                            url: termsOfUseUrl,
+                          );
+                        },
+                      ),
+                      _profileOptionsCard(
+                        leadingIcon: CupertinoIcons.info_circle,
+                        titleText: 'Disclaimer',
+                        onPressed: () {
+                          logger.i("Pressed Disclaimer");
+                          goToWebViewPage(
+                            context,
+                            title: "Disclaimer",
+                            url: disclaimerUrl,
+                          );
+                        },
+                      ),
+                      _profileOptionsCard(
+                        leadingIcon: CupertinoIcons.person_2_square_stack,
+                        titleText: 'Privacy Policy',
+                        onPressed: () {
+                          logger.i("Pressed Privacy Policy");
+                          goToWebViewPage(
+                            context,
+                            title: "Privacy Policy",
+                            url: privacyPolicyUrl,
+                          );
+                        },
+                      ),
+                      _profileOptionsCard(
                         leadingIcon: IconsaxPlusLinear.logout_1,
                         titleText: 'Logout',
-                        color: AppColors.darkGray,
+                        color: AppColors.deepBlue,
                         showTrailingIcon: false,
                         onPressed: () {
                           logger.w("Pressed Logout");
@@ -138,8 +174,7 @@ class _ProfileViewState extends State<ProfileView> {
                         showTrailingIcon: false,
                         onPressed: () {
                           logger.w("Pressed Delete Account");
-                          // TODO: Delete account
-                          // controller.logout(context);
+                          showDeleteAccountConfirmationSheet(context);
                         },
                       ),
                     ],
@@ -173,27 +208,29 @@ class _ProfileViewState extends State<ProfileView> {
             children: [
               Text(
                 "Log out?",
-                style: AppStyles.regularStringStyle(18, AppColors.plainWhite),
+                style: AppStyles.regularStringStyle(
+                    18, AppColors.primaryThemeColor),
               ),
               verticalSpacer(10),
               Text(
                 "Confirm you want to log out from this account",
-                style: AppStyles.normalStringStyle(14, AppColors.fullBlack),
+                textAlign: TextAlign.center,
+                style: AppStyles.normalStringStyle(15, AppColors.fullBlack),
               ),
-              verticalSpacer(45),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CustomButton(
                     color: AppColors.lighterGray,
-                    borderColor: AppColors.plainWhite,
+                    borderColor: AppColors.regularGray,
                     height: 35,
-                    width: screenWidth(context) * 0.28,
+                    width: 100,
                     child: Text(
-                      "No",
+                      "Cancel",
                       style: AppStyles.normalStringStyle(
                         16,
-                        AppColors.plainWhite,
+                        AppColors.fullBlack,
                       ),
                     ),
                     onPressed: () {
@@ -202,9 +239,11 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   CustomButton(
                     height: 35,
-                    width: screenWidth(context) * 0.28,
+                    color: AppColors.kPrimaryColor,
+                    borderColor: AppColors.primaryThemeColor,
+                    width: 100,
                     child: Text(
-                      "Yes",
+                      "Logout",
                       style: AppStyles.normalStringStyle(
                         16,
                         AppColors.fullBlack,
@@ -212,7 +251,78 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
                     onPressed: () async {
                       controller.logout(context);
-                      context.go('/introScreen');
+                      context.go('/onboardingScreen');
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  showDeleteAccountConfirmationSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          height: 180,
+          width: screenWidth(context),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
+            color: AppColors.plainWhite,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Delete Account?",
+                style: AppStyles.regularStringStyle(18, AppColors.coolRed),
+              ),
+              verticalSpacer(10),
+              Text(
+                "Confirm you want to permanently delete this account",
+                textAlign: TextAlign.center,
+                style: AppStyles.normalStringStyle(15, AppColors.fullBlack),
+              ),
+              const Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomButton(
+                    color: AppColors.lighterGray,
+                    borderColor: AppColors.regularGray,
+                    height: 35,
+                    width: 100,
+                    child: Text(
+                      "Cancel",
+                      style: AppStyles.normalStringStyle(
+                        16,
+                        AppColors.fullBlack,
+                      ),
+                    ),
+                    onPressed: () {
+                      context.pop();
+                    },
+                  ),
+                  CustomButton(
+                    height: 35,
+                    color: AppColors.coolRed,
+                    borderColor: AppColors.coolRed,
+                    width: 100,
+                    child: Text(
+                      "Delete",
+                      style:
+                          AppStyles.normalStringStyle(16, AppColors.fullBlack),
+                    ),
+                    onPressed: () async {
+                      await controller.deleteAccount(context);
                     },
                   ),
                 ],
@@ -323,7 +433,7 @@ class _ProfileViewState extends State<ProfileView> {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        height: 70,
+        height: 65,
         width: screenWidth(context),
         padding: const EdgeInsets.symmetric(vertical: 10),
         margin: const EdgeInsets.symmetric(vertical: 10),
