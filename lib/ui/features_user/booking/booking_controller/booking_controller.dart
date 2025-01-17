@@ -27,7 +27,7 @@ class BookingsController extends GetxController {
   BookingModel? bookingData;
   String errMessage = '';
   bool showLoading = false;
-  final depositBookingAmount = 100.0;
+  final depositBookingAmount = 20.0;  // Initial depoit amount for all bookings
 
   TextEditingController locationController = TextEditingController();
   TextEditingController addressController = TextEditingController();

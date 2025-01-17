@@ -4,16 +4,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:tidytech/tidytech_app.dart';
 import 'package:tidytech/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:tidytech/ui/features_user/nav_bar/views/custom_navbar.dart';
 import 'package:tidytech/ui/features_user/profile/profile_controller/profile_controller.dart';
-import 'package:tidytech/ui/features_user/profile/profile_views/about_view.dart';
 import 'package:tidytech/ui/features_user/profile/profile_views/edit_profile_view.dart';
 import 'package:tidytech/ui/features_user/profile/profile_views/help_center_view.dart';
+import 'package:tidytech/ui/features_user/profile/profile_views/web_data_view.dart';
 import 'package:tidytech/ui/features_user/profile/profile_views/widgets/image_full_screen_view.dart';
+import 'package:tidytech/ui/shared/custom_button.dart';
 import 'package:tidytech/ui/shared/loading_widget.dart';
 import 'package:tidytech/ui/shared/spacer.dart';
 import 'package:tidytech/utils/app_constants/app_colors.dart';
@@ -112,24 +114,32 @@ class _ProfileViewState extends State<ProfileView> {
                         titleText: 'About',
                         onPressed: () {
                           logger.i("Pressed About");
-                          Navigator.push(
+                          goToWebViewPage(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const AboutView();
-                              },
-                            ),
+                            title: "About us",
+                            url: aboutUsUrl,
                           );
                         },
                       ),
                       _profileOptionsCard(
                         leadingIcon: IconsaxPlusLinear.logout_1,
                         titleText: 'Logout',
-                        color: AppColors.coolRed,
+                        color: AppColors.darkGray,
                         showTrailingIcon: false,
                         onPressed: () {
                           logger.w("Pressed Logout");
-                          controller.logout(context);
+                          showLogoutConfirmationSheet(context);
+                        },
+                      ),
+                      _profileOptionsCard(
+                        leadingIcon: IconsaxPlusLinear.user_remove,
+                        titleText: 'Delete Account',
+                        color: AppColors.coolRed,
+                        showTrailingIcon: false,
+                        onPressed: () {
+                          logger.w("Pressed Delete Account");
+                          // TODO: Delete account
+                          // controller.logout(context);
                         },
                       ),
                     ],
@@ -140,6 +150,77 @@ class _ProfileViewState extends State<ProfileView> {
           },
         ),
       ),
+    );
+  }
+
+  showLogoutConfirmationSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+          height: 180,
+          width: screenWidth(context),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
+            color: AppColors.plainWhite,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Log out?",
+                style: AppStyles.regularStringStyle(18, AppColors.plainWhite),
+              ),
+              verticalSpacer(10),
+              Text(
+                "Confirm you want to log out from this account",
+                style: AppStyles.normalStringStyle(14, AppColors.fullBlack),
+              ),
+              verticalSpacer(45),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  CustomButton(
+                    color: AppColors.lighterGray,
+                    borderColor: AppColors.plainWhite,
+                    height: 35,
+                    width: screenWidth(context) * 0.28,
+                    child: Text(
+                      "No",
+                      style: AppStyles.normalStringStyle(
+                        16,
+                        AppColors.plainWhite,
+                      ),
+                    ),
+                    onPressed: () {
+                      context.pop();
+                    },
+                  ),
+                  CustomButton(
+                    height: 35,
+                    width: screenWidth(context) * 0.28,
+                    child: Text(
+                      "Yes",
+                      style: AppStyles.normalStringStyle(
+                        16,
+                        AppColors.fullBlack,
+                      ),
+                    ),
+                    onPressed: () async {
+                      controller.logout(context);
+                      context.go('/introScreen');
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 
