@@ -23,11 +23,11 @@ class PaypalUtils {
     ).push(
       MaterialPageRoute(
         builder: (BuildContext context) => UsePaypal(
-          sandboxMode: true,
+          // sandboxMode: true,
           clientId:
-              "AW1TdvpSGbIM5iP4HJNI5TyTmwpY9Gv9dYw8_8yW5lYIbCqf326vrkrp0ce9TAqjEGMHiV3OqJM_aRT0",
+              "ENqVODYGoRSkrTBcnHAMqwD9bJzG3X2xV9J48DXBVEE02gdj1FTGgBkfGmY9hf6Od6JsgJkBSIo5FU4j",
           secretKey:
-              "EHHtTDjnmTZATYBPiGzZC_AZUfMpMAzj2VZUeqlFUrRJA_C0pQNCxDccB5qoRQSEdcOnnKQhycuOWdP9",
+              "AVaRXKxIcKndumvNZLOQEoWowNgTdbADplQPMxRHS2HApbYJpvvEQ8OZwi6btIl5-YsO_8u84B4BoBuW",
           returnURL: "https://samplesite.com/return",
           cancelURL: "https://samplesite.com/cancel",
           transactions: [

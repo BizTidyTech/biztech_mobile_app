@@ -30,7 +30,7 @@ class AppRouter {
       ),
       GoRoute(
         path: '/createAccountView',
-        builder: (context, state) => CreateAccountView(),
+        builder: (context, state) => const CreateAccountView(),
       ),
       GoRoute(
         path: '/signInUserView',
