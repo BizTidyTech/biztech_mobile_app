@@ -25,9 +25,9 @@ class PaypalUtils {
         builder: (BuildContext context) => UsePaypal(
           // sandboxMode: true,
           clientId:
-              "ENqVODYGoRSkrTBcnHAMqwD9bJzG3X2xV9J48DXBVEE02gdj1FTGgBkfGmY9hf6Od6JsgJkBSIo5FU4j",
+              "ASxtXE6BW_7OTbZanc7EKlbBkwbEtTitfYaYDNGIpcU820Wn6CfHyaF8D7AelJrCUULkups7eCQ9dCnI",
           secretKey:
-              "AVaRXKxIcKndumvNZLOQEoWowNgTdbADplQPMxRHS2HApbYJpvvEQ8OZwi6btIl5-YsO_8u84B4BoBuW",
+              "EGu6r9-mSjO8gFvUjUUibdc3GlPSzHZQzyAgskDmNf_4wmDlGk5AGNC9jnSEOP4-8Wneu-R4uKf07pOm",
           returnURL: "https://samplesite.com/return",
           cancelURL: "https://samplesite.com/cancel",
           transactions: [
