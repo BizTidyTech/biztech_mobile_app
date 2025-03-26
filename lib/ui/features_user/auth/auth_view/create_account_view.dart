@@ -15,6 +15,7 @@ import 'package:biztidy_mobile_app/utils/extension_and_methods/string_cap_extens
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,7 +28,14 @@ class CreateAccountView extends StatefulWidget {
 
 class _CreateAccountViewState extends State<CreateAccountView> {
   final controller = Get.put(AuthController());
+  static const String nigeria = "Nigeria", usa = "USA";
+  String _selectedCountry = nigeria;
   bool? acceptedTnC = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +62,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          verticalSpacer(40),
+                          verticalSpacer(10),
                           inputWidget(
                             titleText: AppStrings.fullName.toSentenceCase,
                             textEditingController:
@@ -82,7 +90,20 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                             textInputAction: TextInputAction.done,
                             isObscurable: true,
                           ),
-                          verticalSpacer(30),
+                          verticalSpacer(10),
+                          Row(
+                            children: [
+                              Text(
+                                "Country",
+                                style: AppStyles.subStringStyle(
+                                  12,
+                                  AppColors.fullBlack,
+                                ),
+                              ),
+                            ],
+                          ),
+                          _countrySelector(),
+                          verticalSpacer(10),
                           Center(
                             child: Text(
                               controller.errMessage,
@@ -145,7 +166,7 @@ class _CreateAccountViewState extends State<CreateAccountView> {
                                   onPressed: () {
                                     SystemChannels.textInput
                                         .invokeMethod('TextInput.hide');
-                                    controller.attemptToVerifyNewUser(context);
+                                    controller.attemptToVerifyNewUser(context, _selectedCountry );
                                   },
                                 ),
                           verticalSpacer(12),
@@ -183,6 +204,81 @@ class _CreateAccountViewState extends State<CreateAccountView> {
           );
         },
       ),
+    );
+  }
+
+  Widget _countrySelector() {
+    return Column(
+      children: [
+        // Nigeria option.
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+          minVerticalPadding: 0,
+          minTileHeight: 30,
+          leading: SizedBox(
+            width: 40,
+            height: 40,
+            child: SvgPicture.network(
+              'https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg',
+              width: 40,
+              height: 40,
+            ),
+          ),
+          title: Text(
+            nigeria,
+            style: AppStyles.regularStringStyle(15, AppColors.fullBlack),
+          ),
+          trailing: Radio<String>(
+            activeColor: AppColors.primaryThemeColor,
+            value: nigeria,
+            groupValue: _selectedCountry,
+            onChanged: (String? value) {
+              setState(() {
+                _selectedCountry = nigeria;
+              });
+            },
+          ),
+          onTap: () {
+            setState(() {
+              _selectedCountry = "Nigeria";
+            });
+          },
+        ),
+        // USA option.
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+          minVerticalPadding: 0,
+          minTileHeight: 30,
+          leading: SizedBox(
+            width: 40,
+            height: 40,
+            child: SvgPicture.network(
+              'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg',
+              width: 40,
+              height: 40,
+            ),
+          ),
+          title: Text(
+            usa,
+            style: AppStyles.regularStringStyle(15, AppColors.fullBlack),
+          ),
+          trailing: Radio<String>(
+            activeColor: AppColors.primaryThemeColor,
+            value: "USA",
+            groupValue: _selectedCountry,
+            onChanged: (String? value) {
+              setState(() {
+                _selectedCountry = usa;
+              });
+            },
+          ),
+          onTap: () {
+            setState(() {
+              _selectedCountry = "USA";
+            });
+          },
+        ),
+      ],
     );
   }
 }

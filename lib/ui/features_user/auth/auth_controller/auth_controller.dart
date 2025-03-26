@@ -66,7 +66,8 @@ class AuthController extends GetxController {
     update();
   }
 
-  Future<void> attemptToVerifyNewUser(BuildContext context) async {
+  Future<void> attemptToVerifyNewUser(
+      BuildContext context, String selectedCountry) async {
     logger.i('attemptToVerifyNewUser . . .');
 
     if (fullnameController.text.trim().isEmpty == true ||
@@ -88,6 +89,7 @@ class AuthController extends GetxController {
         email: emailController.text.trim(),
         name: fullnameController.text.trim(),
         password: passwordController.text.trim(),
+        country: selectedCountry,
       );
       logger.i('Registering user . . . ${userEnteredData?.toJson()}');
       sendEmailOtp(context);

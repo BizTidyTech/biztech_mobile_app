@@ -20,10 +20,12 @@ class FirebaseService {
 
       final List<DocumentSnapshot> documents = result.docs;
       if (documents.isEmpty) {
+        final userDataJson = user.toJson();
+        logger.f("userDataJson: $userDataJson");
         firebaseFirestore
             .collection(FbCollectionNames.user)
             .doc(user.userId)
-            .set(user.toJson());
+            .set(userDataJson);
         await saveUserDetailsLocally(user);
         Fluttertoast.showToast(msg: "Account created successfully!");
         return true;

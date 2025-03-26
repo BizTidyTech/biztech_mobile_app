@@ -87,6 +87,7 @@ class ProfileController extends GetxController {
       maxHeight: 1800,
     );
     if (pickedFile != null) {
+      
       final selectedImagefile = File(pickedFile.path);
       final profilePhotoUrl = await uploadProfilePhoto(selectedImagefile);
       if (profilePhotoUrl == null) {
