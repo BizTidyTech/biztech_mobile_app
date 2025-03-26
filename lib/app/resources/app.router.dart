@@ -16,7 +16,7 @@ import 'package:go_router/go_router.dart';
 class AppRouter {
   static final router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
-    initialLocation: '/createAccountView',
+    // initialLocation: '/createAccountView',
     routes: [
       GoRoute(
         path: '/',

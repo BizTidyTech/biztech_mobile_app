@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:biztidy_mobile_app/app/helpers/image_helper.dart';
 import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
 import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfileController extends GetxController {
   ProfileController();
@@ -81,14 +81,14 @@ class ProfileController extends GetxController {
 
   /// Upload image from gallery
   changeProfileImage() async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      
-      final selectedImagefile = File(pickedFile.path);
+    File? imageSelected = await ImageHelper.getFromGallery(false);
+    if (imageSelected != null) {
+      final imagePath = imageSelected.path;
+      var croppedImage = await ImageHelper.cropImage(File(imagePath), false);
+      final croppedImagePath = croppedImage.path;
+      logger.f("Cropped Image Path: $croppedImagePath");
+
+      final selectedImagefile = File(croppedImagePath);
       final profilePhotoUrl = await uploadProfilePhoto(selectedImagefile);
       if (profilePhotoUrl == null) {
         Fluttertoast.showToast(
