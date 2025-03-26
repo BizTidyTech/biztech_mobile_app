@@ -11,6 +11,7 @@ import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
 import 'package:biztidy_mobile_app/utils/extension_and_methods/string_cap_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class EditProfileView extends StatefulWidget {
@@ -22,6 +23,8 @@ class EditProfileView extends StatefulWidget {
 
 class _EditProfileViewState extends State<EditProfileView> {
   final controller = Get.put(ProfileController());
+  static const String nigeria = "Nigeria", usa = "USA";
+  String _selectedCountry = nigeria;
 
   @override
   void initState() {
@@ -34,6 +37,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         TextEditingController(text: controller.myProfileData?.phoneNumber);
     controller.addressController =
         TextEditingController(text: controller.myProfileData?.address);
+    _selectedCountry = controller.myProfileData?.country ?? nigeria;
   }
 
   @override
@@ -85,6 +89,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                       hintText: 'Enter your address',
                       textInputAction: TextInputAction.done,
                     ),
+                    verticalSpacer(20),
+                    Row(
+                      children: [
+                        Text(
+                          "Country",
+                          style: AppStyles.subStringStyle(
+                            12,
+                            AppColors.fullBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                    _countrySelector(),
                     verticalSpacer(30),
                     Center(
                       child: Text(
@@ -103,7 +120,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                             onPressed: () {
                               SystemChannels.textInput
                                   .invokeMethod('TextInput.hide');
-                              controller.attemptToUpdateProfileData();
+                              controller
+                                  .attemptToUpdateProfileData(_selectedCountry);
                             },
                           ),
                     verticalSpacer(12),
@@ -113,5 +131,80 @@ class _EditProfileViewState extends State<EditProfileView> {
             ),
           );
         });
+  }
+
+  Widget _countrySelector() {
+    return Column(
+      children: [
+        // Nigeria option.
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+          minVerticalPadding: 0,
+          minTileHeight: 30,
+          leading: SizedBox(
+            width: 40,
+            height: 40,
+            child: SvgPicture.network(
+              'https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg',
+              width: 40,
+              height: 40,
+            ),
+          ),
+          title: Text(
+            nigeria,
+            style: AppStyles.regularStringStyle(15, AppColors.fullBlack),
+          ),
+          trailing: Radio<String>(
+            activeColor: Colors.blue,
+            value: nigeria,
+            groupValue: _selectedCountry,
+            onChanged: (String? value) {
+              setState(() {
+                _selectedCountry = nigeria;
+              });
+            },
+          ),
+          onTap: () {
+            setState(() {
+              _selectedCountry = "Nigeria";
+            });
+          },
+        ),
+        // USA option.
+        ListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 10),
+          minVerticalPadding: 0,
+          minTileHeight: 30,
+          leading: SizedBox(
+            width: 40,
+            height: 40,
+            child: SvgPicture.network(
+              'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg',
+              width: 40,
+              height: 40,
+            ),
+          ),
+          title: Text(
+            usa,
+            style: AppStyles.regularStringStyle(15, AppColors.fullBlack),
+          ),
+          trailing: Radio<String>(
+            activeColor: Colors.blue,
+            value: "USA",
+            groupValue: _selectedCountry,
+            onChanged: (String? value) {
+              setState(() {
+                _selectedCountry = usa;
+              });
+            },
+          ),
+          onTap: () {
+            setState(() {
+              _selectedCountry = "USA";
+            });
+          },
+        ),
+      ],
+    );
   }
 }

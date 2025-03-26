@@ -12,6 +12,7 @@ class UserData {
   String? photoUrl;
   String? phoneNumber;
   String? address;
+  String? country;
   DateTime? timeCreated;
 
   UserData({
@@ -23,6 +24,7 @@ class UserData {
     this.timeCreated,
     this.phoneNumber,
     this.address,
+    this.country,
   });
 
   UserData copyWith({
@@ -33,6 +35,7 @@ class UserData {
     String? photoUrl,
     String? phoneNumber,
     String? address,
+    String? country,
     DateTime? timeCreated,
   }) =>
       UserData(
@@ -44,6 +47,7 @@ class UserData {
         timeCreated: timeCreated ?? this.timeCreated,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         address: address ?? this.address,
+        country: country ?? this.country,
       );
 
   factory UserData.fromJson(Map<String, dynamic> json) => UserData(
@@ -54,6 +58,7 @@ class UserData {
         photoUrl: json["photoUrl"],
         phoneNumber: json["phoneNumber"],
         address: json["address"],
+        country: json["country"],
         timeCreated: json["timeCreated"] == null
             ? null
             : DateTime.parse(json["timeCreated"]),
@@ -67,6 +72,7 @@ class UserData {
         "photoUrl": photoUrl,
         "phoneNumber": phoneNumber,
         "address": address,
+        "country": country,
         "timeCreated": timeCreated?.toIso8601String(),
       };
 }

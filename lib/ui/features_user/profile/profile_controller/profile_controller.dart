@@ -42,18 +42,18 @@ class ProfileController extends GetxController {
     stopLoading();
   }
 
-  attemptToUpdateProfileData() async {
+  attemptToUpdateProfileData(String country) async {
     if (fullnameController.text.trim().isEmpty == true) {
       errMessage = "Full name field is required";
       Fluttertoast.showToast(msg: "Full name field is required");
       update();
     } else {
       errMessage = '';
-      await updateProfileData();
+      await updateProfileData(country);
     }
   }
 
-  updateProfileData() async {
+  updateProfileData(String country) async {
     errMessage = '';
     startLoading();
     try {
@@ -61,6 +61,7 @@ class ProfileController extends GetxController {
         name: fullnameController.text.trim(),
         address: addressController.text.trim(),
         phoneNumber: phoneController.text.trim(),
+        country: country,
       );
       logger.f("updatedUserProfile: ${updatedUserProfile.toJson()}");
       final updated =
