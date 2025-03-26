@@ -44,39 +44,11 @@ Widget serviceCard(ServiceModel service, {bool? popPage}) {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                /*
-                Text(
-                  "${service.name} Cleaning",
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: AppStyles.normalStringStyle(17, AppColors.fullBlack),
-                ),
-                */
                 SizedBox(
                   width: screenWidth(context) - 50,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      /* !To be reveiewed later
-                      RichText(
-                        text: TextSpan(
-                          text: "From: ",
-                          style: AppStyles.normalStringStyle(
-                            14,
-                            AppColors.fullBlack,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: "\$${service.baseCost}",
-                              style: AppStyles.keyStringStyle(
-                                17,
-                                AppColors.fullBlack,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      */
                       Expanded(
                         child: Text(
                           "${service.name} Cleaning",

@@ -281,11 +281,11 @@ class _HomepageViewState extends State<HomepageView> {
           padding: const EdgeInsets.only(bottom: 5),
           height: 160,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 127,
+                height: 135,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   image: DecorationImage(
@@ -295,7 +295,8 @@ class _HomepageViewState extends State<HomepageView> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
                 child: Text(
                   service.name ?? '',
                   style: AppStyles.normalStringStyle(
