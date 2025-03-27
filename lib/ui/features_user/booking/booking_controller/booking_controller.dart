@@ -117,6 +117,37 @@ class BookingsController extends GetxController {
   }
 
   makeDepositPayment(BookingModel bookingDetails) async {
+    final userCountry = (await getLocallySavedUserDetails())?.country;
+    if (userCountry == 'USA') {
+      logger.w("Pay with PayPal");
+      payWithPayPal(bookingDetails);
+    } else {
+      logger.f("Pay with PayStack");
+      // payWithPaystack(bookingDetails);
+    }
+  }
+
+  payWithPayPal(BookingModel bookingDetails) async {
+    showLoading = true;
+    update();
+    try {
+      final description =
+          "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
+      await PaypalUtils().makePayment(
+        amount: depositBookingAmount,
+        bookingDetails: bookingDetails,
+        description: description,
+        isBalancePayment: false,
+      );
+    } catch (e) {
+      logger.w("Error occured");
+      Fluttertoast.showToast(msg: "Error occured. Kindly retry");
+    }
+    showLoading = false;
+    update();
+  }
+
+  payWithPaystack(BookingModel bookingDetails) async {
     showLoading = true;
     update();
     try {

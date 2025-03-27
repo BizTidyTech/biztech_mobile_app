@@ -249,7 +249,7 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
                             SystemChannels.textInput
                                 .invokeMethod('TextInput.hide');
                             controller.attemptToCreateAppointment(
-                                context, _durationValue, _roomSqFtValue);
+                                context, _durationValue, _roomSqFtValue,);
                           },
                         ),
                 ],
