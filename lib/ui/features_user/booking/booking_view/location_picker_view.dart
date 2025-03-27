@@ -72,8 +72,11 @@ class _LocationPickerViewState extends State<LocationPickerView> {
 
       onPlacePicked: (LocationResult? result) async {
         if (result != null) {
-          final userCountry =
+          String userCountry =
               (await getLocallySavedUserDetails())?.country ?? 'Nigeria';
+          if (userCountry == 'USA') {
+            userCountry = 'United States';
+          }
           final selectedState = result.administrativeAreaLevel1?.longName;
           final selectedCityCounty = result.administrativeAreaLevel2?.longName;
           final selectedAddress = result.formattedAddress;
@@ -88,8 +91,14 @@ class _LocationPickerViewState extends State<LocationPickerView> {
           );
           logger.f("validatorResult:  ${validatorResult.toString()}");
 
-          if (validatorResult.isStateValid == true) {
-            logger.i("Address selected");
+          if (userCountry == 'Nigeria' &&
+              validatorResult.isStateValid == true) {
+            logger.i("Nigerian Address selected");
+            Navigator.pop(context, result);
+          } else if (userCountry == 'United States' &&
+              validatorResult.isStateValid == true &&
+              validatorResult.isCityValid == true) {
+            logger.i("US Address selected");
             Navigator.pop(context, result);
           } else {
             showCustomSnackBar(context, "Selected address is out of range");
@@ -97,35 +106,5 @@ class _LocationPickerViewState extends State<LocationPickerView> {
         }
       },
     );
-  }
-}
-
-class NigerianStateBounds {
-  // Oyo State Bounds
-  static final oyoStateBounds = {
-    'southwest': const LatLng(7.2, 3.5), // Southwestern point
-    'northeast': const LatLng(8.9, 4.5) // Northeastern point
-  };
-
-  // Lagos State Bounds
-  static final lagosStateBounds = {
-    'southwest': const LatLng(6.3, 3.0), // Southwestern point
-    'northeast': const LatLng(6.7, 3.7) // Northeastern point
-  };
-
-  // Ogun State Bounds
-  static final ogunStateBounds = {
-    'southwest': const LatLng(6.5, 3.0), // Southwestern point
-    'northeast': const LatLng(7.5, 4.0) // Northeastern point
-  };
-
-  void setStateView(
-      GoogleMapController controller, Map<String, LatLng> stateBounds) {
-    controller.animateCamera(CameraUpdate.newLatLngBounds(
-      LatLngBounds(
-          southwest: stateBounds['southwest']!,
-          northeast: stateBounds['northeast']!),
-      50,
-    ));
   }
 }

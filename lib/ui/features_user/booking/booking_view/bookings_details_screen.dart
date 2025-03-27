@@ -15,6 +15,7 @@ import 'package:biztidy_mobile_app/utils/extension_and_methods/screen_utils.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:place_picker_google/place_picker_google.dart';
 
 class BookingsDetailsScreen extends StatefulWidget {
@@ -26,8 +27,15 @@ class BookingsDetailsScreen extends StatefulWidget {
 
 class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
   double _durationValue = 1.0, _roomSqFtValue = 100.0;
+  final ValueNotifier<bool> _isLocationLoading = ValueNotifier<bool>(false);
 
   final controller = Get.put(BookingsController());
+
+  @override
+  void dispose() {
+    _isLocationLoading.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +64,7 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
                   Row(
                     children: [
                       Text(
-                        "Location/Landmark name",
+                        "Location address/Landmark name",
                         style: AppStyles.subStringStyle(
                           12,
                           AppColors.fullBlack,
@@ -65,53 +73,74 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
                     ],
                   ),
                   verticalSpacer(5),
-                  CustomButton(
-                    width: screenWidth(context),
-                    onPressed: () async {
-                      logger.f("Capturing location . . .");
-                      final locationCaptured =
-                          await LocationServices().captureLocation(
-                        context,
-                      );
-                      if (locationCaptured != null) {
-                        final LocationResult? locationResult =
-                            await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LocationPickerView(
-                              latitude: locationCaptured.latitude,
-                              longitude: locationCaptured.longitude,
-                            ),
-                          ),
-                        );
+                  ValueListenableBuilder<bool>(
+                      valueListenable: _isLocationLoading,
+                      builder: (context, isLoading, child) {
+                        return CustomButton(
+                          width: screenWidth(context),
+                          onPressed: () async {
+                            if (isLoading != true) {
+                              _isLocationLoading.value = true;
+                              logger.f("Capturing location . . .");
+                              LatLng latLng;
+                              if (controller.userLocationData?.latLng == null) {
+                                final locationCaptured =
+                                    await LocationServices().captureLocation(
+                                  context,
+                                );
+                                latLng = LatLng(
+                                  locationCaptured?.latitude ?? 37.4219983,
+                                  locationCaptured?.longitude ?? -122.084,
+                                );
+                              } else {
+                                latLng = LatLng(
+                                  controller.userLocationData!.latLng!.latitude,
+                                  controller
+                                      .userLocationData!.latLng!.longitude,
+                                );
+                              }
+                              _isLocationLoading.value = false;
 
-                        if (locationResult != null) {
-                          controller.saveSelectedLocation(locationResult);
-                        }
-                      }
-                      logger.f(
-                          "Address: ${controller.userLocationData?.formattedAddress}");
-                    },
-                    color: AppColors.plainWhite,
-                    borderColor: AppColors.primaryThemeColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.location_searching_rounded,
-                          color: AppColors.deepBlue,
-                        ),
-                        horizontalSpacer(10),
-                        Text(
-                          "Pick your location",
-                          style: AppStyles.regularStringStyle(
-                            15,
-                            AppColors.deepBlue,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                              final LocationResult? locationResult =
+                                  await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LocationPickerView(
+                                    latitude: latLng.latitude,
+                                    longitude: latLng.longitude,
+                                  ),
+                                ),
+                              );
+                              if (locationResult != null) {
+                                controller.saveSelectedLocation(locationResult);
+                              }
+                              logger.f(
+                                  "Address: ${controller.userLocationData?.formattedAddress}");
+                            }
+                          },
+                          color: AppColors.plainWhite,
+                          borderColor: AppColors.primaryThemeColor,
+                          child: isLoading
+                              ? loadingWidget()
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.location_searching_rounded,
+                                      color: AppColors.deepBlue,
+                                    ),
+                                    horizontalSpacer(10),
+                                    Text(
+                                      "Pick your location",
+                                      style: AppStyles.regularStringStyle(
+                                        15,
+                                        AppColors.deepBlue,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                        );
+                      }),
                   verticalSpacer(10),
                   if (controller.userLocationData != null)
                     Padding(
@@ -124,11 +153,6 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
                         ),
                       ),
                     ),
-                  inputWidget(
-                    titleText: "Location address",
-                    textEditingController: controller.addressController,
-                    hintText: 'Enter your location address',
-                  ),
                   inputWidget(
                     titleText: "Contact phone number",
                     textEditingController: controller.phoneController,

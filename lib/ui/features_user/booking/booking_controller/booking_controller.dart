@@ -31,13 +31,11 @@ class BookingsController extends GetxController {
   LocationResult? userLocationData;
   final depositBookingAmount = 20.0; // Initial depoit amount for all bookings
 
-  TextEditingController addressController = TextEditingController();
   TextEditingController roomsCountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
   clearVals() {
-    addressController.clear();
     roomsCountController.clear();
     descriptionController.clear();
     phoneController.clear();
@@ -51,6 +49,7 @@ class BookingsController extends GetxController {
 
   saveSelectedLocation(LocationResult location) {
     userLocationData = location;
+    errMessage = '';
     update();
   }
 
@@ -72,9 +71,6 @@ class BookingsController extends GetxController {
     if (userLocationData == null) {
       errMessage = 'Choose your location address or landmark';
       update();
-    } else if (addressController.text.trim().isEmpty == true) {
-      errMessage = 'Enter your location address';
-      update();
     } else if (phoneController.text.trim().isEmpty == true) {
       errMessage = 'Enter the phone number to contact';
       update();
@@ -95,8 +91,8 @@ class BookingsController extends GetxController {
       bookingId: generateRandomString(),
       userId: userData?.userId,
       dateTime: appointmentDateSelected,
-      locationName: userLocationData?.formattedAddress,
-      locationAddress: addressController.text.trim(),
+      locationName: userLocationData?.administrativeAreaLevel2?.longName,
+      locationAddress: userLocationData?.formattedAddress,
       additionalInfo: descriptionController.text.trim(),
       rooms: int.tryParse(roomsCountController.text.trim()) ?? 1,
       duration: durationValue.toInt(),
