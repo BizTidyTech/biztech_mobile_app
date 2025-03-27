@@ -49,5 +49,6 @@ class AppStrings {
   static String upload = 'Upload';
   static String choose = 'Choose';
   static String change = 'Change';
+  static String selectLocation = 'Select ';
   static String test = 'test';
 }

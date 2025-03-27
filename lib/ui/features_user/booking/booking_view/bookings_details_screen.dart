@@ -1,7 +1,10 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
+import 'package:biztidy_mobile_app/app/helpers/location_services.dart';
+import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/widgets/input_widget.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/booking_controller.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/booking_view/location_picker_view.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
@@ -11,6 +14,7 @@ import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
 import 'package:biztidy_mobile_app/utils/extension_and_methods/screen_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class BookingsDetailsScreen extends StatefulWidget {
@@ -24,6 +28,8 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
   double _durationValue = 1.0, _roomSqFtValue = 100.0;
 
   final controller = Get.put(BookingsController());
+  Position? _currentLocationCaptured;
+  String? _fullAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +55,73 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  inputWidget(
-                    titleText: "Location/Landmark name",
-                    textEditingController: controller.locationController,
-                    hintText: 'Enter your location name',
+                  // inputWidget(
+                  //   titleText: "Location/Landmark name",
+                  //   textEditingController: controller.locationController,
+                  //   hintText: 'Enter your location name',
+                  // ),
+
+                  InkWell(
+                    onTap: () async {
+                      logger.f("Capturing location . . .");
+                      final locationCaptured =
+                          await LocationServices().captureLocation(
+                        context,
+                      );
+                      if (locationCaptured != null) {
+                        final locationResult = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LocationPickerView(
+                              latitude: locationCaptured.latitude,
+                              longitude: locationCaptured.longitude,
+                            ),
+                          ),
+                        );
+
+                        if (locationResult != null) {
+                          setState(() {
+                            _currentLocationCaptured = locationCaptured;
+                          });
+                        }
+                      }
+                      logger.f(
+                          "Chosen location: ${_currentLocationCaptured?.toJson()}");
+                    },
+                    child: CustomButton(
+                      color: AppColors.plainWhite,
+                      borderColor: AppColors.deepBlue,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.location_searching_rounded,
+                            color: AppColors.deepBlue,
+                          ),
+                          horizontalSpacer(10),
+                          Text(
+                            "Pick your location",
+                            style: AppStyles.regularStringStyle(
+                              15,
+                              AppColors.deepBlue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
+                  verticalSpacer(10),
+                  if (_fullAddress != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        _fullAddress!,
+                        style: AppStyles.regularStringStyle(
+                          15,
+                          AppColors.fullBlack,
+                        ),
+                      ),
+                    ),
                   inputWidget(
                     titleText: "Location address",
                     textEditingController: controller.addressController,
@@ -164,6 +232,26 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget locationEntityWidget(String label, String value) {
+    return SizedBox(
+      height: 48,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: AppStyles.normalStringStyle(12, AppColors.fullBlack),
+          ),
+          verticalSpacer(6),
+          Text(
+            value,
+            style: AppStyles.regularStringStyle(16, AppColors.fullBlack),
+          ),
+        ],
+      ),
     );
   }
 }
