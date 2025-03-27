@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unused_element
 
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_controller/profile_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/widgets/profile_input_widget.dart';
@@ -81,7 +81,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     profileInputWidget(
                       titleText: "Phone number",
                       textEditingController: controller.phoneController,
-                      hintText: 'Enter your phone number password',
+                      hintText: 'Enter your phone number',
                     ),
                     profileInputWidget(
                       titleText: "Address",
@@ -90,18 +90,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                       textInputAction: TextInputAction.done,
                     ),
                     verticalSpacer(20),
-                    Row(
-                      children: [
-                        Text(
-                          "Country",
-                          style: AppStyles.subStringStyle(
-                            12,
-                            AppColors.fullBlack,
-                          ),
-                        ),
-                      ],
-                    ),
-                    _countrySelector(),
+                    // Row(
+                    //   children: [
+                    //     Text(
+                    //       "Country",
+                    //       style: AppStyles.subStringStyle(
+                    //         12,
+                    //         AppColors.fullBlack,
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // _countrySelector(),
                     verticalSpacer(30),
                     Center(
                       child: Text(

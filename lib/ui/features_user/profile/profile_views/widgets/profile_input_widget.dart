@@ -31,6 +31,8 @@ Widget profileInputWidget({
         CustomTextfield(
           textEditingController: textEditingController,
           hintText: hintText,
+          hintStyle:
+              AppStyles.hintStringStyle(12).copyWith(color: AppColors.deepBlue),
           textInputAction: textInputAction ?? TextInputAction.next,
           keyboardType: keyboardType,
           minLines: minLines,

@@ -5,7 +5,9 @@ import 'dart:io';
 import 'package:biztidy_mobile_app/app/helpers/image_helper.dart';
 import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
 import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
+import 'package:biztidy_mobile_app/app/services/snackbar_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
+import 'package:biztidy_mobile_app/ui/features_user/auth/auth_controller/auth_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
@@ -160,12 +162,18 @@ class ProfileController extends GetxController {
   deleteAccount(BuildContext context) async {
     try {
       User? user = FirebaseAuth.instance.currentUser;
+      final userData = await getLocallySavedUserDetails();
+      await AuthController().signInUser(
+        context,
+        userData?.email ?? '',
+        userData?.password ?? '',
+        navigateToHome: false,
+      );
 
       if (user != null) {
         await user.delete();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account deleted successfully')),
-        );
+        await deleteProfileData();
+        showCustomSnackBar(context, 'Account deleted successfully');
         saveUserDetailsLocally(null);
         context.go('/onboardingScreen');
       }
@@ -175,6 +183,22 @@ class ProfileController extends GetxController {
         const SnackBar(content: Text('Error deleting your account. Retry')),
       );
     }
+  }
+
+  deleteProfileData() async {
+    errMessage = '';
+    startLoading();
+    try {
+      final deleted = await FirebaseService().deleteUserProfile(myProfileData);
+      if (deleted == true) {
+        myProfileData = null;
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+
+    stopLoading();
   }
 
   startLoading() {

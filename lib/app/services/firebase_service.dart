@@ -86,6 +86,23 @@ class FirebaseService {
     }
   }
 
+  Future<bool> deleteUserProfile(UserData? userData) async {
+    try {
+      await firebaseFirestore
+          .collection(FbCollectionNames.user)
+          .doc(userData?.userId)
+          .delete();
+      return true;
+    } catch (e) {
+      logger.e(e);
+      Fluttertoast.showToast(
+        msg: 'Error deleting your account! Retry',
+        backgroundColor: AppColors.coolRed,
+      );
+      return false;
+    }
+  }
+
   Future<bool> bookAppointment({required BookingModel booking}) async {
     try {
       firebaseFirestore

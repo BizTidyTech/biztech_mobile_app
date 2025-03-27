@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:place_picker_google/place_picker_google.dart';
 import 'package:provider/provider.dart';
 
 class BookingsController extends GetxController {
@@ -27,16 +28,15 @@ class BookingsController extends GetxController {
   BookingModel? bookingData;
   String errMessage = '';
   bool showLoading = false;
+  LocationResult? userLocationData;
   final depositBookingAmount = 20.0; // Initial depoit amount for all bookings
 
-  TextEditingController locationController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController roomsCountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
   clearVals() {
-    locationController.clear();
     addressController.clear();
     roomsCountController.clear();
     descriptionController.clear();
@@ -46,6 +46,11 @@ class BookingsController extends GetxController {
     errMessage = '';
     appointmentDateSelected = null;
     selectedService = null;
+    update();
+  }
+
+  saveSelectedLocation(LocationResult location) {
+    userLocationData = location;
     update();
   }
 
@@ -64,8 +69,8 @@ class BookingsController extends GetxController {
       BuildContext context, double durationValue, double roomSqft) async {
     logger.i('attemptToCreateAppointment . . .');
 
-    if (locationController.text.trim().isEmpty == true) {
-      errMessage = 'Enter your location/landmark name';
+    if (userLocationData == null) {
+      errMessage = 'Choose your location address or landmark';
       update();
     } else if (addressController.text.trim().isEmpty == true) {
       errMessage = 'Enter your location address';
@@ -90,7 +95,7 @@ class BookingsController extends GetxController {
       bookingId: generateRandomString(),
       userId: userData?.userId,
       dateTime: appointmentDateSelected,
-      locationName: locationController.text.trim(),
+      locationName: userLocationData?.formattedAddress,
       locationAddress: addressController.text.trim(),
       additionalInfo: descriptionController.text.trim(),
       rooms: int.tryParse(roomsCountController.text.trim()) ?? 1,

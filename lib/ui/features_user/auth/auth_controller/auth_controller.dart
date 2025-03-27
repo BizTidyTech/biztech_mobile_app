@@ -170,12 +170,12 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> signInUser(
-      BuildContext context, String email, String password) async {
+  Future<void> signInUser(BuildContext context, String email, String password,
+      {bool? navigateToHome = true}) async {
     logger.i('signing in user . . .');
     startLoading();
     final isLoggedIn = await AuthUtil().signInUser(email, password);
-    if (isLoggedIn == true) {
+    if (isLoggedIn == true && navigateToHome != false) {
       context.go('/homepageView');
     }
     stopLoading();

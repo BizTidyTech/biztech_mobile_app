@@ -21,6 +21,7 @@ class CustomTextfield extends StatefulWidget {
     this.fillColor,
     this.labelText,
     this.hintText,
+    this.hintStyle,
     this.textEditingController,
     this.hasSuffixIcon = false,
     this.onSuffixIconPressed,
@@ -62,6 +63,7 @@ class CustomTextfield extends StatefulWidget {
   final double? letterSpacing;
   final String? suffixText;
   final String? hintText;
+  final TextStyle? hintStyle;
   final bool? enabled;
   final bool? readOnly;
   final bool? autofocus;
@@ -124,7 +126,7 @@ class _CustomTextfieldState extends State<CustomTextfield> {
             borderRadius: BorderRadius.circular(15.0),
           ),
           labelStyle: labelTextStyles,
-          hintStyle: hintTextStyles,
+          hintStyle: widget.hintStyle ?? hintTextStyles,
           counterText: '',
         ),
       ),

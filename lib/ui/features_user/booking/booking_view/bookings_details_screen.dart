@@ -14,8 +14,8 @@ import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
 import 'package:biztidy_mobile_app/utils/extension_and_methods/screen_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:place_picker_google/place_picker_google.dart';
 
 class BookingsDetailsScreen extends StatefulWidget {
   const BookingsDetailsScreen({super.key});
@@ -28,8 +28,6 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
   double _durationValue = 1.0, _roomSqFtValue = 100.0;
 
   final controller = Get.put(BookingsController());
-  Position? _currentLocationCaptured;
-  String? _fullAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -55,21 +53,29 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // inputWidget(
-                  //   titleText: "Location/Landmark name",
-                  //   textEditingController: controller.locationController,
-                  //   hintText: 'Enter your location name',
-                  // ),
-
-                  InkWell(
-                    onTap: () async {
+                  Row(
+                    children: [
+                      Text(
+                        "Location/Landmark name",
+                        style: AppStyles.subStringStyle(
+                          12,
+                          AppColors.fullBlack,
+                        ),
+                      ),
+                    ],
+                  ),
+                  verticalSpacer(5),
+                  CustomButton(
+                    width: screenWidth(context),
+                    onPressed: () async {
                       logger.f("Capturing location . . .");
                       final locationCaptured =
                           await LocationServices().captureLocation(
                         context,
                       );
                       if (locationCaptured != null) {
-                        final locationResult = await Navigator.push(
+                        final LocationResult? locationResult =
+                            await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => LocationPickerView(
@@ -80,42 +86,38 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
                         );
 
                         if (locationResult != null) {
-                          setState(() {
-                            _currentLocationCaptured = locationCaptured;
-                          });
+                          controller.saveSelectedLocation(locationResult);
                         }
                       }
                       logger.f(
-                          "Chosen location: ${_currentLocationCaptured?.toJson()}");
+                          "Address: ${controller.userLocationData?.formattedAddress}");
                     },
-                    child: CustomButton(
-                      color: AppColors.plainWhite,
-                      borderColor: AppColors.deepBlue,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.location_searching_rounded,
-                            color: AppColors.deepBlue,
+                    color: AppColors.plainWhite,
+                    borderColor: AppColors.primaryThemeColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.location_searching_rounded,
+                          color: AppColors.deepBlue,
+                        ),
+                        horizontalSpacer(10),
+                        Text(
+                          "Pick your location",
+                          style: AppStyles.regularStringStyle(
+                            15,
+                            AppColors.deepBlue,
                           ),
-                          horizontalSpacer(10),
-                          Text(
-                            "Pick your location",
-                            style: AppStyles.regularStringStyle(
-                              15,
-                              AppColors.deepBlue,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   verticalSpacer(10),
-                  if (_fullAddress != null)
+                  if (controller.userLocationData != null)
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
                       child: Text(
-                        _fullAddress!,
+                        controller.userLocationData!.formattedAddress ?? '',
                         style: AppStyles.regularStringStyle(
                           15,
                           AppColors.fullBlack,
@@ -232,26 +234,6 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget locationEntityWidget(String label, String value) {
-    return SizedBox(
-      height: 48,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: AppStyles.normalStringStyle(12, AppColors.fullBlack),
-          ),
-          verticalSpacer(6),
-          Text(
-            value,
-            style: AppStyles.regularStringStyle(16, AppColors.fullBlack),
-          ),
-        ],
-      ),
     );
   }
 }

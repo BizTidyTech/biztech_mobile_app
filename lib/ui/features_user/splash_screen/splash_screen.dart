@@ -84,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen>
           secondaryBeginGeometry: const AlignmentDirectional(2, 0),
           secondaryEndGeometry: const AlignmentDirectional(0, -0.8),
           textDirectionForGeometry: TextDirection.rtl,
-          duration: const Duration(seconds: 2),
+          duration: const Duration(milliseconds: 500),
           primaryColors: [
             Colors.blueAccent,
             AppColors.primaryThemeColor,
