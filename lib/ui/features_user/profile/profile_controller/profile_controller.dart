@@ -81,6 +81,29 @@ class ProfileController extends GetxController {
     stopLoading();
   }
 
+  changeUserPassword(BuildContext context, String newPassword) async {
+    startLoading();
+    try {
+      final updatedUserProfile = myProfileData!.copyWith(
+        password: newPassword,
+      );
+      logger.f("updatedUserProfile: ${updatedUserProfile.toJson()}");
+      final updated =
+          await FirebaseService().updateUserProfile(updatedUserProfile);
+      if (updated == true) {
+        myProfileData = updatedUserProfile;
+        saveUserDetailsLocally(updatedUserProfile);
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Error updating your password",
+        backgroundColor: AppColors.coolRed,
+      );
+    }
+    stopLoading();
+  }
+
   /// Upload image from gallery
   changeProfileImage() async {
     File? imageSelected = await ImageHelper.getFromGallery(false);

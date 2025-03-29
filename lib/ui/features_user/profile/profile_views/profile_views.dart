@@ -2,6 +2,7 @@ import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/views/custom_navbar.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_controller/profile_controller.dart';
+import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/change_password_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/edit_profile_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/help_center_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/web_data_view.dart';
@@ -154,6 +155,21 @@ class _ProfileViewState extends State<ProfileView> {
                             context,
                             title: "Privacy Policy",
                             url: privacyPolicyUrl,
+                          );
+                        },
+                      ),
+                      _profileOptionsCard(
+                        leadingIcon: IconsaxPlusLinear.security_safe,
+                        titleText: 'Change Password',
+                        onPressed: () {
+                          logger.i("Pressed 'Change Password");
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const ChangePasswordView();
+                              },
+                            ),
                           );
                         },
                       ),

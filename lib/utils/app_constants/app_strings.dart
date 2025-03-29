@@ -37,6 +37,9 @@ class AppStrings {
   static String adminIdText = 'Admin ID';
   static String email = 'Email';
   static String password = 'Password';
+  static String oldPassword = 'Old Password';
+  static String newPassword = 'New Password';
+  static String confirmNewPassword = 'Confirm New Password';
   static String confirmPassword = 'Confirm Password';
   static String cleaning = 'Cleaning';
   static String serviceCategory = 'Service Category';
@@ -50,5 +53,7 @@ class AppStrings {
   static String choose = 'Choose';
   static String change = 'Change';
   static String selectLocation = 'Select ';
+  static String save = 'Save ';
+  static String changePassword = 'Change password';
   static String test = 'test';
 }
