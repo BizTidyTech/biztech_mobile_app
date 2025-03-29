@@ -7,3 +7,8 @@ const aboutUsUrl = 'https://www.biztech.com.ng/about-us/';
 const termsOfUseUrl = 'https://www.biztech.com.ng/terms-of-use/';
 const disclaimerUrl = 'https://www.biztech.com.ng/disclaimer/';
 const privacyPolicyUrl = 'https://www.biztech.com.ng/privacy-policy-2/';
+
+const paystackLiveWebhookURL =
+    "https://www.biztech.com.ng/wc-api/Tbz_WC_Paystack_Webhook/";
+
+final List keyInParts = ["AIzaSyD1ZDheziyou3g", "JlSbqtnlR6mitN2e0EGU"];

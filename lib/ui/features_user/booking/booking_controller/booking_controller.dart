@@ -4,11 +4,12 @@ import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
 import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/app/services/navigation_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/payment_utils.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/paypal_response_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/push_notification_utils.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_view/bookings_review_screen.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/payment_utils/paypal_utils.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/payment_utils/paystack_utils.dart';
 import 'package:biztidy_mobile_app/ui/features_user/home/home_model/services_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
@@ -29,7 +30,7 @@ class BookingsController extends GetxController {
   String errMessage = '';
   bool showLoading = false;
   LocationResult? userLocationData;
-  final depositBookingAmount = 20.0; // Initial depoit amount for all bookings
+  final depositBookingAmount = 20.0; // Deposit amount for all bookings (in USD)
 
   TextEditingController roomsCountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -123,7 +124,7 @@ class BookingsController extends GetxController {
       payWithPayPal(bookingDetails);
     } else {
       logger.f("Pay with PayStack");
-      // payWithPaystack(bookingDetails);
+      payWithPaystack(bookingDetails);
     }
   }
 
@@ -151,10 +152,12 @@ class BookingsController extends GetxController {
     showLoading = true;
     update();
     try {
+      final depositBookingAmountInNaira = depositBookingAmount * 1500;
       final description =
           "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
-      await PaypalUtils().makePayment(
-        amount: depositBookingAmount,
+      await PaystackUtils().makePayment(
+        NavigationService.navigatorKey.currentContext!,
+        amount: depositBookingAmountInNaira,
         bookingDetails: bookingDetails,
         description: description,
         isBalancePayment: false,
@@ -168,7 +171,7 @@ class BookingsController extends GetxController {
   }
 
   bookAppointment(
-      BookingModel bookingDetails, PaypalResponseModel paymentData) async {
+      BookingModel bookingDetails, PaymentResponseModel paymentData) async {
     showLoading = true;
     update();
     final initialDepositPayment = PaymentDetails(

@@ -4,6 +4,7 @@ import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
 import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_model/user_data_model.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/push_notification_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -51,6 +52,7 @@ class AuthUtil {
       final userData = await FirebaseService().getUserDetails(email: email);
       if (userData != null) {
         await saveUserDetailsLocally(userData);
+        await initOneSignalPlatformState();
         OneSignal.login(userData.userId!);
       }
       return true;

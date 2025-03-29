@@ -200,6 +200,19 @@ class FirebaseService {
     }
   }
 
+  Future<String?> fetchPaystackApiKey() async {
+    try {
+      DocumentSnapshot document =
+          await firebaseFirestore.collection('Keys').doc('keysData').get();
+
+      final paystackSecretKey = document['paystackSecretKey'];
+      logger.f("paystackSecretKey: $paystackSecretKey");
+      return paystackSecretKey;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<AdminAuthModel?> getAdminAuthDetails() async {
     try {
       DocumentSnapshot document = await firebaseFirestore

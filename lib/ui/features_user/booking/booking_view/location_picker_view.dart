@@ -6,6 +6,7 @@ import 'package:biztidy_mobile_app/app/services/snackbar_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
+import 'package:biztidy_mobile_app/utils/app_constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:place_picker_google/place_picker_google.dart';
@@ -31,7 +32,7 @@ class _LocationPickerViewState extends State<LocationPickerView> {
     return PlacePicker(
       mapsBaseUrl: "https://maps.googleapis.com/maps/api/",
       usePinPointingSearch: true,
-      apiKey: 'AIzaSyD1ZDheziyou3gJlSbqtnlR6mitN2e0EGU', // my key
+      apiKey: "${keyInParts[0]}${keyInParts[1]}",
       enableNearbyPlaces: false,
       showSearchInput: true,
       initialLocation: LatLng(widget.latitude, widget.longitude),
@@ -69,7 +70,6 @@ class _LocationPickerViewState extends State<LocationPickerView> {
         ),
       ),
       autocompletePlacesSearchRadius: 200,
-
       onPlacePicked: (LocationResult? result) async {
         if (result != null) {
           String userCountry =

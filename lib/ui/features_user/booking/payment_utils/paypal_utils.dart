@@ -7,7 +7,7 @@ import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/b
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/paypal_response_model.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_paypal/flutter_paypal.dart';
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -22,14 +22,14 @@ class PaypalUtils {
       NavigationService.navigatorKey.currentContext!,
     ).push(
       MaterialPageRoute(
-        builder: (BuildContext context) => UsePaypal(
+        builder: (BuildContext context) => PaypalCheckoutView(
           // sandboxMode: true,
           clientId:
               "ASxtXE6BW_7OTbZanc7EKlbBkwbEtTitfYaYDNGIpcU820Wn6CfHyaF8D7AelJrCUULkups7eCQ9dCnI",
           secretKey:
               "EGu6r9-mSjO8gFvUjUUibdc3GlPSzHZQzyAgskDmNf_4wmDlGk5AGNC9jnSEOP4-8Wneu-R4uKf07pOm",
-          returnURL: "https://samplesite.com/return",
-          cancelURL: "https://samplesite.com/cancel",
+          // returnURL: "https://samplesite.com/return",
+          // cancelURL: "https://samplesite.com/cancel",
           transactions: [
             {
               "amount": {
@@ -57,12 +57,12 @@ class PaypalUtils {
           note: "Contact us for any questions on your booking.",
           onSuccess: (Map response) async {
             logger.f("onSuccess: $response");
-            PaypalResponseModel paypalResponse = PaypalResponseModel();
+            PaymentResponseModel paymentResponse = PaymentResponseModel();
             try {
-              paypalResponse = paypalResponseModelFromJson(
+              paymentResponse = paypalResponseModelFromJson(
                 json.encode(response),
               );
-              logger.w("Status: ${paypalResponse.status}");
+              logger.w("Status: ${paymentResponse.status}");
             } catch (e) {
               logger.w("Error parsing data: $e");
             }
@@ -74,10 +74,10 @@ class PaypalUtils {
             // Update and book appointment here
             if (isBalancePayment == true) {
               await Get.put(BookingsListController())
-                  .updateBookingFinalPayment(bookingDetails, paypalResponse);
+                  .updateBookingFinalPayment(bookingDetails, paymentResponse);
             } else {
               await Get.put(BookingsController())
-                  .bookAppointment(bookingDetails, paypalResponse);
+                  .bookAppointment(bookingDetails, paymentResponse);
             }
           },
           onError: (error) {

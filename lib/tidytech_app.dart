@@ -2,7 +2,6 @@
 
 import 'package:biztidy_mobile_app/app/resources/app.router.dart';
 import 'package:biztidy_mobile_app/app/services/navigation_service.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/push_notification_utils.dart';
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_strings.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_theme_data.dart';
@@ -23,7 +22,6 @@ class _TidyTechAppState extends State<TidyTechApp> {
   @override
   void initState() {
     super.initState();
-    initOneSignalPlatformState();
   }
 
   @override
@@ -61,7 +59,6 @@ class _AdminTidyTechAppState extends State<AdminTidyTechApp> {
   @override
   void initState() {
     super.initState();
-    initOneSignalPlatformState();
   }
 
   @override

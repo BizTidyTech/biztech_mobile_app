@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:io';
-
 import 'package:animate_gradient/animate_gradient.dart';
 import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
@@ -13,7 +11,6 @@ import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,45 +21,28 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
-  AnimationController? animationController;
   Animation? sizeAnimation;
 
   @override
   void initState() {
     super.initState();
     SystemChannels.textInput.invokeMethod('TextInput.hide');
-    animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300))
-      ..forward();
-
-    sizeAnimation = Tween(begin: 20.0, end: 50.0).animate(CurvedAnimation(
-        parent: animationController!, curve: const Interval(0.0, 0.5)));
-
-    animationController!.addStatusListener((status) async {
-      if (status == AnimationStatus.completed) {
-        logger.f('Animation completed');
-        sleep(const Duration(milliseconds: 200));
-        await OneSignal.Notifications.requestPermission(true);
-
-        final existingUserData = await getLocallySavedUserDetails();
-        logger.w('existingUserData: ${existingUserData?.toJson()}');
-        String? userEmail = existingUserData?.email;
-        String? userPassword = existingUserData?.password;
-        if (existingUserData != null &&
-            userEmail != null &&
-            userPassword != null) {
-          AuthController().signInUser(context, userEmail, userPassword);
-        } else {
-          context.pushReplacement('/onboardingScreen');
-        }
-      }
-    });
+    proceedToApp();
   }
 
-  @override
-  void dispose() {
-    animationController!.dispose();
-    super.dispose();
+  proceedToApp() async {
+    await Future.delayed(const Duration(milliseconds: 1200));
+    logger.f('SPlash show completed completed');
+
+    final existingUserData = await getLocallySavedUserDetails();
+    logger.w('existingUserData: ${existingUserData?.toJson()}');
+    String? userEmail = existingUserData?.email;
+    String? userPassword = existingUserData?.password;
+    if (existingUserData != null && userEmail != null && userPassword != null) {
+      AuthController().signInUser(context, userEmail, userPassword);
+    } else {
+      context.go('/onboardingScreen');
+    }
   }
 
   @override
@@ -84,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen>
           secondaryBeginGeometry: const AlignmentDirectional(2, 0),
           secondaryEndGeometry: const AlignmentDirectional(0, -0.8),
           textDirectionForGeometry: TextDirection.rtl,
-          duration: const Duration(milliseconds: 500),
+          duration: const Duration(milliseconds: 1600),
           primaryColors: [
             Colors.blueAccent,
             AppColors.primaryThemeColor,

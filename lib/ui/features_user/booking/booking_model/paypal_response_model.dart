@@ -1,19 +1,19 @@
 import 'dart:convert';
 
-PaypalResponseModel paypalResponseModelFromJson(String str) =>
-    PaypalResponseModel.fromJson(json.decode(str));
+PaymentResponseModel paypalResponseModelFromJson(String str) =>
+    PaymentResponseModel.fromJson(json.decode(str));
 
-String paypalResponseModelToJson(PaypalResponseModel data) =>
+String paypalResponseModelToJson(PaymentResponseModel data) =>
     json.encode(data.toJson());
 
-class PaypalResponseModel {
+class PaymentResponseModel {
   final String? payerId;
   final String? paymentId;
   final String? token;
   final String? status;
   final Data? data;
 
-  PaypalResponseModel({
+  PaymentResponseModel({
     this.payerId,
     this.paymentId,
     this.token,
@@ -21,14 +21,14 @@ class PaypalResponseModel {
     this.data,
   });
 
-  PaypalResponseModel copyWith({
+  PaymentResponseModel copyWith({
     String? payerId,
     String? paymentId,
     String? token,
     String? status,
     Data? data,
   }) =>
-      PaypalResponseModel(
+      PaymentResponseModel(
         payerId: payerId ?? this.payerId,
         paymentId: paymentId ?? this.paymentId,
         token: token ?? this.token,
@@ -36,8 +36,8 @@ class PaypalResponseModel {
         data: data ?? this.data,
       );
 
-  factory PaypalResponseModel.fromJson(Map<String, dynamic> json) =>
-      PaypalResponseModel(
+  factory PaymentResponseModel.fromJson(Map<String, dynamic> json) =>
+      PaymentResponseModel(
         payerId: json["payerID"],
         paymentId: json["paymentId"],
         token: json["token"],

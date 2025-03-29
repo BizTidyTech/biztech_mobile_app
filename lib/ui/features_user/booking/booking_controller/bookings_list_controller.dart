@@ -4,10 +4,11 @@ import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
 import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/app/services/navigation_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/payment_utils.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/paypal_response_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/push_notification_utils.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/payment_utils/paypal_utils.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/payment_utils/paystack_utils.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/constants.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -57,12 +58,27 @@ class BookingsListController extends GetxController {
       } catch (e) {
         balanceAmount = bookingDetails.service!.baseCost! - 100;
       }
-      await PaypalUtils().makePayment(
-        amount: balanceAmount,
-        bookingDetails: bookingDetails,
-        description: description,
-        isBalancePayment: true,
-      );
+
+      final userCountry = (await getLocallySavedUserDetails())?.country;
+      if (userCountry == 'USA') {
+        await PaypalUtils().makePayment(
+          amount: balanceAmount,
+          bookingDetails: bookingDetails,
+          description: description,
+          isBalancePayment: true,
+        );
+      } else {
+        final balanceAmountInNaira = balanceAmount * 1500;
+        final description =
+            "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
+        await PaystackUtils().makePayment(
+          NavigationService.navigatorKey.currentContext!,
+          amount: balanceAmountInNaira,
+          bookingDetails: bookingDetails,
+          description: description,
+          isBalancePayment: false,
+        );
+      }
     } catch (e) {
       logger.w("Error occured");
       Fluttertoast.showToast(msg: "Error occured. Kindly retry");
@@ -72,7 +88,9 @@ class BookingsListController extends GetxController {
   }
 
   updateBookingFinalPayment(
-      BookingModel bookingDetails, PaypalResponseModel paymentData) async {
+    BookingModel bookingDetails,
+    PaymentResponseModel paymentData,
+  ) async {
     showLoading = true;
     update();
     final finalPaymentData = PaymentDetails(

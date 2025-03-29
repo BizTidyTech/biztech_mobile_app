@@ -74,73 +74,73 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
                   ),
                   verticalSpacer(5),
                   ValueListenableBuilder<bool>(
-                      valueListenable: _isLocationLoading,
-                      builder: (context, isLoading, child) {
-                        return CustomButton(
-                          width: screenWidth(context),
-                          onPressed: () async {
-                            if (isLoading != true) {
-                              _isLocationLoading.value = true;
-                              logger.f("Capturing location . . .");
-                              LatLng latLng;
-                              if (controller.userLocationData?.latLng == null) {
-                                final locationCaptured =
-                                    await LocationServices().captureLocation(
-                                  context,
-                                );
-                                latLng = LatLng(
-                                  locationCaptured?.latitude ?? 37.4219983,
-                                  locationCaptured?.longitude ?? -122.084,
-                                );
-                              } else {
-                                latLng = LatLng(
-                                  controller.userLocationData!.latLng!.latitude,
-                                  controller
-                                      .userLocationData!.latLng!.longitude,
-                                );
-                              }
-                              _isLocationLoading.value = false;
-
-                              final LocationResult? locationResult =
-                                  await Navigator.push(
+                    valueListenable: _isLocationLoading,
+                    builder: (context, isLoading, child) {
+                      return CustomButton(
+                        width: screenWidth(context),
+                        onPressed: () async {
+                          if (isLoading != true) {
+                            _isLocationLoading.value = true;
+                            logger.f("Capturing location . . .");
+                            LatLng latLng;
+                            if (controller.userLocationData?.latLng == null) {
+                              final locationCaptured =
+                                  await LocationServices().captureLocation(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => LocationPickerView(
-                                    latitude: latLng.latitude,
-                                    longitude: latLng.longitude,
-                                  ),
-                                ),
                               );
-                              if (locationResult != null) {
-                                controller.saveSelectedLocation(locationResult);
-                              }
-                              logger.f(
-                                  "Address: ${controller.userLocationData?.formattedAddress}");
+                              latLng = LatLng(
+                                locationCaptured?.latitude ?? 37.4219983,
+                                locationCaptured?.longitude ?? -122.084,
+                              );
+                            } else {
+                              latLng = LatLng(
+                                controller.userLocationData!.latLng!.latitude,
+                                controller.userLocationData!.latLng!.longitude,
+                              );
                             }
-                          },
-                          color: AppColors.plainWhite,
-                          borderColor: AppColors.primaryThemeColor,
-                          child: isLoading
-                              ? loadingWidget()
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.location_searching_rounded,
-                                      color: AppColors.deepBlue,
-                                    ),
-                                    horizontalSpacer(10),
-                                    Text(
-                                      "Pick your location",
-                                      style: AppStyles.regularStringStyle(
-                                        15,
-                                        AppColors.deepBlue,
-                                      ),
-                                    ),
-                                  ],
+                            _isLocationLoading.value = false;
+
+                            final LocationResult? locationResult =
+                                await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LocationPickerView(
+                                  latitude: latLng.latitude,
+                                  longitude: latLng.longitude,
                                 ),
-                        );
-                      }),
+                              ),
+                            );
+                            if (locationResult != null) {
+                              controller.saveSelectedLocation(locationResult);
+                            }
+                            logger.f(
+                                "Address: ${controller.userLocationData?.formattedAddress}");
+                          }
+                        },
+                        color: AppColors.plainWhite,
+                        borderColor: AppColors.primaryThemeColor,
+                        child: isLoading
+                            ? loadingWidget()
+                            : Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.location_searching_rounded,
+                                    color: AppColors.deepBlue,
+                                  ),
+                                  horizontalSpacer(10),
+                                  Text(
+                                    "Pick your location",
+                                    style: AppStyles.regularStringStyle(
+                                      15,
+                                      AppColors.deepBlue,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      );
+                    },
+                  ),
                   verticalSpacer(10),
                   if (controller.userLocationData != null)
                     Padding(
@@ -249,7 +249,10 @@ class _BookingsDetailsScreenState extends State<BookingsDetailsScreen> {
                             SystemChannels.textInput
                                 .invokeMethod('TextInput.hide');
                             controller.attemptToCreateAppointment(
-                                context, _durationValue, _roomSqFtValue,);
+                              context,
+                              _durationValue,
+                              _roomSqFtValue,
+                            );
                           },
                         ),
                 ],
