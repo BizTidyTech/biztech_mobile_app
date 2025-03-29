@@ -255,6 +255,7 @@ class _HomepageViewState extends State<HomepageView> {
                     crossAxisCount: 2,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 5,
+                    mainAxisExtent: 175,
                   ),
                 ),
               ),
@@ -287,24 +288,35 @@ class _HomepageViewState extends State<HomepageView> {
               Container(
                 height: 135,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
                   image: DecorationImage(
                     image: AssetImage(service.imageUrl ?? ''),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: Text(
-                  service.name ?? '',
-                  style: AppStyles.normalStringStyle(
-                    15,
-                    AppColors.fullBlack,
+              Expanded(
+                child: SizedBox(
+                  height: 20,
+                  child: Center(
+                    child: Row(
+                      children: [
+                        horizontalSpacer(12),
+                        Text(
+                          service.name ?? '',
+                          style: AppStyles.normalStringStyle(
+                            15,
+                            AppColors.fullBlack,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
