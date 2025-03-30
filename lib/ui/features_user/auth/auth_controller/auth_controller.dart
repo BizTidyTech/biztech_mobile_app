@@ -2,11 +2,15 @@
 
 import 'dart:io';
 
+import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
+import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_utils/auth_utils.dart';
+import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/extension_and_methods/string_cap_extensions.dart';
 import 'package:email_otp/email_otp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -19,6 +23,7 @@ class AuthController extends GetxController {
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   UserData? userEnteredData;
+  bool isResettingPassword = false;
 
   AuthController();
 
@@ -96,7 +101,51 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> sendEmailOtp(BuildContext context, {bool? navigate}) async {
+  resetUserPassword(
+    BuildContext context,
+    String email,
+    String newPassword,
+  ) async {
+    startLoading();
+    try {
+      final userData = await FirebaseService().getUserDetails(email: email);
+      if (userData == null) {
+        stopLoading();
+        return;
+      }
+      User? authUser = FirebaseAuth.instance.currentUser;
+      await AuthUtil().signInUser(
+        userData.email ?? '',
+        userData.password ?? '',
+      );
+      await authUser?.updatePassword(newPassword);
+
+      final updatedUserProfile = userData.copyWith(
+        password: newPassword,
+      );
+      logger.f("updatedUserProfile: ${updatedUserProfile.toJson()}");
+      final updated =
+          await FirebaseService().updateUserProfile(updatedUserProfile);
+      if (updated == true) {
+        await saveUserDetailsLocally(updatedUserProfile);
+        context.pop();
+        context.pop();
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "Error resetting your password",
+        backgroundColor: AppColors.coolRed,
+      );
+    }
+    stopLoading();
+  }
+
+  Future<void> sendEmailOtp(
+    BuildContext context, {
+    bool? navigate,
+    bool? isResetPassword,
+  }) async {
+    isResettingPassword = isResetPassword ?? false;
     startLoading();
     logger.i("Sending OTP . . .");
     final sendOtpResponse = await EmailOTP.sendOTP(email: emailController.text);
@@ -117,7 +166,13 @@ class AuthController extends GetxController {
     final verifyOtpResponse = EmailOTP.verifyOTP(otp: otpController.text);
     if (verifyOtpResponse == true) {
       Fluttertoast.showToast(msg: "Email verification successful");
-      createNewUser(context);
+      if (isResettingPassword == true) {
+        context.pushReplacement('/resetPasswordScreen');
+        isResettingPassword = false;
+        stopLoading();
+      } else {
+        createNewUser(context);
+      }
     } else {
       invalidOtp = true;
       errMessage = 'Error verifying OTP';

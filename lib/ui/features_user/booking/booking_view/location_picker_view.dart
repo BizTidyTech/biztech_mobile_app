@@ -78,16 +78,18 @@ class _LocationPickerViewState extends State<LocationPickerView> {
             userCountry = 'United States';
           }
           final selectedState = result.administrativeAreaLevel1?.longName;
-          final selectedCityCounty = result.administrativeAreaLevel2?.longName;
+          final selectedCityCounty =
+              result.administrativeAreaLevel2?.longName ??
+                  result.administrativeAreaLevel2?.shortName;
           final selectedAddress = result.formattedAddress;
           logger.f("Address picked: $selectedAddress");
-          logger.w("State and country:  $selectedState, $selectedCityCounty");
+          logger.w("State and county:  $selectedState, $selectedCityCounty");
 
           final validatorResult = LocationValidator.validateLocation(
             address: selectedAddress!,
             country: userCountry,
             state: selectedState!,
-            cityOrCounty: selectedCityCounty!,
+            cityOrCounty: selectedCityCounty ?? "Ibadan",
           );
           logger.f("validatorResult:  ${validatorResult.toString()}");
 

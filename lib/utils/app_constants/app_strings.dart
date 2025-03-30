@@ -54,6 +54,8 @@ class AppStrings {
   static String change = 'Change';
   static String selectLocation = 'Select ';
   static String save = 'Save ';
+  static String resetPassword = 'Reset password';
   static String changePassword = 'Change password';
+  static String forgotPassword = 'Forgot Password';
   static String test = 'test';
 }

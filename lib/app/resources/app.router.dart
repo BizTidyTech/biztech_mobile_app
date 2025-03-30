@@ -3,7 +3,9 @@ import 'package:biztidy_mobile_app/app/services/navigation_service.dart';
 import 'package:biztidy_mobile_app/ui/features_admin/admin_auth/admin_auth_view/admin_signin_view.dart';
 import 'package:biztidy_mobile_app/ui/features_admin/admin_booking/admin_booking_list_view/admin_booking_list_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/create_account_view.dart';
+import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/forgot_password_email_screen.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/onboarding_view.dart';
+import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/reset_password_screen.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/signin_user_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/verify_otp_screen.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_list_view/booking_list_view.dart';
@@ -16,7 +18,7 @@ import 'package:go_router/go_router.dart';
 class AppRouter {
   static final router = GoRouter(
     navigatorKey: NavigationService.navigatorKey,
-    // initialLocation: '/createAccountView',
+    initialLocation: '/onboardingScreen',
     routes: [
       GoRoute(
         path: '/',
@@ -39,6 +41,14 @@ class AppRouter {
       GoRoute(
         path: '/verifyOtpScreen',
         builder: (context, state) => const VerifyOtpScreen(),
+      ),
+      GoRoute(
+        path: '/forgotPasswordEmailScreen',
+        builder: (context, state) => const ForgotPasswordEmailScreen(),
+      ),
+      GoRoute(
+        path: '/resetPasswordScreen',
+        builder: (context, state) => const ResetPasswordScreen(),
       ),
       GoRoute(
         path: '/homepageView',

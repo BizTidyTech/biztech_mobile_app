@@ -58,7 +58,21 @@ class SignInUserView extends StatelessWidget {
                               hintText: 'Enter your password',
                               isObscurable: true,
                             ),
-                            verticalSpacer(40),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () => context
+                                      .push('/forgotPasswordEmailScreen'),
+                                  child: Text(
+                                    "Forgot Password?",
+                                    style: AppStyles.regularStringStyle(
+                                        16, AppColors.coolRed),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            verticalSpacer(20),
                             Center(
                               child: Text(controller.errMessage,
                                   style: AppStyles.subStringStyle(

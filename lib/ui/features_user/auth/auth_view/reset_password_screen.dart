@@ -1,9 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_controller/auth_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/widgets/input_widget.dart';
-import 'package:biztidy_mobile_app/ui/features_user/profile/profile_controller/profile_controller.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
@@ -14,44 +12,39 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class ChangePasswordView extends StatefulWidget {
-  const ChangePasswordView({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
-  State<ChangePasswordView> createState() => _ChangePasswordViewState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _ChangePasswordViewState extends State<ChangePasswordView> {
-  final controller = Get.put(ProfileController());
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  final controller = Get.put(AuthController());
 
-  TextEditingController oldPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
   String validator = '';
 
-  attemptToChangePassword() async {
-    if (oldPasswordController.text.trim().isNotEmpty == true &&
-        newPasswordController.text.trim().isNotEmpty == true &&
+  attemptToResetPassword() async {
+    if (newPasswordController.text.trim().isNotEmpty == true &&
         confirmNewPasswordController.text.trim().isNotEmpty == true) {
       if (newPasswordController.text.trim() ==
           confirmNewPasswordController.text.trim()) {
-        final userData = await getLocallySavedUserDetails();
-        if (oldPasswordController.text.trim() == userData?.password) {
+        final newPassword = newPasswordController.text.trim();
+        if (newPassword.length >= 8) {
           setState(() {
             validator = " ";
           });
-          final newPassword = newPasswordController.text.trim();
-          if (newPassword.length >= 8) {
-            controller.changeUserPassword(context, newPassword);
-          } else {
-            setState(() {
-              validator = "Password must contains at least 8 characters";
-            });
-          }
+          controller.resetUserPassword(
+            context,
+            controller.emailController.text.trim(),
+            newPassword,
+          );
         } else {
           setState(() {
-            validator = "Old password incorrect";
+            validator = "Password must contains at least 8 characters";
           });
         }
       } else {
@@ -69,14 +62,12 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
   @override
   void initState() {
     super.initState();
-    oldPasswordController = TextEditingController();
     newPasswordController = TextEditingController();
     confirmNewPasswordController = TextEditingController();
   }
 
   @override
   void dispose() {
-    oldPasswordController.dispose();
     newPasswordController.dispose();
     confirmNewPasswordController.dispose();
     super.dispose();
@@ -93,7 +84,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         surfaceTintColor: AppColors.plainWhite,
         centerTitle: true,
         title: Text(
-          AppStrings.changePassword,
+          AppStrings.resetPassword,
           style: AppStyles.regularStringStyle(16, AppColors.fullBlack),
         ),
       ),
@@ -104,12 +95,6 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Column(
               children: [
-                inputWidget(
-                  titleText: AppStrings.oldPassword,
-                  textEditingController: oldPasswordController,
-                  hintText: 'Enter your old password',
-                  isObscurable: true,
-                ),
                 inputWidget(
                   titleText: AppStrings.newPassword,
                   textEditingController: newPasswordController,
@@ -134,11 +119,11 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 controller.showLoading == true
                     ? loadingWidget()
                     : CustomButton(
-                        buttonText: AppStrings.save,
+                        buttonText: AppStrings.contineu,
                         onPressed: () {
                           SystemChannels.textInput
                               .invokeMethod('TextInput.hide');
-                          attemptToChangePassword();
+                          attemptToResetPassword();
                         },
                       ),
               ],

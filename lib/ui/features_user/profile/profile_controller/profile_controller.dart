@@ -9,6 +9,7 @@ import 'package:biztidy_mobile_app/app/services/snackbar_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_controller/auth_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_model/user_data_model.dart';
+import 'package:biztidy_mobile_app/ui/features_user/auth/auth_utils/auth_utils.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -84,6 +85,13 @@ class ProfileController extends GetxController {
   changeUserPassword(BuildContext context, String newPassword) async {
     startLoading();
     try {
+      User? authUser = FirebaseAuth.instance.currentUser;
+      await AuthUtil().signInUser(
+        myProfileData?.email ?? '',
+        myProfileData?.password ?? '',
+      );
+      await authUser?.updatePassword(newPassword);
+
       final updatedUserProfile = myProfileData!.copyWith(
         password: newPassword,
       );
