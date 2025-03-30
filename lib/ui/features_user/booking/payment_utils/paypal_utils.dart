@@ -1,10 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
+import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/app/services/navigation_service.dart';
+import 'package:biztidy_mobile_app/app/services/snackbar_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/booking_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/paypal_response_model.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/payment_response_model.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
@@ -12,24 +16,33 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class PaypalUtils {
-  makePayment({
+  makePayment(
+    BuildContext context, {
     required double amount,
     required bookingDetails,
     required String description,
     required bool isBalancePayment,
   }) async {
+    // Returns [paypalSecretKey, paypalClientId]
+    final paypalCredentials =
+        await FirebaseService().fetchPayPalSecretKeyAndClientID();
+    if (paypalCredentials == null) {
+      showCustomSnackBar(
+        context,
+        "Error processing payment. Check your internet and retry",
+        bgColor: AppColors.coolRed,
+      );
+      return;
+    }
+
     await Navigator.of(
       NavigationService.navigatorKey.currentContext!,
     ).push(
       MaterialPageRoute(
         builder: (BuildContext context) => PaypalCheckoutView(
           // sandboxMode: true,
-          clientId:
-              "ASxtXE6BW_7OTbZanc7EKlbBkwbEtTitfYaYDNGIpcU820Wn6CfHyaF8D7AelJrCUULkups7eCQ9dCnI",
-          secretKey:
-              "EGu6r9-mSjO8gFvUjUUibdc3GlPSzHZQzyAgskDmNf_4wmDlGk5AGNC9jnSEOP4-8Wneu-R4uKf07pOm",
-          // returnURL: "https://samplesite.com/return",
-          // cancelURL: "https://samplesite.com/cancel",
+          secretKey: paypalCredentials[0],
+          clientId: paypalCredentials[1],
           transactions: [
             {
               "amount": {

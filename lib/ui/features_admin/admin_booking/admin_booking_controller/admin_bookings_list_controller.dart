@@ -3,7 +3,7 @@
 import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/push_notification_utils.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/notifications_utils.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -66,6 +66,7 @@ class AdminBookingsController extends GetxController {
         sendBookingUpdateNotificationToClient(
           'Your total service charge is \$$totalServicecharge.',
           updatedBookingDetails.userId ?? '',
+          updatedBookingDetails.customer?.email ?? '',
         );
         Fluttertoast.showToast(
           msg: "Update successfully",
@@ -82,19 +83,32 @@ class AdminBookingsController extends GetxController {
   }
 
   sendBookingUpdateNotificationToClient(
-      String description, String userID) async {
+    String description,
+    String receiverUserID,
+    String receiverUserEmail,
+  ) async {
     final notificationApiKey =
         await FirebaseService().fetchNotificationApiKey();
 
     if (notificationApiKey != null) {
-      PushNotificationUtils().sendNotificationToAdmin(
+      NotificationUtils().sendEmailNotification(
+        notificationApiKey: notificationApiKey,
+        emailAddress: receiverUserEmail,
+        emailSubject: 'Updated booking alert',
+        emailBody:
+            '<h1>Updated Booking Alert</h1><p>$description\nPlease check your app for details.</p>',
+        emailFrom: 'tidy1tech@gmail.com',
+        emailFromName: 'BizTidy',
+      );
+
+      NotificationUtils().sendPushNotification(
         notificationApiKey: notificationApiKey,
         title: "Updated booking alert",
         body: description,
-        receiverExternalId: userID,
+        receiverExternalId: receiverUserID,
       );
     } else {
-      logger.e("Error sending notification");
+      logger.e("Error fetching notification key");
     }
   }
 }

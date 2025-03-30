@@ -3,7 +3,7 @@
 import 'package:biztidy_mobile_app/ui/features_admin/admin_auth/admin_auth_controller/admin_auth_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_admin/admin_auth/admin_auth_view/widgets/admin_input_widget.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_view/widgets/top_card.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/push_notification_utils.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/notifications_utils.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';

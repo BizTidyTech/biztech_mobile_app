@@ -7,7 +7,7 @@ import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/booking_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/paypal_response_model.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/payment_response_model.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class PaystackUtils {
     if (paystackSecretKey == null) {
       showCustomSnackBar(
         context,
-        "Error processing payment",
+        "Error processing payment. Check your internet and retry",
         bgColor: AppColors.coolRed,
       );
       return;

@@ -13,27 +13,27 @@ class FirebaseService {
 
   Future<bool> register({required UserData user}) async {
     try {
-      final QuerySnapshot result = await firebaseFirestore
-          .collection(FbCollectionNames.user)
-          .where("email", isEqualTo: user.email)
-          .get();
+      // final QuerySnapshot result = await firebaseFirestore
+      //     .collection(FbCollectionNames.user)
+      //     .where("email", isEqualTo: user.email)
+      //     .get();
 
-      final List<DocumentSnapshot> documents = result.docs;
-      if (documents.isEmpty) {
-        final userDataJson = user.toJson();
-        logger.f("userDataJson: $userDataJson");
-        firebaseFirestore
-            .collection(FbCollectionNames.user)
-            .doc(user.userId)
-            .set(userDataJson);
-        await saveUserDetailsLocally(user);
-        Fluttertoast.showToast(msg: "Account created successfully!");
-        return true;
-      } else {
-        Fluttertoast.showToast(
-            msg: 'User with email ${user.email} already exists.');
-        return false;
-      }
+      // final List<DocumentSnapshot> documents = result.docs;
+      // if (documents.isEmpty) {
+      final userDataJson = user.toJson();
+      logger.f("userDataJson: $userDataJson");
+      firebaseFirestore
+          .collection(FbCollectionNames.user)
+          .doc(user.userId)
+          .set(userDataJson);
+      await saveUserDetailsLocally(user);
+      Fluttertoast.showToast(msg: "Account created successfully!");
+      return true;
+      // } else {
+      //   Fluttertoast.showToast(
+      //       msg: 'User with email ${user.email} already exists.');
+      //   return false;
+      // }
     } catch (e) {
       logger.e(e);
       Fluttertoast.showToast(msg: 'Error occured! Retry.');
@@ -208,6 +208,21 @@ class FirebaseService {
       final paystackSecretKey = document['paystackSecretKey'];
       logger.f("paystackSecretKey: $paystackSecretKey");
       return paystackSecretKey;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<String>?> fetchPayPalSecretKeyAndClientID() async {
+    try {
+      DocumentSnapshot document =
+          await firebaseFirestore.collection('Keys').doc('keysData').get();
+
+      final paypalSecretKey = document['paypalSecretKey'];
+      final paypalClientId = document['paypalClientId'];
+      logger.f(
+          "paypalSecretKey: $paypalSecretKey \npaypalClientId: $paypalClientId");
+      return [paypalSecretKey, paypalClientId];
     } catch (e) {
       return null;
     }

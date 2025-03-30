@@ -121,34 +121,40 @@ class BookingModel {
 class Customer {
   final String? userId;
   final String? name;
+  final String? email;
   final String? phoneNumber;
 
   Customer({
     this.userId,
     this.name,
+    this.email,
     this.phoneNumber,
   });
 
   Customer copyWith({
     String? userId,
     String? name,
+    String? email,
     String? phoneNumber,
   }) =>
       Customer(
         userId: userId ?? this.userId,
         name: name ?? this.name,
+        email: email ?? this.email,
         phoneNumber: phoneNumber ?? this.phoneNumber,
       );
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         userId: json["userId"],
         name: json["name"],
+        email: json["email"],
         phoneNumber: json["phoneNumber"],
       );
 
   Map<String, dynamic> toJson() => {
         "userId": userId,
         "name": name,
+        "email": email,
         "phoneNumber": phoneNumber,
       };
 }

@@ -5,8 +5,8 @@ import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/app/services/navigation_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/paypal_response_model.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/push_notification_utils.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/payment_response_model.dart';
+import 'package:biztidy_mobile_app/ui/features_user/booking/booking_utils/notifications_utils.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_view/bookings_review_screen.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/payment_utils/paypal_utils.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/payment_utils/paystack_utils.dart';
@@ -102,6 +102,7 @@ class BookingsController extends GetxController {
       customer: Customer(
         userId: userData?.userId,
         name: userData?.name,
+        email: userData?.email,
         phoneNumber: phoneController.text.trim(),
       ),
     );
@@ -135,6 +136,7 @@ class BookingsController extends GetxController {
       final description =
           "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
       await PaypalUtils().makePayment(
+        NavigationService.navigatorKey.currentContext!,
         amount: depositBookingAmount,
         bookingDetails: bookingDetails,
         description: description,
@@ -219,7 +221,17 @@ class BookingsController extends GetxController {
     final userData = await getLocallySavedUserDetails();
 
     if (notificationApiKey != null && userData != null) {
-      PushNotificationUtils().sendNotificationToAdmin(
+      NotificationUtils().sendEmailNotification(
+        notificationApiKey: notificationApiKey,
+        emailAddress: 'tidy1tech@gmail.com',
+        emailSubject: 'New booking alert',
+        emailBody:
+            '<h1>New Booking Alert</h1><p>There is a new booking from ${userData.name ?? 'Client'} for $service. Please check the admin panel for details.</p>',
+        emailFrom: userData.email ?? '',
+        emailFromName: 'BizTidy Customer: ${userData.name ?? ''}',
+      );
+
+      NotificationUtils().sendPushNotification(
         notificationApiKey: notificationApiKey,
         title: "New booking alert",
         body:
@@ -227,7 +239,7 @@ class BookingsController extends GetxController {
         receiverExternalId: adminOnesignalExternalID,
       );
     } else {
-      logger.e("Error sending notification");
+      logger.e("Error fetching notification key");
     }
   }
 }
