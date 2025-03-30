@@ -84,9 +84,9 @@ class PaystackUtils {
       initializedTransaction.data?.reference ?? request.reference,
     );
     logger.f("Payment response from Paystack: \n${response.toMap()}");
-    logger.w("Payment status: ${response.status}");
+    logger.w("Payment status: ${response.data.status}");
 
-    if (response.status == true) {
+    if (response.data.status == PaystackTransactionStatus.success) {
       final paymentResponse = PaymentResponseModel(
         payerId: userData?.userId,
         paymentId: paymentRef,

@@ -28,9 +28,11 @@ class BookingsController extends GetxController {
   DateTime? appointmentDateSelected;
   BookingModel? bookingData;
   String errMessage = '';
+  String userCountry = 'Nigeria';
   bool showLoading = false;
   LocationResult? userLocationData;
   final depositBookingAmount = 20.0; // Deposit amount for all bookings (in USD)
+  final depositBookingAmountInNaira = 30000.0;
 
   TextEditingController roomsCountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -66,7 +68,10 @@ class BookingsController extends GetxController {
   }
 
   Future<void> attemptToCreateAppointment(
-      BuildContext context, double durationValue, double roomSqft) async {
+    BuildContext context,
+    double durationValue,
+    double roomSqft,
+  ) async {
     logger.i('attemptToCreateAppointment . . .');
 
     if (userLocationData == null) {
@@ -86,8 +91,12 @@ class BookingsController extends GetxController {
   }
 
   reviewBookingData(
-      BuildContext context, double durationValue, double roomSqft) async {
+    BuildContext context,
+    double durationValue,
+    double roomSqft,
+  ) async {
     final userData = await getLocallySavedUserDetails();
+    userCountry = userData?.country ?? 'Nigeria';
     final newBookingData = BookingModel(
       bookingId: generateRandomString(),
       userId: userData?.userId,
@@ -119,7 +128,7 @@ class BookingsController extends GetxController {
   }
 
   makeDepositPayment(BookingModel bookingDetails) async {
-    final userCountry = (await getLocallySavedUserDetails())?.country;
+    logger.w("userCountry: $userCountry");
     if (userCountry == 'USA') {
       logger.w("Pay with PayPal");
       payWithPayPal(bookingDetails);
@@ -144,7 +153,7 @@ class BookingsController extends GetxController {
       );
     } catch (e) {
       logger.w("Error occured");
-      Fluttertoast.showToast(msg: "Error occured. Kindly retry");
+      // Fluttertoast.showToast(msg: "Error occured. Kindly retry");
     }
     showLoading = false;
     update();
@@ -154,7 +163,6 @@ class BookingsController extends GetxController {
     showLoading = true;
     update();
     try {
-      final depositBookingAmountInNaira = depositBookingAmount * 1500;
       final description =
           "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
       await PaystackUtils().makePayment(
@@ -166,14 +174,16 @@ class BookingsController extends GetxController {
       );
     } catch (e) {
       logger.w("Error occured");
-      Fluttertoast.showToast(msg: "Error occured. Kindly retry");
+      // Fluttertoast.showToast(msg: "Error occured. Kindly retry");
     }
     showLoading = false;
     update();
   }
 
   bookAppointment(
-      BookingModel bookingDetails, PaymentResponseModel paymentData) async {
+    BookingModel bookingDetails,
+    PaymentResponseModel paymentData,
+  ) async {
     showLoading = true;
     update();
     final initialDepositPayment = PaymentDetails(
@@ -182,7 +192,10 @@ class BookingsController extends GetxController {
       payerId: paymentData.payerId,
       status: paymentData.status,
       payerEmail: paymentData.data?.payer?.payerInfo?.email,
-      amount: depositBookingAmount.toString(),
+      amount: (userCountry == 'USA'
+              ? depositBookingAmount
+              : depositBookingAmountInNaira)
+          .toString(),
       payerName:
           "${paymentData.data?.payer?.payerInfo?.firstName} ${paymentData.data?.payer?.payerInfo?.lastName}",
     );
