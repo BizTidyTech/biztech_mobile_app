@@ -157,7 +157,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
             widget.currentPageIndx == barIndex ? activeIcon : inactiveIcon,
             color: widget.currentPageIndx == barIndex
                 ? AppColors.deepBlue
-                : AppColors.fullBlack.withOpacity(0.8),
+                : AppColors.fullBlack.withValues(alpha: 0.8),
             size: 30,
           ),
           Text(
@@ -166,7 +166,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
               10,
               widget.currentPageIndx == barIndex
                   ? AppColors.deepBlue
-                  : AppColors.fullBlack.withOpacity(0.8),
+                  : AppColors.fullBlack.withValues(alpha: 0.8),
             ).copyWith(
               fontWeight: widget.currentPageIndx == barIndex
                   ? FontWeight.w900

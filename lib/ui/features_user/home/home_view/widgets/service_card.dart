@@ -38,7 +38,7 @@ Widget serviceCard(ServiceModel service, {bool? popPage}) {
             width: screenWidth(context),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: AppColors.plainWhite.withOpacity(0.6),
+              color: AppColors.plainWhite.withValues(alpha: 0.6),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

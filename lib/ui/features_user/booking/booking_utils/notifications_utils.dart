@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 
 import 'package:biztidy_mobile_app/tidytech_app.dart';
@@ -84,21 +86,21 @@ class NotificationUtils {
       'content-type': 'application/json',
     };
 
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-        headers: headers,
-        body: jsonEncode(requestBody),
-      );
+    // try {
+    //   final response = await http.post(
+    //     Uri.parse(url),
+    //     headers: headers,
+    //     body: jsonEncode(requestBody),
+    //   );
 
-      if (response.statusCode == 200) {
-        logger.f("Email notification sent successfully: ${response.body}");
-      } else {
-        logger.w(
-            "Failed to send email notification: ${response.statusCode} - ${response.body}");
-      }
-    } catch (e) {
-      logger.e("Error sending email notification: $e");
-    }
+    //   if (response.statusCode == 200) {
+    //     logger.f("Email notification sent successfully: ${response.body}");
+    //   } else {
+    //     logger.w(
+    //         "Failed to send email notification: ${response.statusCode} - ${response.body}");
+    //   }
+    // } catch (e) {
+    //   logger.e("Error sending email notification: $e");
+    // }
   }
 }
