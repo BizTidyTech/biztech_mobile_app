@@ -103,6 +103,7 @@ class BookingsController extends GetxController {
       dateTime: appointmentDateSelected,
       locationName: userLocationData?.administrativeAreaLevel2?.longName,
       locationAddress: userLocationData?.formattedAddress,
+      country: userCountry,
       additionalInfo: descriptionController.text.trim(),
       rooms: int.tryParse(roomsCountController.text.trim()) ?? 1,
       duration: durationValue.toInt(),
@@ -210,8 +211,7 @@ class BookingsController extends GetxController {
     if (bookingResponse == true) {
       NavigationService.navigatorKey.currentContext!.pop();
       logger.f('Booked successfully . . . ');
-      sendBookingNotificationToAdmin(
-          bookingDetails.service?.name ?? 'cleaning service');
+      sendBookingNotificationToAdmin(bookingDetails);
       clearVals();
       // Go to bookings list screen
       Provider.of<CurrentPage>(NavigationService.navigatorKey.currentContext!,
@@ -227,33 +227,36 @@ class BookingsController extends GetxController {
     update();
   }
 
-  sendBookingNotificationToAdmin(String service) async {
+  sendBookingNotificationToAdmin(BookingModel booking) async {
     final notificationApiKey =
         await FirebaseService().fetchNotificationApiKey();
 
     final userData = await getLocallySavedUserDetails();
 
-    if (notificationApiKey != null && userData != null) {
+    if (userData != null) {
+      final bookingDetails = NotificationUtils().createBookingDetails(booking);
+      final String emailBody = '''
+      '<h1>New Booking Alert</h1><p>There is a new booking from ${userData.name ?? 'Client'} for ${booking.service?.name ?? 'cleaning service'}. Please check the admin panel for action. Find the details below:</p>',
+      <pre>$bookingDetails</pre>
+    ''';
+
       NotificationUtils().sendEmailNotification(
-        notificationApiKey: notificationApiKey,
         emailAddress: 'tidy1tech@gmail.com',
         emailSubject: 'New booking alert',
-        emailBody:
-            '<h1>New Booking Alert</h1><p>There is a new booking from ${userData.name ?? 'Client'} for $service. Please check the admin panel for details.</p>',
-        emailFrom: userData.email ?? '',
-        emailFromName: 'BizTidy Customer: ${userData.name ?? ''}',
+        emailBody: emailBody,
       );
 
-      NotificationUtils().sendPushNotification(
-        notificationApiKey: notificationApiKey,
-        title: "New booking alert",
-        body:
-            "There is a new booking from ${userData.name ?? 'Client'} for $service",
-        receiverExternalId: adminOnesignalExternalID,
-      );
+      if (notificationApiKey != null) {
+        NotificationUtils().sendPushNotification(
+          notificationApiKey: notificationApiKey,
+          title: "New booking alert",
+          body:
+              "There is a new booking from ${userData.name ?? 'Client'} for ${booking.service?.name ?? 'cleaning service'}",
+          receiverExternalId: adminOnesignalExternalID,
+        );
+      }
     } else {
       logger.e("Error fetching notification key");
     }
   }
 }
-// ENIOLAsodiq5.

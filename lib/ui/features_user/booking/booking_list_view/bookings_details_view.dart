@@ -2,10 +2,9 @@
 
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
-import 'package:biztidy_mobile_app/ui/shared/curved_container.dart';
+import 'package:biztidy_mobile_app/ui/shared/booking_key_text_value.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
-import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_strings.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
@@ -50,63 +49,68 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               child: Column(
                 children: [
-                  CustomCurvedContainer(
-                    height: 390,
-                    fillColor: AppColors.kPrimaryColor,
-                    topPadding: 15,
-                    leftPadding: 15,
-                    child: Row(
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    width: screenWidth(context),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: AppColors.kPrimaryColor,
+                    ),
+                    child: Column(
                       children: [
-                        SizedBox(
-                          width: 115,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _keyText(AppStrings.service),
-                              _keyText("Deposit Cost"),
-                              _keyText("Location"),
-                              _keyText("Address"),
-                              _keyText("Phone No"),
-                              _keyText("Rooms"),
-                              _keyText("Duration"),
-                              _keyText("Date"),
-                              _keyText("Time"),
-                              _keyText("Total Cost"),
-                            ],
-                          ),
+                        keyTextValue(context, AppStrings.service,
+                            "${widget.booking.service?.name ?? ''} Cleaning"),
+                        keyTextValue(context, "Deposit Cost",
+                            "${widget.booking.country == 'USA' ? "\$" : "N"}${widget.booking.depositPayment?.amount}"),
+                        keyTextValue(
+                          context,
+                          "Location",
+                          widget.booking.locationName ?? '',
                         ),
-                        horizontalSpacer(8),
-                        Expanded(
-                          child: SizedBox(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _valueText(
-                                    "${widget.booking.service?.name ?? ''} Cleaning"),
-                                _valueText(
-                                    "\$${widget.booking.depositPayment?.amount}"),
-                                _valueText(widget.booking.locationName ?? ''),
-                                _valueText(
-                                    widget.booking.locationAddress ?? ''),
-                                _valueText(
-                                    widget.booking.customer?.phoneNumber ?? ''),
-                                _valueText("${widget.booking.rooms ?? ''}"),
-                                _valueText(
-                                    "${widget.booking.duration ?? ''} hours"),
-                                _valueText(DateFormat('MMM d, y').format(
-                                    widget.booking.dateTime ?? DateTime.now())),
-                                _valueText(DateFormat('h:mm a').format(
-                                    widget.booking.dateTime ?? DateTime.now())),
-                                _valueText(widget.booking
-                                            .totalCalculatedServiceCharge ==
-                                        null
-                                    ? "Pending"
-                                    : "\$${widget.booking.totalCalculatedServiceCharge}"),
-                              ],
-                            ),
-                          ),
+                        keyTextValue(
+                          context,
+                          "Address",
+                          widget.booking.locationAddress ?? '',
+                        ),
+                        keyTextValue(
+                          context,
+                          "Country",
+                          widget.booking.country ?? '',
+                        ),
+                        keyTextValue(
+                          context,
+                          "Phone No",
+                          widget.booking.customer?.phoneNumber ?? '',
+                        ),
+                        keyTextValue(
+                          context,
+                          "Rooms",
+                          "${widget.booking.rooms ?? ''}",
+                        ),
+                        keyTextValue(
+                          context,
+                          "Duration",
+                          "${widget.booking.duration ?? ''} hours",
+                        ),
+                        keyTextValue(
+                          context,
+                          "Date",
+                          DateFormat('MMM d, y').format(
+                              widget.booking.dateTime ?? DateTime.now()),
+                        ),
+                        keyTextValue(
+                          context,
+                          "Time",
+                          DateFormat('h:mm a').format(
+                              widget.booking.dateTime ?? DateTime.now()),
+                        ),
+                        keyTextValue(
+                          context,
+                          "Total Cost",
+                          widget.booking.totalCalculatedServiceCharge == null
+                              ? "Pending"
+                              : "${widget.booking.country == 'USA' ? "\$" : "N"}${widget.booking.totalCalculatedServiceCharge}",
                         ),
                       ],
                     ),
@@ -126,7 +130,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                     widget.booking.finalPayment != null
                         ? "Final payment done!"
                         : widget.booking.totalCalculatedServiceCharge == null
-                            ? "You will know the balance to pay when the total service charges are calculated"
+                            ? "You will know the balance to pay when the total service charge is calculated"
                             : "You are to pay the balance of \$${(widget.booking.totalCalculatedServiceCharge! - double.parse(widget.booking.depositPayment!.amount!)).toStringAsFixed(1)}.",
                     textAlign: TextAlign.center,
                     style: widget.booking.finalPayment != null
@@ -154,30 +158,6 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget _keyText(String keyText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        "$keyText:",
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppStyles.floatingHintStringStyleColored(16, AppColors.deepBlue),
-      ),
-    );
-  }
-
-  Widget _valueText(String vaueText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        vaueText,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppStyles.regularStringStyle(16, AppColors.reviewValueColor),
-      ),
     );
   }
 }

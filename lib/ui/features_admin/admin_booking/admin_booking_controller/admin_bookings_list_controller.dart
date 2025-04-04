@@ -92,13 +92,10 @@ class AdminBookingsController extends GetxController {
 
     if (notificationApiKey != null) {
       NotificationUtils().sendEmailNotification(
-        notificationApiKey: notificationApiKey,
         emailAddress: receiverUserEmail,
         emailSubject: 'Updated booking alert',
         emailBody:
-            '<h1>Updated Booking Alert</h1><p>$description\nPlease check your app for details.</p>',
-        emailFrom: 'tidy1tech@gmail.com',
-        emailFromName: 'BizTidy',
+            '<h1>Updated Booking Alert</h1><p>\n$description\nPlease check your app for details.</p>',
       );
 
       NotificationUtils().sendPushNotification(

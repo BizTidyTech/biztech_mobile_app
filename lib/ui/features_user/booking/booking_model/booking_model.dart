@@ -13,6 +13,7 @@ class BookingModel {
   final DateTime? dateTime;
   final String? locationName;
   final String? locationAddress;
+  final String? country;
   final int? rooms;
   final int? duration;
   final double? roomSqFt;
@@ -29,6 +30,7 @@ class BookingModel {
     this.dateTime,
     this.locationName,
     this.locationAddress,
+    this.country,
     this.rooms,
     this.duration,
     this.roomSqFt,
@@ -46,6 +48,7 @@ class BookingModel {
     DateTime? dateTime,
     String? locationName,
     String? locationAddress,
+    String? country,
     int? rooms,
     int? duration,
     double? roomSqFt,
@@ -62,6 +65,7 @@ class BookingModel {
         dateTime: dateTime ?? this.dateTime,
         locationName: locationName ?? this.locationName,
         locationAddress: locationAddress ?? this.locationAddress,
+        country: country ?? this.country,
         rooms: rooms ?? this.rooms,
         duration: duration ?? this.duration,
         roomSqFt: roomSqFt ?? this.roomSqFt,
@@ -81,6 +85,7 @@ class BookingModel {
             json["dateTime"] == null ? null : DateTime.parse(json["dateTime"]),
         locationName: json["locationName"],
         locationAddress: json["locationAddress"],
+        country: json["country"],
         rooms: json["rooms"],
         duration: json["duration"],
         roomSqFt: json["roomSqFt"]?.toDouble(),
@@ -106,6 +111,7 @@ class BookingModel {
         "dateTime": dateTime?.toIso8601String(),
         "locationName": locationName,
         "locationAddress": locationAddress,
+        "country": country,
         "rooms": rooms,
         "duration": duration,
         "roomSqFt": roomSqFt,

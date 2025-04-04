@@ -86,7 +86,7 @@ class PaystackUtils {
     logger.f("Payment response from Paystack: \n${response.toMap()}");
     logger.w("Payment status: ${response.data.status}");
 
-    if (response.data.status == PaystackTransactionStatus.success) {
+    // if (response.data.status == PaystackTransactionStatus.success) {
       final paymentResponse = PaymentResponseModel(
         payerId: userData?.userId,
         paymentId: paymentRef,
@@ -115,8 +115,8 @@ class PaystackUtils {
         await Get.put(BookingsController())
             .bookAppointment(bookingDetails, paymentResponse);
       }
-    } else {
-      showCustomSnackBar(context, response.message);
-    }
+    // } else {
+    //   showCustomSnackBar(context, response.message);
+    // }
   }
 }

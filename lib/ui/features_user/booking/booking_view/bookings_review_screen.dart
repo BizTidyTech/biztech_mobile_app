@@ -2,7 +2,7 @@
 
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/booking_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
-import 'package:biztidy_mobile_app/ui/shared/curved_container.dart';
+import 'package:biztidy_mobile_app/ui/shared/booking_key_text_value.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
@@ -50,65 +50,74 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               child: Column(
                 children: [
-                  CustomCurvedContainer(
-                    height: 350,
-                    fillColor: AppColors.kPrimaryColor,
-                    topPadding: 15,
-                    leftPadding: 15,
-                    child: Row(
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    width: screenWidth(context),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: AppColors.kPrimaryColor,
+                    ),
+                    child: Column(
                       children: [
-                        SizedBox(
-                          width: 115,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _keyText(AppStrings.service),
-                              _keyText("Deposit Cost"),
-                              _keyText("Location"),
-                              _keyText("Address"),
-                              _keyText("Phone No"),
-                              _keyText("Rooms"),
-                              _keyText("Duration"),
-                              _keyText("Date"),
-                              _keyText("Time"),
-                            ],
-                          ),
+                        keyTextValue(context, AppStrings.service,
+                            "${widget.booking.service?.name ?? ''} Cleaning"),
+                        keyTextValue(
+                          context,
+                          "Deposit Cost",
+                          widget.booking.country == 'USA'
+                              ? "\$${controller.depositBookingAmount}"
+                              : "N${controller.depositBookingAmountInNaira}",
                         ),
-                        horizontalSpacer(8),
-                        Expanded(
-                          child: SizedBox(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _valueText(
-                                    "${widget.booking.service?.name ?? ''} Cleaning"),
-                                // _valueText(
-                                //     "\$${widget.booking.service?.baseCost ?? ''}"),
-                                _valueText(controller.userCountry == 'USA'
-                                    ? "\$${controller.depositBookingAmount}"
-                                    : 'N${controller.depositBookingAmountInNaira}'),
-                                _valueText(widget.booking.locationName ?? ''),
-                                _valueText(
-                                    widget.booking.locationAddress ?? ''),
-                                _valueText(
-                                    widget.booking.customer?.phoneNumber ?? ''),
-                                _valueText("${widget.booking.rooms ?? ''}"),
-                                _valueText(
-                                    "${widget.booking.duration ?? ''} hours"),
-                                _valueText(DateFormat('MMM d, y').format(
-                                    widget.booking.dateTime ?? DateTime.now())),
-                                _valueText(DateFormat('h:mm a').format(
-                                    widget.booking.dateTime ?? DateTime.now())),
-                              ],
-                            ),
-                          ),
+                        keyTextValue(
+                          context,
+                          "Location",
+                          widget.booking.locationName ?? '',
+                        ),
+                        keyTextValue(
+                          context,
+                          "Address",
+                          widget.booking.locationAddress ?? '',
+                        ),
+                        keyTextValue(
+                          context,
+                          "Country",
+                          widget.booking.country ?? '',
+                        ),
+                        keyTextValue(
+                          context,
+                          "Phone No",
+                          widget.booking.customer?.phoneNumber ?? '',
+                        ),
+                        keyTextValue(
+                          context,
+                          "Rooms",
+                          "${widget.booking.rooms ?? ''}",
+                        ),
+                        keyTextValue(
+                          context,
+                          "Duration",
+                          "${widget.booking.duration ?? ''} hours",
+                        ),
+                        keyTextValue(
+                          context,
+                          "Date",
+                          DateFormat('MMM d, y').format(
+                              widget.booking.dateTime ?? DateTime.now()),
+                        ),
+                        keyTextValue(
+                          context,
+                          "Time",
+                          DateFormat('h:mm a').format(
+                              widget.booking.dateTime ?? DateTime.now()),
                         ),
                       ],
                     ),
                   ),
                   const Spacer(),
                   Text(
-                    "You are to deposit a sum of ${controller.userCountry == 'USA' ? "\$${controller.depositBookingAmount}" : 'N${controller.depositBookingAmountInNaira}'} to confirm your booking.",
+                    // "You are to deposit a sum of ${controller.userCountry == 'USA' ? "\$${controller.depositBookingAmount}" : 'N${controller.depositBookingAmountInNaira}'} to confirm your booking.",
+                    "You are to deposit a sum of ${controller.userCountry == 'USA' ? "\$${controller.depositBookingAmount}" : 'N30,000'} to confirm your booking.",
                     textAlign: TextAlign.center,
                     style: AppStyles.normalStringStyle(15, AppColors.fullBlack),
                   ),
@@ -142,30 +151,6 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget _keyText(String keyText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        "$keyText:",
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppStyles.floatingHintStringStyleColored(16, AppColors.deepBlue),
-      ),
-    );
-  }
-
-  Widget _valueText(String vaueText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        vaueText,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppStyles.regularStringStyle(16, AppColors.reviewValueColor),
-      ),
     );
   }
 }

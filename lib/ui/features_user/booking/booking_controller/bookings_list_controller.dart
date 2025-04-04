@@ -61,8 +61,8 @@ class BookingsListController extends GetxController {
 
       final userCountry = (await getLocallySavedUserDetails())?.country;
       if (userCountry == 'USA') {
-        await PaypalUtils().makePayment( 
-        NavigationService.navigatorKey.currentContext!,
+        await PaypalUtils().makePayment(
+          NavigationService.navigatorKey.currentContext!,
           amount: balanceAmount,
           bookingDetails: bookingDetails,
           description: description,
@@ -114,8 +114,7 @@ class BookingsListController extends GetxController {
     if (bookingResponse == true) {
       NavigationService.navigatorKey.currentContext!.pop();
       logger.f('Booked successfully . . . ');
-      sendUpdatedBookingNotificationToAdmin(
-          bookingDetails.service?.name ?? 'cleaning service');
+      sendUpdatedBookingNotificationToAdmin(bookingDetails);
       Fluttertoast.showToast(
         msg: "Your appointment has been updated successfully",
         backgroundColor: AppColors.normalGreen,
@@ -126,30 +125,35 @@ class BookingsListController extends GetxController {
     update();
   }
 
-  sendUpdatedBookingNotificationToAdmin(String service) async {
+  sendUpdatedBookingNotificationToAdmin(BookingModel booking) async {
     final notificationApiKey =
         await FirebaseService().fetchNotificationApiKey();
 
     final userData = await getLocallySavedUserDetails();
 
-    if (notificationApiKey != null && userData != null) {
+    if (userData != null) {
+      final bookingDetails = NotificationUtils().createBookingDetails(booking);
+      final String emailBody = '''
+      <h1>Updated Booking Alert</h1>
+      <p>You have received an update regarding a booking from ${userData.name ?? 'Client'} for ${booking.service?.name ?? 'cleaning service'}. Please check the admin panel for action. Find the details below:</p>',
+      <pre>$bookingDetails</pre>
+    ''';
+
       NotificationUtils().sendEmailNotification(
-        notificationApiKey: notificationApiKey,
         emailAddress: 'tidy1tech@gmail.com',
         emailSubject: 'Updated booking alert',
-        emailBody:
-            '<h1>Updated Booking Alert</h1><p>You have received an update regarding your booking. Please check the admin panel for details.</p>',
-        emailFrom: userData.email ?? '',
-        emailFromName: 'BizTidy Customer: ${userData.name ?? ''}',
+        emailBody: emailBody,
       );
 
-      NotificationUtils().sendPushNotification(
-        notificationApiKey: notificationApiKey,
-        title: "Updated booking alert",
-        body:
-            "There is an updated booking from ${userData.name ?? 'Client'} for $service",
-        receiverExternalId: adminOnesignalExternalID,
-      );
+      if (notificationApiKey != null) {
+        NotificationUtils().sendPushNotification(
+          notificationApiKey: notificationApiKey,
+          title: "Updated booking alert",
+          body:
+              "There is an updated booking from ${userData.name ?? 'Client'} for ${booking.service?.name ?? 'cleaning service'}",
+          receiverExternalId: adminOnesignalExternalID,
+        );
+      }
     } else {
       logger.e("Error fetching notification key");
     }

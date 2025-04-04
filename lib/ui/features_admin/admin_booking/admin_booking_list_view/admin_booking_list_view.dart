@@ -65,7 +65,7 @@ class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
                   shadowColor: AppColors.lightGray,
                   backgroundColor: AppColors.primaryThemeColor,
                   title: Text(
-                    AppStrings.myBookings,
+                    AppStrings.bookings,
                     style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
                   ),
                 ),

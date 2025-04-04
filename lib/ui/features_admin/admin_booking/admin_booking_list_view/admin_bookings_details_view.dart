@@ -3,7 +3,7 @@
 import 'package:biztidy_mobile_app/ui/features_admin/admin_auth/admin_auth_view/widgets/admin_input_widget.dart';
 import 'package:biztidy_mobile_app/ui/features_admin/admin_booking/admin_booking_controller/admin_bookings_list_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
-import 'package:biztidy_mobile_app/ui/shared/curved_container.dart';
+import 'package:biztidy_mobile_app/ui/shared/booking_key_text_value.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
@@ -63,79 +63,83 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Column(
                   children: [
-                    CustomCurvedContainer(
-                      height: 420,
-                      fillColor: AppColors.kPrimaryColor,
-                      topPadding: 15,
-                      leftPadding: 15,
-                      child: Row(
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      width: screenWidth(context),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: AppColors.kPrimaryColor,
+                      ),
+                      child: Column(
                         children: [
-                          SizedBox(
-                            width: 115,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _keyText(AppStrings.service),
-                                _keyText("Deposit Cost"),
-                                _keyText("Location"),
-                                _keyText("Address"),
-                                _keyText("Phone No"),
-                                _keyText("Rooms"),
-                                _keyText("Duration"),
-                                _keyText("Date"),
-                                _keyText("Time"),
-                                _keyText("Total Charges"),
-                                _keyText("Final Payment"),
-                              ],
-                            ),
+                          keyTextValue(context, AppStrings.service,
+                              "${controller.selectedBookingData?.service?.name ?? ''} Cleaning"),
+                          keyTextValue(context, "Deposit Cost",
+                              "${controller.selectedBookingData?.country == 'USA' ? "\$" : "N"}${controller.selectedBookingData?.depositPayment?.amount}"),
+                          keyTextValue(
+                            context,
+                            "Location",
+                            controller.selectedBookingData?.locationName ?? '',
                           ),
-                          horizontalSpacer(8),
-                          Expanded(
-                            child: SizedBox(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _valueText(
-                                      "${controller.selectedBookingData?.service?.name ?? ''} Cleaning"),
-                                  _valueText(
-                                      "\$${controller.selectedBookingData?.depositPayment?.amount}"),
-                                  _valueText(controller
-                                          .selectedBookingData?.locationName ??
-                                      ''),
-                                  _valueText(controller.selectedBookingData
-                                          ?.locationAddress ??
-                                      ''),
-                                  _valueText(controller.selectedBookingData
-                                          ?.customer?.phoneNumber ??
-                                      ''),
-                                  _valueText(
-                                      "${controller.selectedBookingData?.rooms ?? ''}"),
-                                  _valueText(
-                                      "${controller.selectedBookingData?.duration ?? ''} hours"),
-                                  _valueText(DateFormat('MMM d, y').format(
-                                      controller
-                                              .selectedBookingData?.dateTime ??
-                                          DateTime.now())),
-                                  _valueText(DateFormat('h:mm a').format(
-                                      controller
-                                              .selectedBookingData?.dateTime ??
-                                          DateTime.now())),
-                                  _valueText(controller.selectedBookingData
-                                              ?.totalCalculatedServiceCharge ==
-                                          null
-                                      ? "Pending"
-                                      : "\$${controller.selectedBookingData?.totalCalculatedServiceCharge}"),
-                                  _valueText(controller.selectedBookingData
-                                              ?.finalPayment ==
-                                          null
-                                      ? "Pending"
-                                      : "Done"),
-                                ],
-                              ),
-                            ),
+                          keyTextValue(
+                            context,
+                            "Address",
+                            controller.selectedBookingData?.locationAddress ??
+                                '',
+                          ),
+                          keyTextValue(
+                            context,
+                            "Country",
+                            controller.selectedBookingData?.country ?? '',
+                          ),
+                          keyTextValue(
+                            context,
+                            "Phone No",
+                            controller.selectedBookingData?.customer
+                                    ?.phoneNumber ??
+                                '',
+                          ),
+                          keyTextValue(
+                            context,
+                            "Rooms",
+                            "${controller.selectedBookingData?.rooms ?? ''}",
+                          ),
+                          keyTextValue(
+                            context,
+                            "Duration",
+                            "${controller.selectedBookingData?.duration ?? ''} hours",
+                          ),
+                          keyTextValue(
+                            context,
+                            "Date",
+                            DateFormat('MMM d, y').format(
+                                controller.selectedBookingData?.dateTime ??
+                                    DateTime.now()),
+                          ),
+                          keyTextValue(
+                            context,
+                            "Time",
+                            DateFormat('h:mm a').format(
+                                controller.selectedBookingData?.dateTime ??
+                                    DateTime.now()),
+                          ),
+                          keyTextValue(
+                            context,
+                            "Total Charges",
+                            controller.selectedBookingData
+                                        ?.totalCalculatedServiceCharge ==
+                                    null
+                                ? "Pending"
+                                : "${controller.selectedBookingData?.country == 'USA' ? "\$" : "N"}${controller.selectedBookingData?.totalCalculatedServiceCharge}",
+                          ),
+                          keyTextValue(
+                            context,
+                            "Final Payment",
+                            controller.selectedBookingData?.finalPayment == null
+                                ? "Pending"
+                                : "Paid",
                           ),
                         ],
                       ),
@@ -171,30 +175,6 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget _keyText(String keyText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        "$keyText:",
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppStyles.floatingHintStringStyleColored(16, AppColors.deepBlue),
-      ),
-    );
-  }
-
-  Widget _valueText(String vaueText) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Text(
-        vaueText,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: AppStyles.regularStringStyle(16, AppColors.reviewValueColor),
-      ),
     );
   }
 }
