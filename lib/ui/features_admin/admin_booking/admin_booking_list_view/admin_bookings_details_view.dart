@@ -77,7 +77,7 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
                           keyTextValue(context, AppStrings.service,
                               "${controller.selectedBookingData?.service?.name ?? ''} Cleaning"),
                           keyTextValue(context, "Deposit Cost",
-                              "${controller.selectedBookingData?.country == 'USA' ? "\$" : "N"}${controller.selectedBookingData?.depositPayment?.amount}"),
+                              "${controller.selectedBookingData?.country == 'USA' ? "\$" : "N"}${NumberFormat("#,###").format(double.parse(controller.selectedBookingData?.depositPayment?.amount ?? "0"))}"),
                           keyTextValue(
                             context,
                             "Location",
@@ -132,7 +132,7 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
                                         ?.totalCalculatedServiceCharge ==
                                     null
                                 ? "Pending"
-                                : "${controller.selectedBookingData?.country == 'USA' ? "\$" : "N"}${controller.selectedBookingData?.totalCalculatedServiceCharge}",
+                                : "${controller.selectedBookingData?.country == 'USA' ? "\$" : "N"}${NumberFormat("#,###").format(controller.selectedBookingData?.totalCalculatedServiceCharge)}",
                           ),
                           keyTextValue(
                             context,
@@ -151,6 +151,7 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
                             textEditingController:
                                 controller.totalAmountController,
                             hintText: "Enter calculated total service charge",
+                            keyboardType: TextInputType.number,
                           )
                         : const SizedBox.shrink(),
                     verticalSpacer(20),

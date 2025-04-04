@@ -8,6 +8,7 @@ import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class AdminBookingsController extends GetxController {
   AdminBookingsController();
@@ -28,7 +29,7 @@ class AdminBookingsController extends GetxController {
 
   selectCurrentBooking(BookingModel booking) {
     selectedBookingData = booking;
-    update();
+    // update();
   }
 
   fetchAllBooking() async {
@@ -64,7 +65,7 @@ class AdminBookingsController extends GetxController {
         selectedBookingData = updatedBookingDetails;
         logger.f('Updated successfully . . . ');
         sendBookingUpdateNotificationToClient(
-          'Your total service charge is \$$totalServicecharge.',
+          'Your total service charge is ${updatedBookingDetails.country == "USA" ? "\$" : "N"}${NumberFormat("#,###").format(totalServicecharge)}.',
           updatedBookingDetails.userId ?? '',
           updatedBookingDetails.customer?.email ?? '',
         );

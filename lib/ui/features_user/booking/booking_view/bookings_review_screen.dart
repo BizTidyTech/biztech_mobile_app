@@ -67,7 +67,7 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                           "Deposit Cost",
                           widget.booking.country == 'USA'
                               ? "\$${controller.depositBookingAmount}"
-                              : "N${controller.depositBookingAmountInNaira}",
+                              : "N${NumberFormat("#,###").format(controller.depositBookingAmountInNaira)}",
                         ),
                         keyTextValue(
                           context,
@@ -116,8 +116,7 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                   ),
                   const Spacer(),
                   Text(
-                    // "You are to deposit a sum of ${controller.userCountry == 'USA' ? "\$${controller.depositBookingAmount}" : 'N${controller.depositBookingAmountInNaira}'} to confirm your booking.",
-                    "You are to deposit a sum of ${controller.userCountry == 'USA' ? "\$${controller.depositBookingAmount}" : 'N30,000'} to confirm your booking.",
+                    "You are to deposit a sum of ${controller.userCountry == 'USA' ? "\$${controller.depositBookingAmount}" : "N${NumberFormat("#,###").format(controller.depositBookingAmountInNaira)}"} to confirm your booking.",
                     textAlign: TextAlign.center,
                     style: AppStyles.normalStringStyle(15, AppColors.fullBlack),
                   ),

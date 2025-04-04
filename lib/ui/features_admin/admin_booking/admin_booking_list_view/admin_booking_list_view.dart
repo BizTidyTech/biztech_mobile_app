@@ -1,5 +1,5 @@
+import 'package:biztidy_mobile_app/ui/features_admin/admin_booking/admin_booking_controller/admin_bookings_list_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_admin/admin_booking/widgets/admin_booking_card.dart';
-import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
@@ -21,7 +21,7 @@ class AdminBookingsListScreen extends StatefulWidget {
 }
 
 class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
-  final controller = Get.put(BookingsListController());
+  final controller = Get.put(AdminBookingsController());
 
   void optInNotification() async {
     await OneSignal.User.pushSubscription.optIn();
@@ -30,12 +30,12 @@ class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
   @override
   void initState() {
     super.initState();
-    controller.fetchBookingsList();
+    controller.fetchAllBooking();
     optInNotification();
   }
 
   Future<void> _refresBookingsList() async {
-    controller.fetchBookingsList();
+    controller.fetchAllBooking();
   }
 
   @override
@@ -51,8 +51,8 @@ class _AdminBookingsListScreenState extends State<AdminBookingsListScreen> {
           systemNavigationBarIconBrightness: Brightness.dark,
           systemNavigationBarColor: AppColors.plainWhite,
         ),
-        child: GetBuilder<BookingsListController>(
-          init: BookingsListController(),
+        child: GetBuilder<AdminBookingsController>(
+          init: AdminBookingsController(),
           builder: (_) {
             return RefreshIndicator(
               color: AppColors.primaryThemeColor,

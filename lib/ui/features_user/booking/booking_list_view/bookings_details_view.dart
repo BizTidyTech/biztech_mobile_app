@@ -62,7 +62,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                         keyTextValue(context, AppStrings.service,
                             "${widget.booking.service?.name ?? ''} Cleaning"),
                         keyTextValue(context, "Deposit Cost",
-                            "${widget.booking.country == 'USA' ? "\$" : "N"}${widget.booking.depositPayment?.amount}"),
+                            "${widget.booking.country == 'USA' ? "\$" : "N"}${NumberFormat("#,###").format(double.parse(widget.booking.depositPayment?.amount ?? '0'))}"),
                         keyTextValue(
                           context,
                           "Location",
@@ -110,7 +110,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                           "Total Cost",
                           widget.booking.totalCalculatedServiceCharge == null
                               ? "Pending"
-                              : "${widget.booking.country == 'USA' ? "\$" : "N"}${widget.booking.totalCalculatedServiceCharge}",
+                              : "${widget.booking.country == 'USA' ? "\$" : "N"}${NumberFormat("#,###").format(widget.booking.totalCalculatedServiceCharge)}",
                         ),
                       ],
                     ),
@@ -131,7 +131,7 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                         ? "Final payment done!"
                         : widget.booking.totalCalculatedServiceCharge == null
                             ? "You will know the balance to pay when the total service charge is calculated"
-                            : "You are to pay the balance of \$${(widget.booking.totalCalculatedServiceCharge! - double.parse(widget.booking.depositPayment!.amount!)).toStringAsFixed(1)}.",
+                            : "You are to pay the balance of ${widget.booking.country == 'USA' ? "\$" : "N"}${NumberFormat("#,###").format(widget.booking.totalCalculatedServiceCharge! - double.parse(widget.booking.depositPayment!.amount!))}.",
                     textAlign: TextAlign.center,
                     style: widget.booking.finalPayment != null
                         ? AppStyles.regularStringStyle(17, AppColors.fullBlack)
