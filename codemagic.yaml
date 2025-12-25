@@ -1,22 +1,31 @@
 workflows:
-  ios_pods_only:
-    name: Generate iOS Podfile.lock
-    max_build_duration: 30
+  ios-workflow:
+    name: iOS Workflow
     environment:
       flutter: stable
       xcode: latest
+      cocoapods: default
     scripts:
-      - name: Flutter pub get
-        script: |
-          flutter pub get
-
-      - name: Install CocoaPods & generate Podfile.lock
+      - name: Install Flutter dependencies
+        script: flutter pub get
+      
+      - name: Install CocoaPods dependencies
         script: |
           cd ios
           pod install
-
-      - name: Show generated files
+      
+      - name: Build iOS
         script: |
-          ls -la ios
+          flutter build ipa --release \
+            --export-options-plist=/Users/builder/export_options.plist
+    
     artifacts:
-      - ios/Podfile.lock
+      - build/ios/ipa/*.ipa
+    
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
+        
