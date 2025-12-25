@@ -1,0 +1,22 @@
+workflows:
+  ios_pods_only:
+    name: Generate iOS Podfile.lock
+    max_build_duration: 30
+    environment:
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Flutter pub get
+        script: |
+          flutter pub get
+
+      - name: Install CocoaPods & generate Podfile.lock
+        script: |
+          cd ios
+          pod install
+
+      - name: Show generated files
+        script: |
+          ls -la ios
+    artifacts:
+      - ios/Podfile.lock
