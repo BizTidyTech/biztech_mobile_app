@@ -50,14 +50,17 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Privacy - Photo Library Usage Description</string>
-    <key>NSMotionUsageDescription</key>
-    <string>Motion usage description</string>
+	
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to select images.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>NSPhotoLibraryAddUsageDescription</string>
+	<string>We need access to save shared images.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone for voice recording.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>We need your location to provide personalized services.</string>
+    <key>NSMotionUsageDescription</key>
+	<string>We need your motion usage to provide personalized services.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

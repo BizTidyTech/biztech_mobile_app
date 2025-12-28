@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '67602217645',
     projectId: 'tidytech-app',
     storageBucket: 'tidytech-app.firebasestorage.app',
-    iosBundleId: 'com.example.biztidyMobileApp',
+    iosBundleId: 'com.tidytech.app',
   );
 }
