@@ -12,3 +12,5 @@ const paystackLiveWebhookURL =
     "https://www.biztech.com.ng/wc-api/Tbz_WC_Paystack_Webhook/";
 
 final List keyInParts = ["AIzaSyD1ZDheziyou3g", "JlSbqtnlR6mitN2e0EGU"];
+
+const companyPhoneNumber = '+2348023179676';

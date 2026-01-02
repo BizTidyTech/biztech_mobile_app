@@ -1,6 +1,7 @@
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
+import 'package:biztidy_mobile_app/utils/app_constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,7 +24,7 @@ class HelpCenterView extends StatelessWidget {
   }
 
   void _launchWhatsApp() async {
-    const String whatsappNumber = "+16823953303";
+    const String whatsappNumber = companyPhoneNumber;
     const String message = "Hello, I need help with . . .";
     final Uri whatsappUri =
         Uri.parse("https://wa.me/$whatsappNumber?text=$message");
@@ -35,7 +36,7 @@ class HelpCenterView extends StatelessWidget {
   }
 
   void _launchPhoneCall() async {
-    final Uri phoneUri = Uri(scheme: 'tel', path: '+16823237358');
+    final Uri phoneUri = Uri(scheme: 'tel', path: companyPhoneNumber);
     try {
       await launchUrl(phoneUri);
     } catch (e) {
