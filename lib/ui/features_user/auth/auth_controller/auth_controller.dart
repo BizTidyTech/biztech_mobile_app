@@ -7,6 +7,7 @@ import 'package:biztidy_mobile_app/app/services/firebase_service.dart';
 import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_utils/auth_utils.dart';
+import 'package:biztidy_mobile_app/ui/shared/globals.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/extension_and_methods/string_cap_extensions.dart';
 import 'package:email_otp/email_otp.dart';
@@ -231,6 +232,7 @@ class AuthController extends GetxController {
     startLoading();
     final isLoggedIn = await AuthUtil().signInUser(email, password);
     if (isLoggedIn == true && navigateToHome != false) {
+      Globals.isLoggedIn = isLoggedIn;
       context.go('/homepageView');
     }
     stopLoading();

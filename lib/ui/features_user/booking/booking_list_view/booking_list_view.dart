@@ -2,6 +2,8 @@ import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/b
 import 'package:biztidy_mobile_app/ui/features_user/booking/widgets/booking_card.dart';
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/data/page_index_class.dart';
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/views/custom_navbar.dart';
+import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/widgets/guest_user_prompt_view.dart';
+import 'package:biztidy_mobile_app/ui/shared/globals.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_strings.dart';
@@ -25,7 +27,9 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
   @override
   void initState() {
     super.initState();
-    controller.fetchBookingsList();
+    if (Globals.isLoggedIn == true) {
+      controller.fetchBookingsList();
+    }
   }
 
   @override
@@ -58,32 +62,37 @@ class _BookingsListScreenState extends State<BookingsListScreen> {
               ),
               body: controller.showLoading == true
                   ? loadingWidget()
-                  : Container(
-                      padding: const EdgeInsets.all(12.0),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(20.0),
-                        ),
-                      ),
-                      child: controller.bookingsList?.isEmpty == true
-                          ? const Center(child: Text("No bookings found"))
-                          : ListView.builder(
-                              itemCount: controller.bookingsList?.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final booking = controller.bookingsList?[index];
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 5.0),
-                                  child: bookingCard(context, booking),
-                                );
-                              },
-                            ),
-                    ),
+                  : Globals.isLoggedIn == true
+                      ? _bookingListView(context)
+                      : guestUserPromptView(context, "bookings"),
             );
           },
         ),
       ),
+    );
+  }
+
+  Widget _bookingListView(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20.0),
+        ),
+      ),
+      child: controller.bookingsList?.isEmpty == true
+          ? const Center(child: Text("No bookings found"))
+          : ListView.builder(
+              itemCount: controller.bookingsList?.length,
+              itemBuilder: (BuildContext context, int index) {
+                final booking = controller.bookingsList?[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: bookingCard(context, booking),
+                );
+              },
+            ),
     );
   }
 }

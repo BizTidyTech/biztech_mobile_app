@@ -6,8 +6,10 @@ import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/change
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/edit_profile_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/help_center_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/web_data_view.dart';
+import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/widgets/guest_user_prompt_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/widgets/image_full_screen_view.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
+import 'package:biztidy_mobile_app/ui/shared/globals.dart';
 import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
@@ -69,137 +71,143 @@ class _ProfileViewState extends State<ProfileView> {
                   style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
                 ),
               ),
-              extendBodyBehindAppBar: true,
+              // extendBodyBehindAppBar: true,
               body: Container(
                 height: screenHeight(context),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      verticalSpacer(
-                          MediaQuery.of(context).viewPadding.top + 55),
-                      _profileDetailsCard(),
-                      verticalSpacer(20),
-                      _profileOptionsCard(
-                        leadingIcon: IconsaxPlusLinear.user,
-                        titleText: 'Personal  Details',
-                        onPressed: () {
-                          logger.i("Pressed Personal Details");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const EditProfileView();
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      _profileOptionsCard(
-                        leadingIcon: Icons.perm_contact_calendar_outlined,
-                        titleText: 'Help Center',
-                        onPressed: () {
-                          logger.i("Pressed Help Center");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const HelpCenterView();
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      _profileOptionsCard(
-                        leadingIcon: CupertinoIcons.question_circle,
-                        titleText: 'About',
-                        onPressed: () {
-                          logger.i("Pressed About");
-                          goToWebViewPage(
-                            context,
-                            title: "About us",
-                            url: aboutUsUrl,
-                          );
-                        },
-                      ),
-                      _profileOptionsCard(
-                        leadingIcon: CupertinoIcons.doc_append,
-                        titleText: 'Terms of Use',
-                        onPressed: () {
-                          logger.i("Pressed Terms of Use");
-                          goToWebViewPage(
-                            context,
-                            title: "Terms of Use",
-                            url: termsOfUseUrl,
-                          );
-                        },
-                      ),
-                      _profileOptionsCard(
-                        leadingIcon: CupertinoIcons.info_circle,
-                        titleText: 'Disclaimer',
-                        onPressed: () {
-                          logger.i("Pressed Disclaimer");
-                          goToWebViewPage(
-                            context,
-                            title: "Disclaimer",
-                            url: disclaimerUrl,
-                          );
-                        },
-                      ),
-                      _profileOptionsCard(
-                        leadingIcon: CupertinoIcons.person_2_square_stack,
-                        titleText: 'Privacy Policy',
-                        onPressed: () {
-                          logger.i("Pressed Privacy Policy");
-                          goToWebViewPage(
-                            context,
-                            title: "Privacy Policy",
-                            url: privacyPolicyUrl,
-                          );
-                        },
-                      ),
-                      _profileOptionsCard(
-                        leadingIcon: IconsaxPlusLinear.security_safe,
-                        titleText: 'Change Password',
-                        onPressed: () {
-                          logger.i("Pressed 'Change Password");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const ChangePasswordView();
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      _profileOptionsCard(
-                        leadingIcon: IconsaxPlusLinear.logout_1,
-                        titleText: 'Logout',
-                        color: AppColors.deepBlue,
-                        showTrailingIcon: false,
-                        onPressed: () {
-                          logger.w("Pressed Logout");
-                          showLogoutConfirmationSheet(context);
-                        },
-                      ),
-                      _profileOptionsCard(
-                        leadingIcon: IconsaxPlusLinear.user_remove,
-                        titleText: 'Delete Account',
-                        color: AppColors.coolRed,
-                        showTrailingIcon: false,
-                        onPressed: () {
-                          logger.w("Pressed Delete Account");
-                          showDeleteAccountConfirmationSheet(context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
+                child: Globals.isLoggedIn == true
+                    // child: Globals.isLoggedIn == false
+                    ? _loggedInUserProfileView(context)
+                    : guestUserPromptView(context, "profile"),
               ),
             );
           },
         ),
+      ),
+    );
+  }
+
+  Widget _loggedInUserProfileView(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          verticalSpacer(20),
+          _profileDetailsCard(),
+          verticalSpacer(20),
+          _profileOptionsCard(
+            leadingIcon: IconsaxPlusLinear.user,
+            titleText: 'Personal  Details',
+            onPressed: () {
+              logger.i("Pressed Personal Details");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const EditProfileView();
+                  },
+                ),
+              );
+            },
+          ),
+          _profileOptionsCard(
+            leadingIcon: Icons.perm_contact_calendar_outlined,
+            titleText: 'Help Center',
+            onPressed: () {
+              logger.i("Pressed Help Center");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const HelpCenterView();
+                  },
+                ),
+              );
+            },
+          ),
+          _profileOptionsCard(
+            leadingIcon: CupertinoIcons.question_circle,
+            titleText: 'About',
+            onPressed: () {
+              logger.i("Pressed About");
+              goToWebViewPage(
+                context,
+                title: "About us",
+                url: aboutUsUrl,
+              );
+            },
+          ),
+          _profileOptionsCard(
+            leadingIcon: CupertinoIcons.doc_append,
+            titleText: 'Terms of Use',
+            onPressed: () {
+              logger.i("Pressed Terms of Use");
+              goToWebViewPage(
+                context,
+                title: "Terms of Use",
+                url: termsOfUseUrl,
+              );
+            },
+          ),
+          _profileOptionsCard(
+            leadingIcon: CupertinoIcons.info_circle,
+            titleText: 'Disclaimer',
+            onPressed: () {
+              logger.i("Pressed Disclaimer");
+              goToWebViewPage(
+                context,
+                title: "Disclaimer",
+                url: disclaimerUrl,
+              );
+            },
+          ),
+          _profileOptionsCard(
+            leadingIcon: CupertinoIcons.person_2_square_stack,
+            titleText: 'Privacy Policy',
+            onPressed: () {
+              logger.i("Pressed Privacy Policy");
+              goToWebViewPage(
+                context,
+                title: "Privacy Policy",
+                url: privacyPolicyUrl,
+              );
+            },
+          ),
+          _profileOptionsCard(
+            leadingIcon: IconsaxPlusLinear.security_safe,
+            titleText: 'Change Password',
+            onPressed: () {
+              logger.i("Pressed 'Change Password");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const ChangePasswordView();
+                  },
+                ),
+              );
+            },
+          ),
+          _profileOptionsCard(
+            leadingIcon: IconsaxPlusLinear.logout_1,
+            titleText: 'Logout',
+            color: AppColors.deepBlue,
+            showTrailingIcon: false,
+            onPressed: () {
+              logger.w("Pressed Logout");
+              showLogoutConfirmationSheet(context);
+            },
+          ),
+          _profileOptionsCard(
+            leadingIcon: IconsaxPlusLinear.user_remove,
+            titleText: 'Delete Account',
+            color: AppColors.coolRed,
+            showTrailingIcon: false,
+            onPressed: () {
+              logger.w("Pressed Delete Account");
+              showDeleteAccountConfirmationSheet(context);
+            },
+          ),
+        ],
       ),
     );
   }

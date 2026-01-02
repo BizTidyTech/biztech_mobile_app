@@ -44,7 +44,8 @@ class _CategoryServicesViewState extends State<CategoryServicesView> {
         backgroundColor: AppColors.plainWhite,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: AppColors.plainWhite.withValues(alpha: 0.4),
+          backgroundColor: AppColors.plainWhite,
+          surfaceTintColor: AppColors.plainWhite,
           title: Text(
             "${widget.cleaningCategory.name.toSentenceCase} Cleaning",
             style: AppStyles.regularStringStyle(16, AppColors.fullBlack),

@@ -1,4 +1,5 @@
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
+import 'package:biztidy_mobile_app/ui/shared/globals.dart';
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_strings.dart';
@@ -19,6 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   void initState() {
     super.initState();
+    Globals.isLoggedIn = false;
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }
 
@@ -94,6 +96,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       textcolor: AppColors.deepBlue,
                       buttonText: AppStrings.login,
                       onPressed: () => context.push('/signInUserView'),
+                    ),
+                  ),
+                  verticalSpacer(15),
+                  Center(
+                    child: InkWell(
+                      onTap: () => context.go('/homepageView'),
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: 'Continue as a ',
+                          style: AppStyles.normalStringStyle(
+                                  16, AppColors.fullBlack)
+                              .copyWith(
+                            decoration: TextDecoration.underline,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'guest',
+                              style: AppStyles.regularStringStyle(
+                                16,
+                                AppColors.fullBlack,
+                              ).copyWith(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ],
+                        ),
+                        textScaler: const TextScaler.linear(1),
+                      ),
                     ),
                   ),
                   const Spacer(),

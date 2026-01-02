@@ -7,6 +7,7 @@ import 'package:biztidy_mobile_app/ui/features_user/nav_bar/data/page_index_clas
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/views/custom_navbar.dart';
 import 'package:biztidy_mobile_app/ui/shared/curved_container.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
+import 'package:biztidy_mobile_app/ui/shared/globals.dart';
 import 'package:biztidy_mobile_app/ui/shared/spacer.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_strings.dart';
@@ -14,7 +15,9 @@ import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:provider/provider.dart';
@@ -223,6 +226,15 @@ class _BookingsViewState extends State<BookingsView> {
   }
 
   Future<void> _chooseAppointmentDate(BookingsController controller) async {
+    if (Globals.isLoggedIn != true) {
+      Fluttertoast.showToast(
+        msg: "Sign in to book an appointment",
+        toastLength: Toast.LENGTH_LONG,
+      );
+      context.push('/signInUserView');
+      return;
+    }
+
     final initialDate = DateTime.now().add(const Duration(days: 1));
 
     DateTime? dateTime = await showOmniDateTimePicker(

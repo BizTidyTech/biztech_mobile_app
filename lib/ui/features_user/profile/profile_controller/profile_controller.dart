@@ -10,6 +10,7 @@ import 'package:biztidy_mobile_app/tidytech_app.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_controller/auth_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_model/user_data_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/auth/auth_utils/auth_utils.dart';
+import 'package:biztidy_mobile_app/ui/shared/globals.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -187,6 +188,7 @@ class ProfileController extends GetxController {
   logout(BuildContext context) {
     FirebaseAuth.instance.signOut();
     saveUserDetailsLocally(null);
+    Globals.isLoggedIn = false;
     context.go('/onboardingScreen');
   }
 
