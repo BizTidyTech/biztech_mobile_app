@@ -30,4 +30,12 @@ void configureEmailOtp() {
     appEmail: 'verification@tidytech.com',
     otpLength: 6,
   );
+
+  EmailOTP.setSMTP(
+    host: 'smtp.gmail.com',
+    emailPort: EmailPort.port587,
+    secureType: SecureType.tls,
+    username: 'tidy1tech@gmail.com',
+    password: 'poxlbnkvssftilaj',
+  );
 }
