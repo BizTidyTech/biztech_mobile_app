@@ -1,3 +1,4 @@
+import 'package:biztidy_mobile_app/app/helpers/sharedprefs.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/booking_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/home/home_model/services_model.dart';
 import 'package:biztidy_mobile_app/ui/features_user/nav_bar/data/page_index_class.dart';
@@ -10,11 +11,23 @@ import 'package:biztidy_mobile_app/utils/extension_and_methods/screen_utils.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 Widget serviceCard(ServiceModel service, {bool? popPage}) {
   return Builder(builder: (context) {
-    return Container(
+    return FutureBuilder(
+      future: getLocallySavedUserDetails(),
+      builder: (context, snapshot) {
+        final isUSA = snapshot.data?.country == 'USA';
+        final priceDisplay = isUSA
+            ? (service.usdCost != null
+                ? '\$${NumberFormat("#,###").format(service.usdCost)}'
+                : '')
+            : (service.baseCost != null
+                ? '₦${NumberFormat("#,###").format(service.baseCost)}'
+                : '');
+        return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       height: 222,
       child: Stack(
@@ -34,7 +47,7 @@ Widget serviceCard(ServiceModel service, {bool? popPage}) {
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
             padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 60,
+            height: 65,
             width: screenWidth(context),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
@@ -50,12 +63,24 @@ Widget serviceCard(ServiceModel service, {bool? popPage}) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: Text(
-                          "${service.name} Cleaning",
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: AppStyles.regularStringStyle(
-                              16, AppColors.fullBlack),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "${service.name} Cleaning",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: AppStyles.regularStringStyle(
+                                  15, AppColors.fullBlack),
+                            ),
+                            if (priceDisplay.isNotEmpty)
+                              Text(
+                                priceDisplay,
+                                style: AppStyles.normalStringStyle(
+                                    13, AppColors.deepBlue),
+                              ),
+                          ],
                         ),
                       ),
                       horizontalSpacer(10),
@@ -84,6 +109,8 @@ Widget serviceCard(ServiceModel service, {bool? popPage}) {
           ),
         ],
       ),
+    );
+      },
     );
   });
 }

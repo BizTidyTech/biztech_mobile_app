@@ -46,7 +46,7 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                 style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
               ),
             ),
-            body: Container(
+            body: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               child: Column(
                 children: [
@@ -64,10 +64,10 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                             "${widget.booking.service?.name ?? ''} Cleaning"),
                         keyTextValue(
                           context,
-                          "Deposit Cost",
+                          "Full Payment Amount",
                           widget.booking.country == 'USA'
-                              ? "\$${controller.depositBookingAmount}"
-                              : "N${NumberFormat("#,###").format(controller.depositBookingAmountInNaira)}",
+                              ? "\$${NumberFormat("#,###.##").format(controller.fullPaymentAmountInUSD)}"
+                              : "₦${NumberFormat("#,###").format(controller.fullPaymentAmountInNaira)}",
                         ),
                         keyTextValue(
                           context,
@@ -114,9 +114,9 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                       ],
                     ),
                   ),
-                  const Spacer(),
+                  verticalSpacer(24),
                   Text(
-                    "You are to deposit a sum of ${controller.userCountry == 'USA' ? "\$${controller.depositBookingAmount}" : "N${NumberFormat("#,###").format(controller.depositBookingAmountInNaira)}"} to confirm your booking.",
+                    "You are required to make full payment of ${controller.userCountry == 'USA' ? "\$${NumberFormat("#,###.##").format(controller.fullPaymentAmountInUSD)}" : "₦${NumberFormat("#,###").format(controller.fullPaymentAmountInNaira)}"} to confirm your booking.",
                     textAlign: TextAlign.center,
                     style: AppStyles.normalStringStyle(15, AppColors.fullBlack),
                   ),
@@ -124,10 +124,10 @@ class _BookingReviewScreenState extends State<BookingReviewScreen> {
                   controller.showLoading == true
                       ? loadingWidget()
                       : CustomButton(
-                          buttonText: AppStrings.contineu,
+                          buttonText: "Pay Now",
                           width: screenWidth(context) * 0.5,
                           onPressed: () {
-                            controller.makeDepositPayment(widget.booking);
+                            controller.makeFullPayment(widget.booking);
                           },
                         ),
                   verticalSpacer(10),

@@ -149,28 +149,32 @@ class _CustomNavBarState extends State<CustomNavBar> {
       required IconData inactiveIcon}) {
     return SizedBox(
       width: 70,
-      height: 50,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             widget.currentPageIndx == barIndex ? activeIcon : inactiveIcon,
             color: widget.currentPageIndx == barIndex
                 ? AppColors.deepBlue
                 : AppColors.fullBlack.withValues(alpha: 0.8),
-            size: 30,
+            size: 22,
           ),
-          Text(
-            label,
-            style: AppStyles.subStringStyle(
-              10,
-              widget.currentPageIndx == barIndex
-                  ? AppColors.deepBlue
-                  : AppColors.fullBlack.withValues(alpha: 0.8),
-            ).copyWith(
-              fontWeight: widget.currentPageIndx == barIndex
-                  ? FontWeight.w900
-                  : FontWeight.w400,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              maxLines: 1,
+              style: AppStyles.subStringStyle(
+                10,
+                widget.currentPageIndx == barIndex
+                    ? AppColors.deepBlue
+                    : AppColors.fullBlack.withValues(alpha: 0.8),
+              ).copyWith(
+                fontWeight: widget.currentPageIndx == barIndex
+                    ? FontWeight.w900
+                    : FontWeight.w400,
+              ),
             ),
           ),
         ],

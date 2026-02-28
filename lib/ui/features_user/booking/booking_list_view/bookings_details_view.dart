@@ -3,8 +3,6 @@
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_controller/bookings_list_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/booking/booking_model/booking_model.dart';
 import 'package:biztidy_mobile_app/ui/shared/booking_key_text_value.dart';
-import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
-import 'package:biztidy_mobile_app/ui/shared/loading_widget.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_colors.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_strings.dart';
 import 'package:biztidy_mobile_app/utils/app_constants/app_styles.dart';
@@ -61,8 +59,8 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                       children: [
                         keyTextValue(context, AppStrings.service,
                             "${widget.booking.service?.name ?? ''} Cleaning"),
-                        keyTextValue(context, "Deposit Cost",
-                            "${widget.booking.country == 'USA' ? "\$" : "N"}${NumberFormat("#,###").format(double.parse(widget.booking.depositPayment?.amount ?? '0'))}"),
+                        keyTextValue(context, "Amount Paid",
+                            "${widget.booking.country == 'USA' ? "\$" : "₦"}${NumberFormat("#,###").format(double.parse(widget.booking.depositPayment?.amount ?? '0'))}"),
                         keyTextValue(
                           context,
                           "Location",
@@ -117,40 +115,18 @@ class _BookingDetailsScreenState extends State<BookingDetailsScreen> {
                   ),
                   const Spacer(),
                   Icon(
-                    widget.booking.finalPayment == null
-                        ? CupertinoIcons.hourglass
-                        : CupertinoIcons.check_mark_circled,
-                    color: widget.booking.finalPayment == null
-                        ? AppColors.regularGray
-                        : AppColors.normalGreen,
+                    CupertinoIcons.check_mark_circled,
+                    color: AppColors.normalGreen,
                     size: 80,
                   ),
                   const Spacer(),
                   Text(
-                    widget.booking.finalPayment != null
-                        ? "Final payment done!"
-                        : widget.booking.totalCalculatedServiceCharge == null
-                            ? "You will know the balance to pay when the total service charge is calculated"
-                            : "You are to pay the balance of ${widget.booking.country == 'USA' ? "\$" : "N"}${NumberFormat("#,###").format(widget.booking.totalCalculatedServiceCharge! - double.parse(widget.booking.depositPayment!.amount!))}.",
+                    "Full payment received. Your booking is confirmed!",
                     textAlign: TextAlign.center,
-                    style: widget.booking.finalPayment != null
-                        ? AppStyles.regularStringStyle(17, AppColors.fullBlack)
-                        : AppStyles.normalStringStyle(15, AppColors.fullBlack),
+                    style: AppStyles.regularStringStyle(17, AppColors.fullBlack),
                   ),
                   const Spacer(),
-                  controller.showLoading == true
-                      ? loadingWidget()
-                      : widget.booking.totalCalculatedServiceCharge == null ||
-                              widget.booking.finalPayment != null
-                          ? const SizedBox.shrink()
-                          : CustomButton(
-                              buttonText: AppStrings.payBalance,
-                              width: screenWidth(context) * 0.5,
-                              onPressed: () {
-                                controller
-                                    .makeBalanceFinalPayment(widget.booking);
-                              },
-                            ),
+                  const SizedBox.shrink(),
                   const Spacer(),
                 ],
               ),

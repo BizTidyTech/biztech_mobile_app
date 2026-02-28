@@ -76,8 +76,8 @@ class _AdminBookingDetailsScreenState extends State<AdminBookingDetailsScreen> {
                         children: [
                           keyTextValue(context, AppStrings.service,
                               "${controller.selectedBookingData?.service?.name ?? ''} Cleaning"),
-                          keyTextValue(context, "Deposit Cost",
-                              "${controller.selectedBookingData?.country == 'USA' ? "\$" : "N"}${NumberFormat("#,###").format(double.parse(controller.selectedBookingData?.depositPayment?.amount ?? "0"))}"),
+                          keyTextValue(context, "Amount Paid",
+                              "${controller.selectedBookingData?.country == 'USA' ? "\$" : "₦"}${NumberFormat("#,###").format(double.parse(controller.selectedBookingData?.depositPayment?.amount ?? "0"))}"),
                           keyTextValue(
                             context,
                             "Location",

@@ -71,7 +71,7 @@ class BookingsListController extends GetxController {
       } else {
         final balanceAmountInNaira = balanceAmount * 1500;
         final description =
-            "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
+            "Balance payment for ${bookingDetails.service?.name} booking with ID ${bookingDetails.bookingId}";
         await PaystackUtils().makePayment(
           NavigationService.navigatorKey.currentContext!,
           amount: balanceAmountInNaira,
@@ -100,7 +100,8 @@ class BookingsListController extends GetxController {
       payerId: paymentData.payerId,
       status: paymentData.status,
       payerEmail: paymentData.data?.payer?.payerInfo?.email,
-      amount: bookingDetails.depositPayment?.amount.toString(),
+      amount: bookingDetails.totalCalculatedServiceCharge?.toString() ??
+          bookingDetails.depositPayment?.amount.toString(),
       payerName:
           "${paymentData.data?.payer?.payerInfo?.firstName} ${paymentData.data?.payer?.payerInfo?.lastName}",
     );

@@ -208,77 +208,75 @@ class _CreateAccountViewState extends State<CreateAccountView> {
   }
 
   Widget _countrySelector() {
-    return Column(
-      children: [
-        // Nigeria option.
-        ListTile(
-          contentPadding: const EdgeInsets.symmetric(vertical: 10),
-          minVerticalPadding: 0,
-          minTileHeight: 30,
-          leading: SizedBox(
-            width: 40,
-            height: 40,
-            child: SvgPicture.network(
-              'https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg',
+    return RadioGroup<String>(
+      groupValue: _selectedCountry,
+      onChanged: (String? value) {
+        if (value != null) {
+          setState(() {
+            _selectedCountry = value;
+          });
+        }
+      },
+      child: Column(
+        children: [
+          // Nigeria option.
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            minVerticalPadding: 0,
+            minTileHeight: 30,
+            leading: SizedBox(
               width: 40,
               height: 40,
+              child: SvgPicture.network(
+                'https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg',
+                width: 40,
+                height: 40,
+              ),
             ),
-          ),
-          title: Text(
-            nigeria,
-            style: AppStyles.regularStringStyle(15, AppColors.fullBlack),
-          ),
-          trailing: Radio<String>(
-            activeColor: AppColors.primaryThemeColor,
-            value: nigeria,
-            groupValue: _selectedCountry,
-            onChanged: (String? value) {
+            title: Text(
+              nigeria,
+              style: AppStyles.regularStringStyle(15, AppColors.fullBlack),
+            ),
+            trailing: Radio<String>(
+              activeColor: AppColors.primaryThemeColor,
+              value: nigeria,
+            ),
+            onTap: () {
               setState(() {
                 _selectedCountry = nigeria;
               });
             },
           ),
-          onTap: () {
-            setState(() {
-              _selectedCountry = "Nigeria";
-            });
-          },
-        ),
-        // USA option.
-        ListTile(
-          contentPadding: const EdgeInsets.symmetric(vertical: 10),
-          minVerticalPadding: 0,
-          minTileHeight: 30,
-          leading: SizedBox(
-            width: 40,
-            height: 40,
-            child: SvgPicture.network(
-              'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg',
+          // USA option.
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            minVerticalPadding: 0,
+            minTileHeight: 30,
+            leading: SizedBox(
               width: 40,
               height: 40,
+              child: SvgPicture.network(
+                'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg',
+                width: 40,
+                height: 40,
+              ),
             ),
-          ),
-          title: Text(
-            usa,
-            style: AppStyles.regularStringStyle(15, AppColors.fullBlack),
-          ),
-          trailing: Radio<String>(
-            activeColor: AppColors.primaryThemeColor,
-            value: "USA",
-            groupValue: _selectedCountry,
-            onChanged: (String? value) {
+            title: Text(
+              usa,
+              style: AppStyles.regularStringStyle(15, AppColors.fullBlack),
+            ),
+            trailing: Radio<String>(
+              activeColor: AppColors.primaryThemeColor,
+              value: usa,
+            ),
+            onTap: () {
               setState(() {
                 _selectedCountry = usa;
               });
             },
           ),
-          onTap: () {
-            setState(() {
-              _selectedCountry = "USA";
-            });
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

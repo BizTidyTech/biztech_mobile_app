@@ -31,8 +31,12 @@ class BookingsController extends GetxController {
   String userCountry = 'Nigeria';
   bool showLoading = false;
   LocationResult? userLocationData;
-  final depositBookingAmount = 20.0; // Deposit amount for all bookings (in USD)
-  final depositBookingAmountInNaira = 30000.0;
+  // Full upfront payment — amount is determined by the selected service's baseCost
+  double get fullPaymentAmountInNaira =>
+      selectedService?.baseCost ?? 0.0;
+  // For USD users, use the dedicated USD price on the service
+  double get fullPaymentAmountInUSD =>
+      selectedService?.usdCost ?? 0.0;
 
   TextEditingController roomsCountController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -128,7 +132,7 @@ class BookingsController extends GetxController {
     );
   }
 
-  makeDepositPayment(BookingModel bookingDetails) async {
+  makeFullPayment(BookingModel bookingDetails) async {
     logger.w("userCountry: $userCountry");
     if (userCountry == 'USA') {
       logger.w("Pay with PayPal");
@@ -144,17 +148,16 @@ class BookingsController extends GetxController {
     update();
     try {
       final description =
-          "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
+          "Full payment for ${bookingDetails.service?.name} booking with ID ${bookingDetails.bookingId}";
       await PaypalUtils().makePayment(
         NavigationService.navigatorKey.currentContext!,
-        amount: depositBookingAmount,
+        amount: fullPaymentAmountInUSD,
         bookingDetails: bookingDetails,
         description: description,
         isBalancePayment: false,
       );
     } catch (e) {
       logger.w("Error occured");
-      // Fluttertoast.showToast(msg: "Error occured. Kindly retry");
     }
     showLoading = false;
     update();
@@ -165,17 +168,16 @@ class BookingsController extends GetxController {
     update();
     try {
       final description =
-          "Booking deposit for ${bookingDetails.service?.name} with ID ${bookingDetails.bookingId}";
+          "Full payment for ${bookingDetails.service?.name} booking with ID ${bookingDetails.bookingId}";
       await PaystackUtils().makePayment(
         NavigationService.navigatorKey.currentContext!,
-        amount: depositBookingAmountInNaira,
+        amount: fullPaymentAmountInNaira,
         bookingDetails: bookingDetails,
         description: description,
         isBalancePayment: false,
       );
     } catch (e) {
       logger.w("Error occured");
-      // Fluttertoast.showToast(msg: "Error occured. Kindly retry");
     }
     showLoading = false;
     update();
@@ -187,21 +189,27 @@ class BookingsController extends GetxController {
   ) async {
     showLoading = true;
     update();
-    final initialDepositPayment = PaymentDetails(
+    final fullPaymentDetails = PaymentDetails(
       paidAt: DateTime.now(),
       paymentId: paymentData.paymentId,
       payerId: paymentData.payerId,
       status: paymentData.status,
       payerEmail: paymentData.data?.payer?.payerInfo?.email,
       amount: (userCountry == 'USA'
-              ? depositBookingAmount
-              : depositBookingAmountInNaira)
+              ? fullPaymentAmountInUSD
+              : fullPaymentAmountInNaira)
           .toString(),
       payerName:
           "${paymentData.data?.payer?.payerInfo?.firstName} ${paymentData.data?.payer?.payerInfo?.lastName}",
     );
-    final updatedBookingDetails =
-        bookingDetails.copyWith(depositPayment: initialDepositPayment);
+    // Store full payment as both depositPayment and finalPayment — booking is fully paid upfront
+    final updatedBookingDetails = bookingDetails.copyWith(
+      depositPayment: fullPaymentDetails,
+      finalPayment: fullPaymentDetails,
+      totalCalculatedServiceCharge: userCountry == 'USA'
+          ? fullPaymentAmountInUSD
+          : fullPaymentAmountInNaira,
+    );
     logger.w("Updated bookingDetails: ${updatedBookingDetails.toJson()}");
 
     logger.f('Booking appointment . . . ');

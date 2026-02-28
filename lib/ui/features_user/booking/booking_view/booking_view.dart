@@ -75,16 +75,21 @@ class _BookingsViewState extends State<BookingsView> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            controller.selectedService == null
-                                ? 'Select service'
-                                : "${controller.selectedService?.name} Cleaning",
-                            style: controller.selectedService == null
-                                ? AppStyles.floatingHintStringStyle(16,
-                                    color: AppColors.deepBlue)
-                                : AppStyles.normalStringStyle(
-                                    16, AppColors.fullBlack),
+                          Expanded(
+                            child: Text(
+                              controller.selectedService == null
+                                  ? 'Select service'
+                                  : "${controller.selectedService?.name} Cleaning",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: controller.selectedService == null
+                                  ? AppStyles.floatingHintStringStyle(16,
+                                      color: AppColors.deepBlue)
+                                  : AppStyles.normalStringStyle(
+                                      16, AppColors.fullBlack),
+                            ),
                           ),
+                          const SizedBox(width: 8),
                           SizedBox(
                             height: 30,
                             width: 85,
@@ -109,17 +114,22 @@ class _BookingsViewState extends State<BookingsView> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            controller.appointmentDateSelected == null
-                                ? 'Choose appointment date'
-                                : DateFormat('MMM d, y, h:mm a').format(
-                                    controller.appointmentDateSelected!),
-                            style: controller.selectedService == null
-                                ? AppStyles.floatingHintStringStyle(16,
-                                    color: AppColors.deepBlue)
-                                : AppStyles.normalStringStyle(
-                                    16, AppColors.fullBlack),
+                          Expanded(
+                            child: Text(
+                              controller.appointmentDateSelected == null
+                                  ? 'Choose appointment date'
+                                  : DateFormat('MMM d, y, h:mm a').format(
+                                      controller.appointmentDateSelected!),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: controller.selectedService == null
+                                  ? AppStyles.floatingHintStringStyle(16,
+                                      color: AppColors.deepBlue)
+                                  : AppStyles.normalStringStyle(
+                                      16, AppColors.fullBlack),
+                            ),
                           ),
+                          const SizedBox(width: 8),
                           SizedBox(
                             height: 30,
                             width: 85,
