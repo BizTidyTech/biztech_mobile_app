@@ -84,3 +84,35 @@ class _AdminTidyTechAppState extends State<AdminTidyTechApp> {
   // BuildContext? get ctx => _router.routerDelegate.navigatorKey.currentContext;
   final _router = AdminAppRouter.router;
 }
+
+class AgentTidyTechApp extends StatefulWidget {
+  const AgentTidyTechApp({super.key});
+
+  @override
+  State<AgentTidyTechApp> createState() => _AgentTidyTechAppState();
+}
+
+class _AgentTidyTechAppState extends State<AgentTidyTechApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => CurrentPage(),
+      child: MaterialApp.router(
+        title: 'BizTidy Agent',
+        scaffoldMessengerKey: NavigationService.scaffoldMessengerKey,
+        debugShowCheckedModeBanner: false,
+        theme: appThemeData,
+        routeInformationProvider: _router.routeInformationProvider,
+        routeInformationParser: _router.routeInformationParser,
+        routerDelegate: _router.routerDelegate,
+      ),
+    );
+  }
+
+  final _router = AgentAppRouter.router;
+}

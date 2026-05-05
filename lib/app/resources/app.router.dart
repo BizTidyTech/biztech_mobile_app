@@ -1,3 +1,8 @@
+import 'package:biztidy_mobile_app/ui/features_agent/agent_auth/agent_auth_view/agent_onboarding_view.dart';
+import 'package:biztidy_mobile_app/ui/features_agent/agent_auth/agent_auth_view/agent_create_account_view.dart';
+import 'package:biztidy_mobile_app/ui/features_agent/agent_auth/agent_auth_view/agent_pending_approval_screen.dart';
+import 'package:biztidy_mobile_app/ui/features_agent/agent_auth/agent_auth_view/agent_signin_view.dart';
+import 'package:biztidy_mobile_app/ui/features_agent/agent_home/agent_home_view/agent_home_screen.dart';
 import 'package:biztidy_mobile_app/app/resources/app.transitions.dart';
 import 'package:biztidy_mobile_app/app/services/navigation_service.dart';
 import 'package:biztidy_mobile_app/ui/features_admin/admin_auth/admin_auth_view/admin_signin_view.dart';
@@ -89,6 +94,35 @@ class AdminAppRouter {
         path: '/adminBookingsListScreen',
         pageBuilder: (context, state) => CustomNormalTransition(
             child: const AdminBookingsListScreen(), key: state.pageKey),
+      ),
+    ],
+  );
+}
+
+class AgentAppRouter {
+  static final router = GoRouter(
+    navigatorKey: NavigationService.navigatorKey,
+    routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const AgentOnboardingView(),
+      ),
+      GoRoute(
+        path: '/agentSignInView',
+        builder: (context, state) => const AgentSignInView(),
+      ),
+      GoRoute(
+        path: '/agentCreateAccountView',
+        builder: (context, state) => const AgentCreateAccountView(),
+      ),
+      GoRoute(
+        path: '/agentPendingApprovalScreen',
+        builder: (context, state) => const AgentPendingApprovalScreen(),
+      ),
+      GoRoute(
+        path: '/agentHomeScreen',
+        pageBuilder: (context, state) => CustomNormalTransition(
+            child: const AgentHomeScreen(), key: state.pageKey),
       ),
     ],
   );

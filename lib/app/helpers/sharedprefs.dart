@@ -28,7 +28,7 @@ saveUserDetailsLocally(UserData? userData) async {
 Future<UserData?> getLocallySavedUserDetails() async {
   try {
     final userDataString =
-        await getSharedPrefsSavedString(FbCollectionNames.user);
+    await getSharedPrefsSavedString(FbCollectionNames.user);
     if (userDataString == '') {
       return null;
     }
@@ -36,4 +36,13 @@ Future<UserData?> getLocallySavedUserDetails() async {
   } catch (e) {
     return null;
   }
+}
+
+// ✅ FIX: Clears locally saved user credentials.
+// Called when sign-in fails at splash screen to prevent the app
+// from getting stuck with stale or invalid saved credentials.
+Future<void> clearSavedUserDetails() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove(FbCollectionNames.user);
+  print('Cleared saved user details.');
 }

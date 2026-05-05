@@ -103,10 +103,10 @@ class AuthController extends GetxController {
   }
 
   resetUserPassword(
-    BuildContext context,
-    String email,
-    String newPassword,
-  ) async {
+      BuildContext context,
+      String email,
+      String newPassword,
+      ) async {
     startLoading();
     try {
       final userData = await FirebaseService().getUserDetails(email: email);
@@ -126,7 +126,7 @@ class AuthController extends GetxController {
       );
       logger.f("updatedUserProfile: ${updatedUserProfile.toJson()}");
       final updated =
-          await FirebaseService().updateUserProfile(updatedUserProfile);
+      await FirebaseService().updateUserProfile(updatedUserProfile);
       if (updated == true) {
         await saveUserDetailsLocally(updatedUserProfile);
         context.pop();
@@ -142,10 +142,10 @@ class AuthController extends GetxController {
   }
 
   Future<void> sendEmailOtp(
-    BuildContext context, {
-    bool? navigate,
-    bool? isResetPassword,
-  }) async {
+      BuildContext context, {
+        bool? navigate,
+        bool? isResetPassword,
+      }) async {
     isResettingPassword = isResetPassword ?? false;
     startLoading();
     logger.i("Sending OTP . . .");
@@ -234,6 +234,13 @@ class AuthController extends GetxController {
     if (isLoggedIn == true && navigateToHome != false) {
       Globals.isLoggedIn = isLoggedIn;
       context.go('/homepageView');
+    } else if (isLoggedIn == false && navigateToHome != false) {
+      // ✅ FIX: Clear stale/invalid saved credentials and redirect to onboarding
+      // This prevents the app from getting stuck on the splash screen when
+      // locally saved credentials are invalid or have been changed/revoked.
+      logger.w('Sign in failed — clearing saved credentials and redirecting to onboarding.');
+      await clearSavedUserDetails();
+      context.go('/onboardingScreen');
     }
     stopLoading();
   }

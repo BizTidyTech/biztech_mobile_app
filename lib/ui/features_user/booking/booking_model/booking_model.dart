@@ -24,6 +24,11 @@ class BookingModel {
   final PaymentDetails? depositPayment;
   final PaymentDetails? finalPayment;
 
+  // ── Post-job rating (written by client after job completion) ──────────────
+  final double? clientRating; // 1.0 – 5.0
+  final String? clientReview; // optional text
+  final DateTime? ratedAt;    // timestamp of submission
+
   BookingModel({
     this.bookingId,
     this.userId,
@@ -40,11 +45,17 @@ class BookingModel {
     this.depositPayment,
     this.finalPayment,
     this.totalCalculatedServiceCharge,
+    this.clientRating,
+    this.clientReview,
+    this.ratedAt,
   });
+
+  /// True once the client has submitted a star rating.
+  bool get isRated => clientRating != null;
 
   BookingModel copyWith({
     String? bookingId,
-    final String? userId,
+    String? userId,
     DateTime? dateTime,
     String? locationName,
     String? locationAddress,
@@ -58,6 +69,9 @@ class BookingModel {
     PaymentDetails? depositPayment,
     PaymentDetails? finalPayment,
     double? totalCalculatedServiceCharge,
+    double? clientRating,
+    String? clientReview,
+    DateTime? ratedAt,
   }) =>
       BookingModel(
         bookingId: bookingId ?? this.bookingId,
@@ -76,6 +90,9 @@ class BookingModel {
         finalPayment: finalPayment ?? this.finalPayment,
         totalCalculatedServiceCharge:
             totalCalculatedServiceCharge ?? this.totalCalculatedServiceCharge,
+        clientRating: clientRating ?? this.clientRating,
+        clientReview: clientReview ?? this.clientReview,
+        ratedAt: ratedAt ?? this.ratedAt,
       );
 
   factory BookingModel.fromJson(Map<String, dynamic> json) => BookingModel(
@@ -90,7 +107,8 @@ class BookingModel {
         duration: json["duration"],
         roomSqFt: json["roomSqFt"]?.toDouble(),
         additionalInfo: json["additionalInfo"],
-        totalCalculatedServiceCharge: json["totalCalculatedServiceCharge"],
+        totalCalculatedServiceCharge:
+            json["totalCalculatedServiceCharge"]?.toDouble(),
         service: json["service"] == null
             ? null
             : ServiceModel.fromJson(json["service"]),
@@ -103,6 +121,10 @@ class BookingModel {
         finalPayment: json["finalPayment"] == null
             ? null
             : PaymentDetails.fromJson(json["finalPayment"]),
+        clientRating: json["clientRating"]?.toDouble(),
+        clientReview: json["clientReview"],
+        ratedAt:
+            json["ratedAt"] == null ? null : DateTime.parse(json["ratedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -121,6 +143,9 @@ class BookingModel {
         "customer": customer?.toJson(),
         "depositPayment": depositPayment?.toJson(),
         "finalPayment": finalPayment?.toJson(),
+        "clientRating": clientRating,
+        "clientReview": clientReview,
+        "ratedAt": ratedAt?.toIso8601String(),
       };
 }
 
@@ -130,12 +155,7 @@ class Customer {
   final String? email;
   final String? phoneNumber;
 
-  Customer({
-    this.userId,
-    this.name,
-    this.email,
-    this.phoneNumber,
-  });
+  Customer({this.userId, this.name, this.email, this.phoneNumber});
 
   Customer copyWith({
     String? userId,

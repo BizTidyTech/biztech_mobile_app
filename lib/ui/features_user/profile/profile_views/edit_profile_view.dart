@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, unused_element
+// ignore_for_file: prefer_const_constructors, must_be_immutable, unused_element
 
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_controller/profile_controller.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/widgets/profile_input_widget.dart';

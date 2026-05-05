@@ -17,8 +17,9 @@ void main() async {
   await setupLocator();
   Firebase.initializeApp();
   configureEmailOtp();
-  runApp(const TidyTechApp()); // To run the User app
-  // runApp(const AdminTidyTechApp()); // To run the Admin app
+  runApp(const TidyTechApp());         // ← CLIENT app (Play Store / App Store)
+  // runApp(const AdminTidyTechApp());  // ← ADMIN app (install directly)
+  // runApp(const AgentTidyTechApp());  // ← AGENT app (install directly)
 }
 
 void configureEmailOtp() {
