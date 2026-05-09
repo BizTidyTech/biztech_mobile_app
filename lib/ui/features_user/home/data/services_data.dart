@@ -16,7 +16,8 @@ List<ServiceModel> residentialServices = [
   ServiceModel(imageUrl: 'assets/apartment.png', name: '4-5 Bedroom Duplex', baseCost: 160000, usdCost: 160),
   ServiceModel(imageUrl: 'assets/house.png', name: "4-5 Bedroom Duplex with Boys' Quarters", baseCost: 190000, usdCost: 190),
   ServiceModel(imageUrl: 'assets/move_in_out.png', name: '3-Bedroom Flat', baseCost: 50000, usdCost: 50),
-  ServiceModel(imageUrl: 'assets/apartment.png', name: '2-Bedroom Flat', baseCost: 40000, usdCost: 40),
+  ServiceModel(imageUrl: 'assets/apartment.png', name: '2-Bedroom Flat', baseCost: 50000, usdCost: 50),
+  ServiceModel(imageUrl: 'assets/move_in_out.png', name: 'Move In/Move Out', baseCost: 100000, usdCost: 100),
 ];
 
 // Industrial Cleaning — ₦200,000 / $200
@@ -33,7 +34,7 @@ List<ServiceModel> specialtyServices = [
 ];
 
 List<ServiceModel> popularServices = [
-  ServiceModel(imageUrl: 'assets/apartment_home.png', name: '2-Bedroom Flat', baseCost: 40000, usdCost: 40),
+  ServiceModel(imageUrl: 'assets/apartment_home.png', name: '2-Bedroom Flat', baseCost: 50000, usdCost: 50),
   ServiceModel(imageUrl: 'assets/move_in_out_home.png', name: '3-Bedroom Flat', baseCost: 50000, usdCost: 50),
   ServiceModel(imageUrl: 'assets/office_home.png', name: 'Office', baseCost: 50000, usdCost: 50),
   ServiceModel(imageUrl: 'assets/factory.png', name: 'Factory', baseCost: 200000, usdCost: 200),
