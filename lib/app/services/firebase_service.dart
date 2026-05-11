@@ -55,7 +55,7 @@ class FirebaseService {
         return null;
       } else {
         final userData =
-            UserData.fromJson(result.docs[0].data() as Map<String, dynamic>);
+        UserData.fromJson(result.docs[0].data() as Map<String, dynamic>);
         return userData;
       }
     } catch (e) {
@@ -189,7 +189,7 @@ class FirebaseService {
           'id': notifId,
           'title': 'New Job Available!',
           'body':
-              '${booking.service?.name ?? 'Cleaning'} job in ${booking.locationName ?? 'your area'}. Tap to accept.',
+          '${booking.service?.name ?? 'Cleaning'} job in ${booking.locationName ?? 'your area'}. Tap to accept.',
           'type': 'job',
           'jobId': jobId,
           'createdAt': Timestamp.now(),
@@ -235,7 +235,7 @@ class FirebaseService {
         final List<DocumentSnapshot> documents = result.docs;
         List<BookingModel> listOfBookings = List.generate(
           documents.length,
-          (index) => BookingModel.fromJson(
+              (index) => BookingModel.fromJson(
               documents.elementAt(index).data() as Map<String, dynamic>),
         );
         return listOfBookings;
@@ -250,7 +250,7 @@ class FirebaseService {
   Future<List<BookingModel>?> adminFetchAllBookings() async {
     try {
       final QuerySnapshot result =
-          await firebaseFirestore.collection(FbCollectionNames.bookings).get();
+      await firebaseFirestore.collection(FbCollectionNames.bookings).get();
 
       final List<DocumentSnapshot> documents = result.docs;
       if (documents.isEmpty) {
@@ -259,7 +259,7 @@ class FirebaseService {
         final List<DocumentSnapshot> documents = result.docs;
         List<BookingModel> listOfBookings = List.generate(
           documents.length,
-          (index) => BookingModel.fromJson(
+              (index) => BookingModel.fromJson(
               documents.elementAt(index).data() as Map<String, dynamic>),
         );
         return listOfBookings;
@@ -274,7 +274,7 @@ class FirebaseService {
   Future<String?> fetchNotificationApiKey() async {
     try {
       DocumentSnapshot document =
-          await firebaseFirestore.collection('Keys').doc('keysData').get();
+      await firebaseFirestore.collection('Keys').doc('keysData').get();
 
       final notificationApiKey = document['notificationApiKey'];
       logger.f("notificationApiKey: $notificationApiKey");
@@ -287,7 +287,7 @@ class FirebaseService {
   Future<String?> fetchPaystackApiKey() async {
     try {
       DocumentSnapshot document =
-          await firebaseFirestore.collection('Keys').doc('keysData').get();
+      await firebaseFirestore.collection('Keys').doc('keysData').get();
 
       final paystackSecretKey = document['paystackSecretKey'];
       logger.f("paystackSecretKey: $paystackSecretKey");
@@ -300,7 +300,7 @@ class FirebaseService {
   Future<List<String>?> fetchPayPalSecretKeyAndClientID() async {
     try {
       DocumentSnapshot document =
-          await firebaseFirestore.collection('Keys').doc('keysData').get();
+      await firebaseFirestore.collection('Keys').doc('keysData').get();
 
       final paypalSecretKey = document['paypalSecretKey'];
       final paypalClientId = document['paypalClientId'];
@@ -319,7 +319,7 @@ class FirebaseService {
           .doc('auth')
           .get();
       final adminAuthDetails =
-          AdminAuthModel.fromJson(document.data() as Map<String, dynamic>);
+      AdminAuthModel.fromJson(document.data() as Map<String, dynamic>);
       return adminAuthDetails;
     } catch (e) {
       logger.e(e);
@@ -365,8 +365,7 @@ class FirebaseService {
   /// so the rolling average and pendingPayout are updated atomically.
   ///
   /// Agent earnings formula (matches SOP §4):
-  ///   NGN : baseCost × 0.60 − ₦500 trust fee
-  ///   USD : baseCost × 0.60  (trust fee is NGN-only)
+  ///   Agent share : baseCost × 0.60  (60/40 split, no deductions)
   Future<bool> submitJobRating({
     required String bookingId,
     required String agentId,
@@ -377,9 +376,8 @@ class FirebaseService {
   }) async {
     try {
       final jobId = 'job_$bookingId';
-      final rawEarnings =
-          isUSD ? jobCost * 0.60 : (jobCost * 0.60) - 500;
-      final agentEarnings = rawEarnings < 0 ? 0.0 : rawEarnings;
+      final rawEarnings = jobCost * 0.60;
+      final agentEarnings = rawEarnings;
       final cleanReview = review.trim().isEmpty ? null : review.trim();
       final now = DateTime.now();
 
@@ -406,7 +404,7 @@ class FirebaseService {
       // 3 ── Agents doc — atomic transaction for safe rolling-average math
       await firebaseFirestore.runTransaction((tx) async {
         final agentRef =
-            firebaseFirestore.collection('Agents').doc(agentId);
+        firebaseFirestore.collection('Agents').doc(agentId);
         final snap = await tx.get(agentRef);
         if (!snap.exists) return;
 
@@ -438,10 +436,10 @@ class FirebaseService {
       final starWord = rating == 5.0
           ? 'Amazing work'
           : rating >= 4.0
-              ? 'Great job'
-              : rating >= 3.0
-                  ? 'Good effort'
-                  : 'Room to improve';
+          ? 'Great job'
+          : rating >= 3.0
+          ? 'Good effort'
+          : 'Room to improve';
       final truncated = cleanReview != null && cleanReview.length > 60
           ? '${cleanReview.substring(0, 60)}…'
           : cleanReview;
