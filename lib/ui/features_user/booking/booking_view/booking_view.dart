@@ -68,7 +68,7 @@ class _BookingsViewState extends State<BookingsView> {
               ),
               body: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: Column(
                   children: [
                     CustomCurvedContainer(
@@ -84,9 +84,9 @@ class _BookingsViewState extends State<BookingsView> {
                               maxLines: 1,
                               style: controller.selectedService == null
                                   ? AppStyles.floatingHintStringStyle(16,
-                                      color: AppColors.deepBlue)
+                                  color: AppColors.deepBlue)
                                   : AppStyles.normalStringStyle(
-                                      16, AppColors.fullBlack),
+                                  16, AppColors.fullBlack),
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -119,14 +119,14 @@ class _BookingsViewState extends State<BookingsView> {
                               controller.appointmentDateSelected == null
                                   ? 'Choose appointment date'
                                   : DateFormat('MMM d, y, h:mm a').format(
-                                      controller.appointmentDateSelected!),
+                                  controller.appointmentDateSelected!),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: controller.selectedService == null
                                   ? AppStyles.floatingHintStringStyle(16,
-                                      color: AppColors.deepBlue)
+                                  color: AppColors.deepBlue)
                                   : AppStyles.normalStringStyle(
-                                      16, AppColors.fullBlack),
+                                  16, AppColors.fullBlack),
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -135,9 +135,9 @@ class _BookingsViewState extends State<BookingsView> {
                             width: 85,
                             child: CustomButton(
                               buttonText:
-                                  controller.appointmentDateSelected == null
-                                      ? AppStrings.choose
-                                      : AppStrings.change,
+                              controller.appointmentDateSelected == null
+                                  ? AppStrings.choose
+                                  : AppStrings.change,
                               fontSize: 12,
                               width: 45,
                               onPressed: () {
@@ -160,37 +160,37 @@ class _BookingsViewState extends State<BookingsView> {
                     ),
                     controller.appointmentDateSelected == null
                         ? const Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text("Choose a date to see available hours"),
-                          )
+                      padding: EdgeInsets.only(top: 10),
+                      child: Text("Choose a date to see available hours"),
+                    )
                         : _timeSelectorWidget(),
                     const Spacer(),
                     controller.selectedService == null ||
-                            controller.appointmentDateSelected == null
+                        controller.appointmentDateSelected == null
                         ? const SizedBox.shrink()
                         : Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                width: 125,
-                                child: CustomButton(
-                                  buttonText: AppStrings.contineu,
-                                  fontSize: 12,
-                                  width: 45,
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const BookingsDetailsScreen(),
-                                      ),
-                                    );
-                                  },
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SizedBox(
+                          height: 40,
+                          width: 125,
+                          child: CustomButton(
+                            buttonText: AppStrings.contineu,
+                            fontSize: 12,
+                            width: 45,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                  const BookingsDetailsScreen(),
                                 ),
-                              ),
-                            ],
-                          )
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -210,29 +210,29 @@ class _BookingsViewState extends State<BookingsView> {
     return controller.appointmentDateSelected == null
         ? const SizedBox.shrink()
         : Wrap(
-            spacing: 8.0,
-            runSpacing: 8.0,
-            children: availableTimes.map((time) {
-              final isSelected =
-                  time.hour == controller.appointmentDateSelected?.hour;
+      spacing: 8.0,
+      runSpacing: 8.0,
+      children: availableTimes.map((time) {
+        final isSelected =
+            time.hour == controller.appointmentDateSelected?.hour;
 
-              return ElevatedButton(
-                onPressed: () {
-                  final initTime = controller.appointmentDateSelected!;
-                  final selectedDateTime = DateTime(initTime.year,
-                      initTime.month, initTime.day, time.hour, 0, 0);
-                  controller.changeSelectedAppointmentDate(selectedDateTime);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isSelected ? Colors.blue : Colors.grey,
-                  foregroundColor: Colors.white,
-                ),
-                child: Text(DateFormat('h:mm a').format(
-                  DateTime(0, 0, 0, time.hour, 0, 0),
-                )),
-              );
-            }).toList(),
-          );
+        return ElevatedButton(
+          onPressed: () {
+            final initTime = controller.appointmentDateSelected!;
+            final selectedDateTime = DateTime(initTime.year,
+                initTime.month, initTime.day, time.hour, 0, 0);
+            controller.changeSelectedAppointmentDate(selectedDateTime);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: isSelected ? Colors.blue : Colors.grey,
+            foregroundColor: Colors.white,
+          ),
+          child: Text(DateFormat('h:mm a').format(
+            DateTime(0, 0, 0, time.hour, 0, 0),
+          )),
+        );
+      }).toList(),
+    );
   }
 
   Future<void> _chooseAppointmentDate(BookingsController controller) async {
@@ -245,7 +245,8 @@ class _BookingsViewState extends State<BookingsView> {
       return;
     }
 
-    final initialDate = DateTime.now().add(const Duration(days: 1));
+    final now = DateTime.now();
+    final initialDate = DateTime(now.year, now.month, now.day);
 
     DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
