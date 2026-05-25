@@ -85,7 +85,7 @@ class HelpCenterView extends StatelessWidget {
             verticalSpacer(16),
             ElevatedButton.icon(
               onPressed: _launchWhatsApp,
-              icon: Icon(
+              icon: FaIcon(
                 FontAwesomeIcons.whatsapp,
                 color: AppColors.normalGreen,
               ),
