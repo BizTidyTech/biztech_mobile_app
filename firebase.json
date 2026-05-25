@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"tidytech-app","appId":"1:67602217645:android:9b87480a765a6e564da424","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"tidytech-app","configurations":{"android":"1:67602217645:android:9b87480a765a6e564da424","ios":"1:67602217645:ios:c4ba3a88f02eddf64da424"}}}}}}
