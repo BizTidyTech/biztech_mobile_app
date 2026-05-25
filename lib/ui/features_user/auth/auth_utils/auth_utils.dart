@@ -37,6 +37,7 @@ class AuthUtil {
       name: auth.currentUser!.displayName ?? userdata?.name,
       photoUrl: auth.currentUser!.photoURL,
       country: userdata?.country,
+      phoneNumber: userdata?.phoneNumber,
       timeCreated: DateTime.now(),
     );
     bool isRegister = await FirebaseService().register(user: userData);

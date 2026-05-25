@@ -5,7 +5,6 @@ import 'package:biztidy_mobile_app/ui/features_user/profile/profile_controller/p
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/change_password_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/edit_profile_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/help_center_view.dart';
-import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/web_data_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/widgets/guest_user_prompt_view.dart';
 import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/widgets/image_full_screen_view.dart';
 import 'package:biztidy_mobile_app/ui/shared/custom_button.dart';
@@ -26,6 +25,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:biztidy_mobile_app/ui/features_user/profile/profile_views/static_content_view.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -71,12 +71,10 @@ class _ProfileViewState extends State<ProfileView> {
                   style: AppStyles.normalStringStyle(20, AppColors.fullBlack),
                 ),
               ),
-              // extendBodyBehindAppBar: true,
               body: Container(
                 height: screenHeight(context),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Globals.isLoggedIn == true
-                    // child: Globals.isLoggedIn == false
                     ? _loggedInUserProfileView(context)
                     : guestUserPromptView(context, "profile"),
               ),
@@ -129,10 +127,19 @@ class _ProfileViewState extends State<ProfileView> {
             titleText: 'About',
             onPressed: () {
               logger.i("Pressed About");
-              goToWebViewPage(
+              Navigator.push(
                 context,
-                title: "About us",
-                url: aboutUsUrl,
+                MaterialPageRoute(
+                  builder: (_) => const StaticContentView(
+                    title: "About Us",
+                    content: '''BizTidy is a professional cleaning and facility management company dedicated to providing top-quality services across Nigeria. We connect customers with trusted, vetted cleaning professionals for residential, commercial, and industrial spaces.
+
+Our mission is to make clean, safe, and comfortable environments accessible to everyone — whether at home, in the office, or at your business premises.
+
+Contact us: tidy1tech@gmail.com
+Phone: +2348023179676''',
+                  ),
+                ),
               );
             },
           ),
@@ -141,10 +148,30 @@ class _ProfileViewState extends State<ProfileView> {
             titleText: 'Terms of Use',
             onPressed: () {
               logger.i("Pressed Terms of Use");
-              goToWebViewPage(
+              Navigator.push(
                 context,
-                title: "Terms of Use",
-                url: termsOfUseUrl,
+                MaterialPageRoute(
+                  builder: (_) => const StaticContentView(
+                    title: "Terms of Use",
+                    content: '''By using the BizTidy app, you agree to the following terms:
+
+1. Eligibility: You must be at least 18 years old to use this app.
+
+2. Account: You are responsible for maintaining the confidentiality of your account credentials.
+
+3. Bookings: All bookings made through the app are subject to agent availability. BizTidy reserves the right to reschedule or cancel bookings in exceptional circumstances.
+
+4. Payment: All payments must be completed through the app. BizTidy does not accept cash payments directly.
+
+5. Conduct: You agree not to misuse the platform, harass agents, or provide false information.
+
+6. Termination: BizTidy reserves the right to suspend or terminate accounts that violate these terms.
+
+7. Changes: These terms may be updated from time to time. Continued use of the app constitutes acceptance of the updated terms.
+
+For questions, contact us at tidy1tech@gmail.com.''',
+                  ),
+                ),
               );
             },
           ),
@@ -153,10 +180,20 @@ class _ProfileViewState extends State<ProfileView> {
             titleText: 'Disclaimer',
             onPressed: () {
               logger.i("Pressed Disclaimer");
-              goToWebViewPage(
+              Navigator.push(
                 context,
-                title: "Disclaimer",
-                url: disclaimerUrl,
+                MaterialPageRoute(
+                  builder: (_) => const StaticContentView(
+                    title: "Disclaimer",
+                    content: '''The information provided in this app is for general informational purposes only.
+
+BizTidy makes no guarantees regarding the accuracy, completeness, or reliability of any content within the app. Service availability may vary by location and time.
+
+BizTidy shall not be held liable for any damages arising from the use of this app or the services booked through it, including but not limited to delays, cancellations, or unsatisfactory service outcomes.
+
+Users are encouraged to review booking details carefully before confirming. For complaints or disputes, please contact our support team at tidy1tech@gmail.com within 24 hours of service completion.''',
+                  ),
+                ),
               );
             },
           ),
@@ -165,10 +202,28 @@ class _ProfileViewState extends State<ProfileView> {
             titleText: 'Privacy Policy',
             onPressed: () {
               logger.i("Pressed Privacy Policy");
-              goToWebViewPage(
+              Navigator.push(
                 context,
-                title: "Privacy Policy",
-                url: privacyPolicyUrl,
+                MaterialPageRoute(
+                  builder: (_) => const StaticContentView(
+                    title: "Privacy Policy",
+                    content: '''BizTidy is committed to protecting your personal information. This policy explains how we collect, use, and safeguard your data.
+
+1. Information We Collect: We collect your name, email address, phone number, and location when you register and make bookings.
+
+2. How We Use Your Data: Your data is used to process bookings, send notifications, and improve our services. We do not sell your personal information to third parties.
+
+3. Data Storage: Your data is stored securely on Firebase servers. We take reasonable measures to protect your information from unauthorised access.
+
+4. Location Data: We collect location data solely to facilitate accurate service delivery. This data is not shared beyond what is necessary for your booking.
+
+5. Third-Party Services: We use third-party services such as Paystack for payment processing and OneSignal for push notifications. These services have their own privacy policies.
+
+6. Your Rights: You may request to view, update, or delete your personal data at any time by contacting us at tidy1tech@gmail.com.
+
+7. Changes: This policy may be updated periodically. We will notify users of significant changes through the app.''',
+                  ),
+                ),
               );
             },
           ),
@@ -343,7 +398,7 @@ class _ProfileViewState extends State<ProfileView> {
                     child: Text(
                       "Delete",
                       style:
-                          AppStyles.normalStringStyle(16, AppColors.fullBlack),
+                      AppStyles.normalStringStyle(16, AppColors.fullBlack),
                     ),
                     onPressed: () async {
                       await controller.deleteAccount(context);
@@ -366,84 +421,84 @@ class _ProfileViewState extends State<ProfileView> {
       child: controller.showLoading == true
           ? loadingWidget()
           : Row(
-              children: [
-                Stack(
-                  alignment: AlignmentDirectional.bottomEnd,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        logger.w("Show profile image in full screen");
-                        if (controller.myProfileData != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ImageFullScreen(
-                                  userData: controller.myProfileData!,
-                                );
-                              },
-                            ),
+        children: [
+          Stack(
+            alignment: AlignmentDirectional.bottomEnd,
+            children: [
+              InkWell(
+                onTap: () {
+                  logger.w("Show profile image in full screen");
+                  if (controller.myProfileData != null) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ImageFullScreen(
+                            userData: controller.myProfileData!,
                           );
-                        }
-                      },
-                      child: CircleAvatar(
-                        radius: 51,
-                        backgroundColor: AppColors.primaryThemeColor,
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundImage: CachedNetworkImageProvider(
-                            controller.myProfileData?.photoUrl ?? dummyImageUrl,
-                          ),
-                        ),
+                        },
                       ),
+                    );
+                  }
+                },
+                child: CircleAvatar(
+                  radius: 51,
+                  backgroundColor: AppColors.primaryThemeColor,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: CachedNetworkImageProvider(
+                      controller.myProfileData?.photoUrl ?? dummyImageUrl,
                     ),
-                    InkWell(
-                      onTap: () {
-                        logger.w("Change profile image");
-                        controller.changeProfileImage();
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: AppColors.primaryThemeColor,
-                        radius: 18.5,
-                        child: CircleAvatar(
-                          backgroundColor: AppColors.plainWhite,
-                          radius: 18,
-                          child: Icon(
-                            IconsaxPlusLinear.gallery_edit,
-                            size: 20,
-                            color: AppColors.kPrimaryColor,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                horizontalSpacer(15),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        controller.myProfileData?.name ?? '',
-                        style: AppStyles.normalStringStyle(
-                            17, AppColors.fullBlack),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        controller.myProfileData?.email ?? '',
-                        style: AppStyles.hintStringStyle(14),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      verticalSpacer(5),
-                      const Divider(height: 1, thickness: 1)
-                    ],
                   ),
                 ),
+              ),
+              InkWell(
+                onTap: () {
+                  logger.w("Change profile image");
+                  controller.changeProfileImage();
+                },
+                child: CircleAvatar(
+                  backgroundColor: AppColors.primaryThemeColor,
+                  radius: 18.5,
+                  child: CircleAvatar(
+                    backgroundColor: AppColors.plainWhite,
+                    radius: 18,
+                    child: Icon(
+                      IconsaxPlusLinear.gallery_edit,
+                      size: 20,
+                      color: AppColors.kPrimaryColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          horizontalSpacer(15),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  controller.myProfileData?.name ?? '',
+                  style: AppStyles.normalStringStyle(
+                      17, AppColors.fullBlack),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  controller.myProfileData?.email ?? '',
+                  style: AppStyles.hintStringStyle(14),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                verticalSpacer(5),
+                const Divider(height: 1, thickness: 1)
               ],
             ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -480,10 +535,10 @@ class _ProfileViewState extends State<ProfileView> {
                 showTrailingIcon == false
                     ? const SizedBox.shrink()
                     : Icon(
-                        IconsaxPlusLinear.arrow_right_3,
-                        color: AppColors.fullBlack,
-                        size: 25,
-                      ),
+                  IconsaxPlusLinear.arrow_right_3,
+                  color: AppColors.fullBlack,
+                  size: 25,
+                ),
               ],
             ),
             verticalSpacer(10),
