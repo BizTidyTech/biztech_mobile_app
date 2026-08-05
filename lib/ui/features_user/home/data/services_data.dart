@@ -25,6 +25,7 @@ List<ServiceModel> industrialServices = [
   ServiceModel(imageUrl: 'assets/factory.jpeg', name: 'Factory', baseCost: 200000, usdCost: 200),
   ServiceModel(imageUrl: 'assets/workshop.jpeg', name: 'Workshop', baseCost: 200000, usdCost: 200),
   ServiceModel(imageUrl: 'assets/maintenance.png', name: 'Maintenance', baseCost: 200000, usdCost: 200),
+  ServiceModel(imageUrl: 'assets/deepcleaning.jpeg', name: 'Deep', baseCost: 200000, usdCost: 200),
 ];
 
 // Specialty Cleaning — ₦400,000 / $400
