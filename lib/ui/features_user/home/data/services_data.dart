@@ -14,7 +14,7 @@ List<ServiceModel> residentialServices = [
   ServiceModel(imageUrl: 'assets/2-bedroom.jpeg', name: '2-Bedroom Flat', baseCost: 50000, usdCost: 50),
   ServiceModel(imageUrl: 'assets/3-bedroom-duplex.jpeg', name: '3-Bedroom Duplex', baseCost: 90000, usdCost: 90),
   ServiceModel(imageUrl: 'assets/3-bedroom-duplexBq.jpeg', name: "3-Bedroom Duplex with Boys' Quarters", baseCost: 120000, usdCost: 120),
-  ServiceModel(imageUrl: 'assets/3-bedroom_flat.jpeg', name: '3-Bedroom Flat', baseCost: 50000, usdCost: 50),
+  ServiceModel(imageUrl: 'assets/3-bedroom_flat.jpeg', name: '3-Bedroom Flat', baseCost: 70000, usdCost: 70),
   ServiceModel(imageUrl: 'assets/4-bedroom_duplex.jpeg', name: '4 Bedroom Duplex', baseCost: 160000, usdCost: 160),
   ServiceModel(imageUrl: 'assets/4-bedroom_duplexBq.jpeg', name: "4 Bedroom Duplex with Boys' Quarters", baseCost: 190000, usdCost: 190),
   ServiceModel(imageUrl: 'assets/move_in_out_home.png', name: 'Move In/Move Out', baseCost: 100000, usdCost: 100),
